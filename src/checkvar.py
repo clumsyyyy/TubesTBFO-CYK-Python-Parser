@@ -25,4 +25,4 @@ def start_varname(str):
 def isValid_varname(str):
     return start_varname(str)
 
-print(isValid_varname('Trafgeg'))
+print(isValid_varname('2sadksadas'))
