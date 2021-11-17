@@ -1,7 +1,14 @@
 from itertools import product as cp
+import itertools
+
+def tuple_to_arr(tuple):
+    return list(tuple)
 
 def join_tuple_string(strings_tuple) -> str:
    return ''.join(strings_tuple)
+
+def join_array_string(array_string) -> str:
+    return ''.join(array_string)
 
 def checkrulethatproduces(rule, word):
     availrule = []
@@ -10,14 +17,14 @@ def checkrulethatproduces(rule, word):
             availrule.append(x)
     return availrule
 
-def checkcyk(rule, str):
-    tablesize = len(str)
+def checkcyk(rule, word):
+    tablesize = len(word)
     cyktable = [[None for i in range(tablesize)] for j in range(tablesize)]
     for stage in range(tablesize):
         for diag in range(0, tablesize - stage):
             # cyktable[diag][diag + stage]
             if stage == 0:
-                cyktable[diag][diag + stage] = checkrulethatproduces(rule, str[diag])
+                cyktable[diag][diag + stage] = checkrulethatproduces(rule, [word[diag]])
             else:
                 totalrule = []
                 i = diag
@@ -27,11 +34,11 @@ def checkcyk(rule, str):
                         continue
                     else:
                         productcombin = [item for item in cp(cyktable[i][jcell], cyktable[jcell+1][j])]
-                        tosearchrule = map(join_tuple_string, productcombin)
+                        tosearchrule = map(tuple_to_arr, productcombin)
                         for wordsearch in tosearchrule:
                             availrule = checkrulethatproduces(rule, wordsearch)
                             totalrule = totalrule + availrule
-                totalrule = list(set(totalrule))
+                totalrule = list(set(totalrule)) # REMOVE DUPLICATES
                 if (len(totalrule) == 0):
                     cyktable[i][j] = None
                 else:
@@ -41,39 +48,18 @@ def checkcyk(rule, str):
 
 
 rule = [
-    ("S", "AB"),
-    ("S", "BC"),
-    ("A", "BA"),
-    ("A", "a"),
-    ("B", "CC"),
-    ("B", "b"),
-    ("C", "AB"),
-    ("C", "a"), # SECTION INI UNTUK CEK VARIABLE
+    ("S", ["A", "B"]),
+    ("S", ["B", "C"]),
+    ("GAMING", ["AD", "A"]),
+    ("A", ["B", "A"]),
+    ("A", ["a"]),
+    ("B", ["CB", "C"]),
+    ("AD", ["ManTAP"]),
+    ("DA", ["LB", "A"]),
+    ("B", ["b"]),
+    ("C", ["A", "B"]),
+    ("C", ["a"]),
+    ("CB", ["cb"]),
+    ("LB", ["cb"]),
 ]
-
-"""
- S -> H0 T
- V -> return
- T -> None
-    | False
-    | True
- W -> w
-H0 -> V W
-"""
-
-rulereturn = [
-    ("S", "ZT"),
-    ("V", "return"),
-    ("T", "VALIDRTYPE"),
-    ("W", " "),
-    ("Z", "VW")
-]
-
-str = ["return", " ", "INVALIDRTYPE"]
-
-if (str[2] == 'None' or str[2] == 'False' or str[2] == 'True'): # or isValid_varname(str[2])
-    str[2] = 'VALIDRTYPE'
-else:
-    str[2] = 'INVALIDRTYPE'
-strlen = len(str)
-print(checkcyk(rulereturn, str)[0][strlen-1])
+print(checkcyk(rule, ["ManTAP", "a"])[0][1]); # HARUS TERMINAL
