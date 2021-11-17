@@ -17,7 +17,7 @@ def checkrulethatproduces(rule, word):
             availrule.append(x)
     return availrule
 
-def checkcyk(rule, word):
+def checkcyk(rule, word) -> bool:
     tablesize = len(word)
     cyktable = [[None for i in range(tablesize)] for j in range(tablesize)]
     for stage in range(tablesize):
@@ -43,7 +43,10 @@ def checkcyk(rule, word):
                     cyktable[i][j] = None
                 else:
                     cyktable[i][j] = totalrule
-    return cyktable
+    if (cyktable[0][tablesize - 1] == None):
+        return False
+    else:
+        return True
 
 
 
@@ -62,4 +65,4 @@ rule = [
     ("CB", ["cb"]),
     ("LB", ["cb"]),
 ]
-print(checkcyk(rule, ["ManTAP", "a"])[0][1]); # HARUS TERMINAL
+print(checkcyk(rule, ["ManTAP", "a"])); # HARUS TERMINAL
