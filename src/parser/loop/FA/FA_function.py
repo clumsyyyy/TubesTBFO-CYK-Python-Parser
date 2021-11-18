@@ -3,12 +3,12 @@ import os
 
 srcfold = "C:\\reverseon\\code\\github\\TubesTBFO\\src\\"
 cykpath = "cykcheck\\"
-cnfpath = "parser\\loop\\CNF\\"
+cnfpath = "parser\\loop\\"
 sys.path.append(os.path.abspath(srcfold + cykpath))
 sys.path.append(os.path.abspath(srcfold + cnfpath))
 
-from CNF_functionargs import *
-from cykcheck import *
+from CNF import CNF_functionargs
+from cykchecker import cykcheck
 
 class FA_VALIDFUNVARNAMEC:
     def __init__(self):
@@ -45,8 +45,8 @@ class FA_function_HELPER:
         if (str == ""):
             return True
         funVarCheck = FA_VALIDFUNVARNAMEC()
-        argsRule = CNF_FUNCTIONARGSC()
-        cykChecker = CYKCHECKCLASS()
+        argsRule = CNF_functionargs.CNF_FUNCTIONARGSC()
+        cykChecker = cykcheck.CYKCHECKCLASS()
         str = ''.join(str.split())
         word = []
         buf = ""
@@ -102,6 +102,51 @@ class FA_function_HELPER:
                     raise Exception("Missing Parentheses")
                     return
             return True
+    def checkforloopstatement(self, str):
+        # WORD TO STR
+        funVarCheck = FA_VALIDFUNVARNAMEC()
+        fa_helper = FA_function_HELPER()
+        word = []
+        buf = ""
+        strlen = len(str)
+        for i in range(0, strlen):
+            if (str[i] == " "):
+                word.append(buf)
+                buf = ""
+            else:
+                buf += str[i]
+        if (buf != ""):
+            word.append(buf)
+        word = list(filter(lambda a: a != "", word))
+        if (word[2] != "in"):
+            raise Exception("Error: Invalid loop statement: Unknown keyword")
+            return
+        elif (word[-1] != ":"):
+            if (word[-1][-1] != ":"):
+                raise Exception("Missing colon at the end")
+                return
+            else:
+                word[-1] = word[-1][:-1]
+                word.append(":")
+        for i in range(3, len(word)-3):
+            if (word[i][-1:].isalpha() and word[i+1][:1].isalpha()):
+                raise Exception("Space detected between variables/function")
+                return
+        word[3] = ''.join(word[3:-1])
+        del word[4:]
+        try:
+            funVarCheck.check(word[1])
+        except Exception as e:
+            raise e
+            return
+        else:
+            try:
+                fa_helper.checkfuncall(word[3], False)
+            except Exception as e:
+                raise e
+                return
+            else:
+                return True
 
             
 
