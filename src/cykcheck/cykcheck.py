@@ -41,7 +41,11 @@ class CYKCHECKCLASS:
         if (cyktable[0][tablesize - 1] == None):
             return False
         else:
-            return True
+            (startrule, _)= rule[0]
+            if (startrule in cyktable[0][tablesize - 1]):
+                return True
+            else:
+                return False
 
 
 initInst = CYKCHECKCLASS()
@@ -61,4 +65,3 @@ rule = [
     ("CB", ["cb"]),
     ("LB", ["cb"]),
 ]
-print(initInst.check(rule, ["ManTAP", "a"])); # HARUS TERMINAL
