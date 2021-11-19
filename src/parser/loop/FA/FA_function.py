@@ -1,7 +1,8 @@
 import sys 
 import os
 
-srcfold = "C:\\reverseon\\code\\github\\TubesTBFO\\src\\"
+#srcfold = "C:\\reverseon\\code\\github\\TubesTBFO\\src\\"
+srcfold = "C:\\Users\\OWEN\\OneDrive\\Documents\\IF Sem 3\\TBFO\\Tubes\\TubesTBFO\\src\\"
 cykpath = "cykcheck\\"
 cnfpath = "parser\\loop\\"
 sys.path.append(os.path.abspath(srcfold + cykpath))

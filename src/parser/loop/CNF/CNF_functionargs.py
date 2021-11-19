@@ -1,5 +1,3 @@
-
-
 class CNF_FUNCTIONARGSC:
     def get(self):
         return [
