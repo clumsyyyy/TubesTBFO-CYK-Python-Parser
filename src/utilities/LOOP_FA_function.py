@@ -4,8 +4,8 @@ import os
 srcfold = "C:\\reverseon\\code\\github\\TubesTBFO\\src\\"
 cykpath = "cykcheck\\"
 cnfpath = "parser\\loop\\"
-sys.path.append(os.path.abspath(srcfold + cykpath))
-sys.path.append(os.path.abspath(srcfold + cnfpath))
+sys.path.append(srcfold + cykpath)
+sys.path.append(srcfold + cnfpath)
 
 from CNF import CNF_functionargs
 from cykchecker import cykcheck
@@ -45,20 +45,21 @@ class FA_function_HELPER:
         if (str == ""):
             return True
         funVarCheck = FA_VALIDFUNVARNAMEC()
-        argsRule = CNF_functionargs.CNF_FUNCTIONARGSC()
+        argsRule = CNF_functionargs.CNF_LOOP()
         cykChecker = cykcheck.CYKCHECKCLASS()
-        str = ''.join(str.split())
+        str = str.strip()
+        str = ' '.join(str.split())
         word = []
         buf = ""
         for i in str:
             if i == ",":
-                word.append(buf)
+                word.append(buf.strip())
                 word.append(i)
                 buf = ""
             else: 
                 buf += i
         if (buf != ""):
-            word.append(buf)
+            word.append(buf.strip())
         # CHECK WORD
         wordlen = len(word)
         for i in range(0, wordlen):
@@ -74,79 +75,78 @@ class FA_function_HELPER:
                 else:
                     word[i] = "V"
 
-        res = cykChecker.check(argsRule.get(), word);
+        res = cykChecker.check(argsRule.getArgsRule(), word);
         if (res):
             return True
         else:
             raise Exception("Invalid Function Arguments")
             return 
 
-    def checkfuncall(self, str, variablePermitted): 
+    def checkfuncall(self, str): 
         # withcolon toggled specific for "for in" call 
         # if variablepermitted is set to true, then input of a variable is permitted, Variable is allowed.
         # such as function(a,b,c) or function(a,b,c): are allowed (later if with colon are enabled) 
         # STR TO WORD
-        extractfnargs = SEMIFA_EXTRACT_FUNNAME_ARGS_PARENTHESES()
-        str = ''.join(str.split())
         if (str == ""):
             raise Exception("Invalid Function Call")
             return
+        funVarCheck = FA_VALIDFUNVARNAMEC()
+        extractfnargs = SEMIFA_EXTRACT_FUNNAME_ARGS_PARENTHESES()
+        str = str.strip()
+        word = str.split()
+        str = ' '.join(word)
         try:
             res = extractfnargs.extract(str) # VIBECHECK FUNCTION NAME AND ARGS
+            funVarCheck.check(res[0])
+            self.checkargs(res[2])
         except Exception as e:
             raise e
             return
         else:
-            if (not variablePermitted):
-                if (res[1] == ""):
-                    raise Exception("Missing Parentheses")
-                    return
             return True
+
     def checkforloopstatement(self, str):
         # WORD TO STR
+        LatestCatch = ""
         funVarCheck = FA_VALIDFUNVARNAMEC()
-        fa_helper = FA_function_HELPER()
-        word = []
-        buf = ""
-        strlen = len(str)
-        for i in range(0, strlen):
-            if (str[i] == " "):
-                word.append(buf)
-                buf = ""
-            else:
-                buf += str[i]
-        if (buf != ""):
-            word.append(buf)
+        cykCheck = cykcheck.CYKCHECKCLASS()
+        argsRule = CNF_functionargs.CNF_LOOP()
+        word = str.strip().split()
+        wlen = len(word)
+        tempo = word[wlen-1]
+        word[wlen-1] = word[wlen-1][0:-1]
+        word.append(tempo[-1])
         word = list(filter(lambda a: a != "", word))
-        if (word[2] != "in"):
-            raise Exception("Error: Invalid loop statement: Unknown keyword")
-            return
-        elif (word[-1] != ":"):
-            if (word[-1][-1] != ":"):
-                raise Exception("Missing colon at the end")
-                return
-            else:
-                word[-1] = word[-1][:-1]
-                word.append(":")
-        for i in range(3, len(word)-3):
-            if (word[i][-1:].isalpha() and word[i+1][:1].isalpha()):
-                raise Exception("Space detected between variables/function")
-                return
-        word[3] = ''.join(word[3:-1])
-        del word[4:]
+        if (len(word) > 4):
+            word[3] = ' '.join(word[3:-1])
+            del word[4:-1]
         try:
-            funVarCheck.check(word[1])
+            self.checkfuncall(word[3])
         except Exception as e:
-            raise e
-            return
-        else:
             try:
-                fa_helper.checkfuncall(word[3], False)
+                funVarCheck.check(word[3])
             except Exception as e:
-                raise e
-                return
+                word[3] = "INVALID"
+                LatestCatch = e
             else:
-                return True
+                word[3] = "VAR"
+        else:
+            word[3] = "FUNCALL"
+        finally:
+            try:
+                funVarCheck.check(word[1])
+            except Exception as e:
+                word[1] = "INVALID"
+                LatestCatch = e
+            else:
+                word[1] = "VAR"
+                if (cykCheck.check(argsRule.getForLoopRule(), word)):
+                    return True
+                else:
+                    raise Exception("Invalid For Loop Statement", LatestCatch)
+                    return
+
+
 
             
 
@@ -165,32 +165,13 @@ class SEMIFA_EXTRACT_FUNNAME_ARGS_PARENTHESES:
     
     def _start(self, str):
         if (str == ''):
-            self._questions() # SPECIAL CASE
+            raise Exception("Missing argument")
+            return
         elif (str[0] == '('):
-            varChecker = FA_VALIDFUNVARNAMEC()
-            try:
-                varChecker.check(self.fun_name)
-            except Exception as e:
-                raise e
-            else:
-                self._extractargs(str[1:])
+            self._extractargs(str[1:])
         else:
             self.fun_name += str[0]
             self._start(str[1:])
-        
-    def _questions(self):
-        if (self.fun_name == ''):
-            raise Exception("Missing argument")
-            return
-        else:
-            varChecker = FA_VALIDFUNVARNAMEC()
-            try:
-                varChecker.check(self.fun_name)
-            except Exception as e:
-                raise e
-                return
-            else:
-                self.res = [self.fun_name, "", "", ""] # then self.fun_name is actually a variable
 
     def _extractargs(self, str):
         if (str == ''):
@@ -207,11 +188,4 @@ class SEMIFA_EXTRACT_FUNNAME_ARGS_PARENTHESES:
             self._extractargs(str[1:])
 
     def _finish(self):
-        try:
-            helper = FA_function_HELPER()
-            helper.checkargs(self.argsraw)
-        except Exception as e:
-            raise e
-            return
-        else:
-            self.res = [self.fun_name, "(", self.argsraw, ")"]
+        self.res = [self.fun_name.strip(), "(", self.argsraw, ")"]
