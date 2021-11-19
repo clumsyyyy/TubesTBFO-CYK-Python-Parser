@@ -1,15 +1,5 @@
-import sys 
-import os
-
-#srcfold = "C:\\reverseon\\code\\github\\TubesTBFO\\src\\"
-srcfold = "C:\\Users\\OWEN\\OneDrive\\Documents\\IF Sem 3\\TBFO\\Tubes\\TubesTBFO\\src\\"
-cykpath = "cykcheck\\"
-cnfpath = "parser\\loop\\"
-sys.path.append(srcfold + cykpath)
-sys.path.append(srcfold + cnfpath)
-
-from CNF import CNF_functionargs
-from cykchecker import cykcheck
+import CNF_general as CNF_functionargs
+import CYKCHECKER_general as cykcheck
 
 class FA_VALIDFUNVARNAMEC:
     def __init__(self):

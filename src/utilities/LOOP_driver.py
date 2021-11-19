@@ -1,7 +1,6 @@
-import sys
-from cykchecker import cykcheck 
-from FA import FA_function
-from CNF import CNF_functionargs
+import CNF_general as CNF_functionargs
+import CYKCHECKER_general as cykcheck
+import LOOP_FA_function as FA_function
 
 funVarCheck = FA_function.FA_VALIDFUNVARNAMEC()
 argsRule =  CNF_functionargs.CNF_LOOP()
@@ -10,7 +9,7 @@ extractfnargs = FA_function.SEMIFA_EXTRACT_FUNNAME_ARGS_PARENTHESES()
 fa_helper = FA_function.FA_function_HELPER()
 
 try:
-    fa_helper.checkforloopstatement("for i in range(5, 6, 1):")
+    fa_helper.checkforloopstatement("for i in range(5 4, 6, 1):")
 except Exception as e:
     print(e.args[0] + ":", e.args[1])
 else:
