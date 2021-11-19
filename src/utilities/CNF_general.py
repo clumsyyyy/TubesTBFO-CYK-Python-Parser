@@ -1,12 +1,22 @@
 class CNF_Boolean:
-    def get(self):
+    def getBooleanRule(self):
         return [
             ("S", ["H0", "S2"]),
-            ("S1", ["True", "False"]),
-            ("S2", ["True", "False"]),
-            ("Op", ["and", "or"]),
-            ("w", ["H1", "H1"]),
-            ("Not", ["not", ""])
+            ("S", ["H1", "S2"]),
+            ("S", ["H2", "S2"]),
+            ("S", ["H3", "S2"]),
+            ("S1", ["True"]),
+            ("S1", ["False"]),
+            ("S2", ["True"]),
+            ("S2", ["False"]),
+            ("Not", ["not"]),
+            ("Op", ["and"]),
+            ("Op", ["or"]),
+            ("H0", ["H2", "Not"]),
+            ("H1", ["H3", "Not"]),
+            ("H2", ["H4", "Op"]),
+            ("H3", ["S1", "Op"]),
+            ("H4", ["Not", "S1"])
         ]
 
 class CNF_IMPORT:

@@ -1,7 +1,6 @@
-# from loop.FA import FA_function
-# funcChecker = FA_function.FA_function_HELPER()
 from ARITH_helper import arithHelper
-
+from CNF_general import CNF_Boolean
+from CYKCHECKER_general import CYKCHECKCLASS
 class FA_boolean:
     #the exceptions are still ambiguous because im confused
     #ini buat and/not/or
@@ -72,7 +71,16 @@ class FA_boolean:
 
         if openingBracketCount != closingBracketCount:
             raise Exception("open bracket detected but no close bracket")
-
+        for i in range(len(word)):
+            if "(" in word[i]:
+                word[i] = word[i].replace("(", "")
+            if ")" in word[i]:
+                word[i] = word[i].replace(")", "")
+        CYKChecker = CYKCHECKCLASS()
+        FAChecker = FA_boolean()
+        CNF = CNF_Boolean()
+        boolRule = CNF.getBooleanRule()
+        CYKChecker.check(boolRule, "not True and not False".split(" "))
 
     def checkComparisonStatement(self, str):
         comparisonOps = ["<", "<=", ">", ">=", "==", "!="]

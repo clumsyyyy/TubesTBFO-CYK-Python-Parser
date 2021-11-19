@@ -1,9 +1,11 @@
 from BOOL_FA import FA_boolean
-FAChecker = FA_boolean()
+from CNF_general import CNF_Boolean
+from CYKCHECKER_general import CYKCHECKCLASS
 
+FAChecker = FA_boolean()
 try:
-    #FAChecker.checkBoolStatement("((not(5)) and (not(7)))") # <- ganti isi string kalo mo tes
-    FAChecker.checkComparisonStatement("(12*-34) < (6 * - 5 // 9)")
+    FAChecker.checkBoolStatement("(not True) or (False)") # <- ganti isi string kalo mo tes
+    #FAChecker.checkComparisonStatement("(12*-34) < (6 * - 5 // 9)")
 except Exception as e:
     print(e)
 else:
