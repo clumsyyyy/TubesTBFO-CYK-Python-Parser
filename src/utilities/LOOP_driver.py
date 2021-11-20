@@ -9,8 +9,8 @@ extractfnargs = FA_function.SEMIFA_EXTRACT_FUNNAME_ARGS_PARENTHESES()
 fa_helper = FA_function.FA_function_HELPER()
 
 try:
-    fa_helper.checkforloopstatement("for i in range(5 4, 6, 1):")
+    fa_helper.checkforloopstatement("for i in 3ran3ge(54, 6, 1):")
 except Exception as e:
-    print(e.args[0] + ":", e.args[1])
+    print(e)
 else:
     print("Success")

@@ -24,7 +24,7 @@ class FA_VALIDFUNVARNAMEC:
             self._dead(str[1:])
 
     def _dead(self, str):
-            raise Exception("Invalid variable/function name")
+            raise Exception(["Invalid variable/function name"])
             self.res = False
             
     def check(self, str):
@@ -33,6 +33,8 @@ class FA_VALIDFUNVARNAMEC:
 class FA_function_HELPER:
     def checkargs(self, str) -> bool:
         # STR TO WORD
+        LatestCatch = ""
+        trig = False
         if (str == ""):
             return True
         funVarCheck = FA_VALIDFUNVARNAMEC()
@@ -59,8 +61,9 @@ class FA_function_HELPER:
                     try:
                         funVarCheck.check(word[i])
                     except Exception as e:
-                        raise e
-                        return
+                        LatestCatch = e
+                        trig = True
+                        word[i] = "INVALID"
                     else:
                         word[i] = "V"
                 else:
@@ -70,8 +73,11 @@ class FA_function_HELPER:
         if (res):
             return True
         else:
-            raise Exception("Invalid Function Arguments")
-            return 
+            if (trig):
+                raise Exception(["Invalid Arguments"] + list(LatestCatch.args)[0])
+                return
+            else:
+                raise Exception(["Invalid Arguments"])
 
     def checkfuncall(self, str): 
         # withcolon toggled specific for "for in" call 
@@ -79,7 +85,7 @@ class FA_function_HELPER:
         # such as function(a,b,c) or function(a,b,c): are allowed (later if with colon are enabled) 
         # STR TO WORD
         if (str == ""):
-            raise Exception("Invalid Function Call")
+            raise Exception(["Invalid Function Call"])
             return
         funVarCheck = FA_VALIDFUNVARNAMEC()
         extractfnargs = SEMIFA_EXTRACT_FUNNAME_ARGS_PARENTHESES()
@@ -91,13 +97,14 @@ class FA_function_HELPER:
             funVarCheck.check(res[0])
             self.checkargs(res[2])
         except Exception as e:
-            raise e
+            raise Exception(["Invalid Function Call"] + list(e.args)[0])
             return
         else:
             return True
 
     def checkforloopstatement(self, str):
         # WORD TO STR
+        trig = False
         LatestCatch = ""
         funVarCheck = FA_VALIDFUNVARNAMEC()
         cykCheck = cykcheck.CYKCHECKCLASS()
@@ -118,6 +125,7 @@ class FA_function_HELPER:
                 funVarCheck.check(word[3])
             except Exception as e:
                 word[3] = "INVALID"
+                trig = True
                 LatestCatch = e
             else:
                 word[3] = "VAR"
@@ -128,14 +136,18 @@ class FA_function_HELPER:
                 funVarCheck.check(word[1])
             except Exception as e:
                 word[1] = "INVALID"
+                trig = True
                 LatestCatch = e
             else:
                 word[1] = "VAR"
                 if (cykCheck.check(argsRule.getForLoopRule(), word)):
                     return True
                 else:
-                    raise Exception("Invalid For Loop Statement", LatestCatch)
-                    return
+                    if (trig):
+                        raise Exception(["Invalid For Loop Statement"] + list(LatestCatch.args)[0])
+                        return
+                    else:
+                        raise Exception(["Invalid For Loop Statement"])
 
 
 
@@ -156,7 +168,7 @@ class SEMIFA_EXTRACT_FUNNAME_ARGS_PARENTHESES:
     
     def _start(self, str):
         if (str == ''):
-            raise Exception("Missing argument")
+            raise Exception(["Missing argument"])
             return
         elif (str[0] == '('):
             self._extractargs(str[1:])
@@ -166,11 +178,11 @@ class SEMIFA_EXTRACT_FUNNAME_ARGS_PARENTHESES:
 
     def _extractargs(self, str):
         if (str == ''):
-            raise Exception("Missing ')'")
+            raise Exception(["Missing ')'"])
             return
         elif (str[0] == ')'):
             if (len(str) > 1):
-                raise Exception("Extra characters after ')'")
+                raise Exception(["Extra characters after ')'"])
                 return
             else:
                 self._finish()

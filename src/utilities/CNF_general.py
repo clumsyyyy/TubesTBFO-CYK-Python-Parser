@@ -27,24 +27,44 @@ class CNF_Boolean:
             ("H3", ["S1", "Op"]),
             ("H4", ["Not", "S1"])
         ]
-
 class CNF_IMPORT:
     def getImportRule(self):
+        # from METHOD import VAR as VAR
+        # from METHOD import VAR
+        # import METHOD
+        # import METHOD as VAR 
+        # from VAR import VAR as VAR
+        # from VAR import VAR
+        # import VAR
+        # import VAR as VAR
         return [
             ("START", ["H1", "H0"]),
             ("START", ["H2", "H0"]),
-            ("START", ["H3", "H0"]),
+            ("START", ["H3", "MV"]),
+            ("START", ["H4", "H0"]),
+            ("MV", ["METHOD"]),
+            ("MV", ["VAR"]),
             ("H0", ["VAR"]),
-            ("H1", ["H5", "H4"]),
-            ("H2", ["H6", "H3"]),
+            ("H1", ["H5", "H3"]),
+            ("H2", ["H7", "H6"]),
             ("H3", ["import"]),
-            ("H4", ["as"]),
-            ("H5", ["H2", "H0"]),
-            ("H6", ["H7", "H0"]),
-            ("H7", ["from"])
+            ("H4", ["H8", "H6"]),
+            ("H5", ["H9", "MV"]),
+            ("H6", ["as"]),
+            ("H7", ["H1", "H0"]),
+            ("H8", ["H3", "MV"]),
+            ("H9", ["from"])
         ]
-
-
+    def getMethodRule(self):
+        # VAR. ... VAR
+        return [
+            ("START", ["H0", "B"]),
+            ("B", ["H0", "B"]),
+            ("B", ["VAR"]),
+            ("H0", ["H1", "H2"]),
+            ("H1", ["VAR"]),
+            ("H2", ["."])
+        ]
 
 class CNF_LOOP:
     def getArgsRule(self):
