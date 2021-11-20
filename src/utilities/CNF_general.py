@@ -79,19 +79,14 @@ class CNF_Equals:
             ("S2", ["VAR"]),
             ("S2", ["LIST"]),
             ("S2", ["ARITH"]),
+            ("S2", ["FUNCALL"]),
+            ("S2", ["ASSIGN"]),
             ("NOT", ["not"]),
             ("H0", ["H1", "NOT"]),
             ("H1", ["S1", "EQ"])
         ]
 
 '''
-S -> S1 EQ NOT S2
-S1 -> "VAR"
-EQ -> "="
-S2 -> "VAR" | "LIST" | "ARITH"
-NOT -> "not" | ""
-
-
   S -> H0 S2
      | H1 S2
  S1 -> "VAR"
@@ -99,6 +94,7 @@ NOT -> "not" | ""
  S2 -> "VAR"
      | "LIST"
      | "ARITH"
+     | "FUNCALL"
 NOT -> "not"
  H0 -> H1 NOT
  H1 -> S1 EQ

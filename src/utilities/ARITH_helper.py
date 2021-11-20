@@ -1,6 +1,17 @@
 class arithHelper:
     def checkArithStatement(self, str):
         arithOps = ["+", "-", "/", "//", "%", "*"]
+        arithFlag = False
+        for i in range(len(arithOps)):
+            if arithOps[i] in str:
+                arithFlag = True
+        for i in range(len(arithOps)):
+            if (str[0] == arithOps[i] or str[-1] == arithOps[i]) and arithOps[i] != "-":
+                raise Exception("misplaced operator")
+
+        if arithFlag == False:
+            raise Exception("No operator in sentence")
+        
         openingBracketCount = str.count("(")
         closingBracketCount = str.count(")")
         if (openingBracketCount != closingBracketCount):
@@ -28,6 +39,8 @@ class arithHelper:
         
         if (arithCount >= len(self.arithTokenizer(str))):
             raise Exception("Too many arithmetic operators")
+        else:
+            return True
     
     def arithTokenizer(self, str):
         num_arr = []
@@ -48,6 +61,8 @@ class arithHelper:
                         else:
                             num_arr.append(int(count))
                         count = ""
+            elif arr[i].isalpha():
+                num_arr.append(arr[i])
             else:
                 if count != "":
                     if minusFlag:

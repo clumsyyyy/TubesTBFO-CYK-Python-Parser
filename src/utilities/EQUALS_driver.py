@@ -2,7 +2,7 @@ from EQUALS_FA import FA_equals
 
 FAChecker = FA_equals()
 try:
-    FAChecker.checkEqual("a = b")
+    FAChecker.checkEqual("a = not True")
 except Exception as e:
     print(e)
 else:
