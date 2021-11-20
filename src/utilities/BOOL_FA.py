@@ -1,6 +1,7 @@
 from ARITH_helper import arithHelper
 from CNF_general import CNF_Boolean
 from CYKCHECKER_general import CYKCHECKCLASS
+from LOOP_FA_function import FA_VALIDFUNVARNAMEC, FA_function_HELPER
 class FA_boolean:
     #the exceptions are still ambiguous because im confused
     #ini buat and/not/or
@@ -18,29 +19,11 @@ class FA_boolean:
             word.append(buffer)
         word = list(filter(lambda a: a != "", word))
         
-        
-        if (len(word) > 5):
-            raise Exception("Too many arguments")
-
-        if ("and" not in word and "or" not in word):
-            raise Exception("No keyword 'and/or' in statement")
-
-        if (word[0] == "not"):
-            if (word[2] != "and" and word[2] != "or"):
-                raise Exception("'And/or' keyword misplaced")
-
-        '''
-        UNCOMMENT KALO CUMAN TRUE/FALSE
-        elif (word[i + 1] != "True" and word[i + 1] != "False"):
-            raise Exception("not harusnya diikutin True/False")
-        '''
-        
-        # elif (not funcChecker.checkfuncall(word[i + 1], True)):
-            # raise Exception("ada nama fungsi yang tidak valid")
         openingBracketCount = 0
         closingBracketCount = 0
         # asumsi kasusnya masih nerima True/False dulu
         for i in range(len(word)):
+            '''
             if ("not" in word[i]):
                 if ("True" in word[i] or "False" in word[i]):
                     raise Exception("'not' should be separated")
@@ -58,16 +41,38 @@ class FA_boolean:
                             j += 1
                         if varFlag == False:
                             raise Exception("'not' should be followed by a constant/variable")
-            if ("(" in word[i][0]):
+            '''
+            
+            if ("(" in word[i]):
                 if ("and" in word[i] or "or" in word[i]):
                     raise Exception("'and/or' operator should not have an opening bracket")
                 else:
                     openingBracketCount += word[i].count("(")
-            if (")" in word[i][-1]):
+            if (")" in word[i]):
                 if ("and" in word[i] or "or" in word[i] or "not" in word[i]):
                     raise Exception("'and/or/not' operator should not have a closing bracket")
                 else:
                     closingBracketCount += word[i].count(")")
+        
+        funVarCheck = FA_VALIDFUNVARNAMEC()
+        funcNameCheck = FA_function_HELPER()
+        
+        for i in range(len(word)):
+            if word[i][0] == "(": word[i] = word[i][1:]
+            if word[i][-1] == ")" and word[i][-2] != "(": word[i] = word[i][:-1]
+        print(word)
+        arr = ["not", "and", "or", "True", "False"]
+        for i in range(len(word)):
+            if word[i] not in arr:
+                if word[i].isdigit():
+                    word[i] = "VAR"
+                else:
+                    try:
+                        funcNameCheck.checkfuncall(word[i])
+                    except Exception as e:
+                        raise e
+                    else:
+                        word[i] = "FUNCALL"
 
         if openingBracketCount != closingBracketCount:
             raise Exception("open bracket detected but no close bracket")
@@ -76,11 +81,14 @@ class FA_boolean:
                 word[i] = word[i].replace("(", "")
             if ")" in word[i]:
                 word[i] = word[i].replace(")", "")
+        
         CYKChecker = CYKCHECKCLASS()
-        FAChecker = FA_boolean()
         CNF = CNF_Boolean()
         boolRule = CNF.getBooleanRule()
-        CYKChecker.check(boolRule, "not True and not False".split(" "))
+        if CYKChecker.check(boolRule, word):
+            return True
+        else:
+            raise Exception("Grammar incompatible!")
 
     def checkComparisonStatement(self, str):
         comparisonOps = ["<", "<=", ">", ">=", "==", "!="]

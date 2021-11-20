@@ -2,13 +2,22 @@ class CNF_Boolean:
     def getBooleanRule(self):
         return [
             ("S", ["H0", "S2"]),
+            ("S", ["Not", "S1"]),
             ("S", ["H1", "S2"]),
             ("S", ["H2", "S2"]),
             ("S", ["H3", "S2"]),
+            ("S", ["True"]),
+            ("S", ["False"]),
+            ("S", ["VAR"]),
+            ("S", ["FUNCALL"]),
             ("S1", ["True"]),
             ("S1", ["False"]),
+            ("S1", ["VAR"]),
+            ("S1", ["FUNCALL"]),
             ("S2", ["True"]),
             ("S2", ["False"]),
+            ("S2", ["VAR"]),
+            ("S2", ["FUNCALL"]),
             ("Not", ["not"]),
             ("Op", ["and"]),
             ("Op", ["or"]),
@@ -59,3 +68,38 @@ class CNF_LOOP:
             ("H5", ["for"]),
             ("H6", ["VAR"]),
         ]
+
+class CNF_Equals:
+    def getEqualsRule(self):
+        return [
+            ("S", ["H0", "S2"]),
+            ("S", ["H1", "S2"]),
+            ("S1", ["VAR"]),
+            ("EQ", ["="]),
+            ("S2", ["VAR"]),
+            ("S2", ["LIST"]),
+            ("S2", ["ARITH"]),
+            ("NOT", ["not"]),
+            ("H0", ["H1", "NOT"]),
+            ("H1", ["S1", "EQ"])
+        ]
+
+'''
+S -> S1 EQ NOT S2
+S1 -> "VAR"
+EQ -> "="
+S2 -> "VAR" | "LIST" | "ARITH"
+NOT -> "not" | ""
+
+
+  S -> H0 S2
+     | H1 S2
+ S1 -> "VAR"
+ EQ -> "="
+ S2 -> "VAR"
+     | "LIST"
+     | "ARITH"
+NOT -> "not"
+ H0 -> H1 NOT
+ H1 -> S1 EQ
+ '''
