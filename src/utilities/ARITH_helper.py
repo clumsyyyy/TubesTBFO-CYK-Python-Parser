@@ -1,7 +1,11 @@
+import re
+
 class arithHelper:
     def checkArithStatement(self, str):
         arithOps = ["+", "-", "/", "//", "%", "*"]
         arithFlag = False
+        if re.search('[a-zA-Z]', str):
+            raise Exception("there is alphabet")
         for i in range(len(arithOps)):
             if arithOps[i] in str:
                 arithFlag = True

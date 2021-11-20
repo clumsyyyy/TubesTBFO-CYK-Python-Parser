@@ -1,4 +1,5 @@
 from ARITH_helper import arithHelper
+from LIST_helper import listHelper
 from CNF_general import CNF_Equals
 from CYKCHECKER_general import CYKCHECKCLASS
 from LOOP_FA_function import FA_VALIDFUNVARNAMEC, FA_function_HELPER
@@ -29,26 +30,33 @@ class FA_equals:
         #cek sisi kanan
         arithCheck = arithHelper()
         funcCheck = FA_function_HELPER()
+        listCheck = listHelper()
         try:
-            arithCheck.checkArithStatement(word[2])
+            listCheck.checkList(word[2])
         except Exception as e:
             try:
-                varCheck.check(word[2])
+                arithCheck.checkArithStatement(word[2])
             except Exception as e:
                 try:
-                    funcCheck.checkfuncall(word[2])
+                    varCheck.check(word[2])
                 except Exception as e:
-                    if ("\"" in word[2] and word[2].count("\"") % 2 == 0) or word[2].isdigit():
-                        word[2] = "ASSIGN"
+                    try:
+                        funcCheck.checkfuncall(word[2])
+                    except Exception as e:
+                        print(listCheck.checkList(word[2]))
+                        if ("\"" in word[2] and word[2].count("\"") % 2 == 0) or word[2].isdigit() and not listCheck.checkList(word[2]):
+                            word[2] = "ASSIGN"
+                        else:
+                            word[2] = "INVALID"
+                        
                     else:
-                        word[2] = "INVALID"
+                        word[2] = "FUNCALL"
                 else:
-                    word[2] = "FUNCALL"
+                    word[2] = "VAR"
             else:
-                word[2] = "VAR"
+                word[2] = "ARITH"
         else:
-            word[2] = "ARITH"
-        
+            word[2] = "LIST"
 
         CYKChecker = CYKCHECKCLASS()
         print(word)

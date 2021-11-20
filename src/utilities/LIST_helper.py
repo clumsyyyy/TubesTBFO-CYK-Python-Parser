@@ -3,7 +3,10 @@ from LOOP_FA_function import FA_VALIDFUNVARNAMEC, FA_function_HELPER
 
 class listHelper:
     def checkList(self, string):
+        if (string[0] != "[") or (string[-1] != "]"):
+            raise Exception("Not a list")
         lst = string.split(",")
+        
         commaCount = string.count(",")
         for i in range(len(lst)):
             if lst[i] == " ":
@@ -45,7 +48,8 @@ class listHelper:
 
         if len(lst) != commaCount + 1:
             raise Exception("Too many commas")
-
+        else:
+            return True
     
 listHelp = listHelper()
 try:
