@@ -27,7 +27,7 @@ class FA_equals:
         for i in range(len(word)):
             word[i] = word[i].replace(" ", "")
         
-        print(word)
+
         try:
             varCheck.check(word[0])
         except Exception as e:
@@ -40,7 +40,7 @@ class FA_equals:
         arithCheck = arithHelper()
         funcCheck = FA_function_HELPER()
         #listCheck = listHelper()
-        print(word)
+
         # try:
         #     listCheck.checkList(word[2])
         # except Exception as e:
@@ -67,7 +67,7 @@ class FA_equals:
         #     word[2] = "LIST"
 
         CYKChecker = CYKCHECKCLASS()
-        print(word)
+
         CNF = CNF_Equals()
         if CYKChecker.check(CNF.getEqualsRule(), word):
             return True

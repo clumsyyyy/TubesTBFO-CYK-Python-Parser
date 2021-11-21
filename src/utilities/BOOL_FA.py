@@ -27,12 +27,12 @@ class FA_boolean:
         for i in range(len(word)):            
             if ("(" in word[i]):
                 if ("and" in word[i] or "or" in word[i]):
-                    raise Exception("'and/or' operator should not have an opening bracket")
+                    raise Exception(["'and/or' operator should not have an opening bracket"])
                 else:
                     openingBracketCount += word[i].count("(")
             if (")" in word[i]):
                 if ("and" in word[i] or "or" in word[i] or "not" in word[i]):
-                    raise Exception("'and/or/not' operator should not have a closing bracket")
+                    raise Exception(["'and/or/not' operator should not have a closing bracket"])
                 else:
                     closingBracketCount += word[i].count(")")
         
@@ -61,7 +61,6 @@ class FA_boolean:
                 token += word[i]
         if token != "":
             tokenWord.append(token)
-        print(tokenWord)
         word = tokenWord
         for i in range(len(word)):
             if word[i] not in arr:
@@ -88,13 +87,13 @@ class FA_boolean:
                         word[i] = "FUNCALL"
 
         if openingBracketCount != closingBracketCount:
-            raise Exception("Mismatching bracket count")
+            raise Exception(["Mismatching bracket count"])
         for i in range(len(word)):
             if "(" in word[i]:
                 word[i] = word[i].replace("(", "")
             if ")" in word[i]:
                 word[i] = word[i].replace(")", "")
-        print(word)
+
         CYKChecker = CYKCHECKCLASS()
         CNF = CNF_Boolean()
         boolRule = CNF.getBoolRule()
@@ -103,10 +102,9 @@ class FA_boolean:
         if CYKChecker.check(boolRule, word):
             return True
         else:
-            raise Exception("Grammar incompatible!")
+            raise Exception(["Grammar incompatible!"])
 
     def checkComparisonStatement(self, str):
-        print(str)
         comparisonOps = [ "<=", ">=", ">", "<", "==", "!="]
         opsCount = 0;
         for i in range(len(comparisonOps)):
@@ -115,7 +113,7 @@ class FA_boolean:
                 word = str.split(comparisonOps[i])
                 break
         if (opsCount > 1):
-            raise Exception("More than one comparison operator detected")
+            raise Exception(["More than one comparison operator detected"])
         #cek arithmetic
         instArith = arithHelper()
         var = FA_VALIDFUNVARNAMEC()
