@@ -2,106 +2,136 @@ from LOOP_FA_function import FA_VALIDFUNVARNAMEC, FA_function_HELPER
 
 class arithHelper:
     def checkArithStatement(self, string):
-        arithOps = ["+", "-", "/", "//", "%", "*"]
+        instValid = FA_VALIDFUNVARNAMEC()
+        if (string.isdigit()):
+            return True
+        arithOps = ["+", "-", "/", "//", "%", "*", "**"]
+        opsSingleton = ["+", "-", "*", "/", "%"]
+        openingBracketCount = string.count("(")
+        closingBracketCount = string.count(")")
+        if (openingBracketCount != closingBracketCount):
+            raise Exception(["Non-matching brackets"])
         arithFlag = False
         for i in range(len(arithOps)):
             if arithOps[i] in string:
                 arithFlag = True
-        for i in range(len(arithOps)):
-            if (string[0] == arithOps[i] or string[-1] == arithOps[i]) and arithOps[i] != "-":
-                raise Exception("misplaced operator")
-
+                break
         if arithFlag == False:
-            raise Exception("No operator in sentence")
+            raise Exception(["No operator in sentence"])
+        wordSep = []
+        operand = ""
+        for i in string:
+            if i in ["(", ")"]:
+                if operand != "":
+                    wordSep.append(operand)
+                    operand = ""
+                wordSep.append(i)
+            else:
+                operand = operand + i
+        if operand != "":
+            wordSep.append(operand)
+        openInsideFirstBracket = 0
+        f = True
+        wslen = len(wordSep)
+        parsedWord = []
+        insideapp = ""
+        isThereParen = False
+        for i in range(wslen):
+            if wordSep[i] == "(":
+                isThereParen = True
+                if f:
+                    parsedWord.append("(")
+                    f = False
+                else:
+                    openInsideFirstBracket += 1
+                    insideapp += wordSep[i]
+            elif wordSep[i] == ")":
+                if openInsideFirstBracket == 0:
+                    parsedWord.append(insideapp)
+                    parsedWord.append(wordSep[i])
+                    insideapp = ""
+                    f = True
+                else:
+                    openInsideFirstBracket -= 1
+                    insideapp += wordSep[i]
+            else:
+                if (f == True):
+                    parsedWord.append(wordSep[i])
+                else:
+                    insideapp += wordSep[i]
         
-        openingBracketCount = string.count("(")
-        closingBracketCount = string.count(")")
-        if (openingBracketCount != closingBracketCount):
-            raise Exception("Non-matching brackets")
-        arithCount = 0
-        for i in range(len(arithOps)):
-            if arithOps[i] in string:
-                if (arithOps[i] == "-"):
-                    arr = [x for x in string]
-                    for j in range(len(arr)):
-                        if arr[j] == "-" and not arr[j + 1].isdigit():
-                            arithCount += 1
-                elif (arithOps[i] == "/"):
-                    arr = [x for x in string]
-                    for j in range(len(arr)):
-                        if arr[j] == "/" and (arr[j + 1] != "/" and arr[j - 1] != "/"):
-                            arithCount += 1
+        #parsedWord = [x.strip() for x in parsedWord]
+        pwlen = len(parsedWord)
+        if isThereParen:
+            exprFlag = False
+            for i in range(pwlen):
+                if parsedWord[i] == "(":
+                    exprFlag = True
+                elif parsedWord[i] == ")":
+                    exprFlag = False
                 else:
-                    arithCount += string.count(arithOps[i])
-
-        if "(" in string:
-            string = string.replace("(", "")
-        if ")" in string:
-            string = string.replace(")", "")
-        if (arithCount >= len(self.arithTokenizer(string))):
-            raise Exception("Too many arithmetic operators")
-        else:
-            return True
-    
-    def arithTokenizer(self, string):
-        num_arr = []
-        arr = [x for x in string]
-        arithOps = ["+", "-", "/", "//", "%", "*"]
-        count = ""
-        minusFlag = False
-        for i in range(len(arr)):
-            if arr[i].isdigit() or arr[i].isalpha():
-                count += arr[i]
-            elif arr[i] == "-":
-                if arr[i + 1].isdigit() and arr[i - 1] != "-":
-                    minusFlag = True
-                elif (arr[i + 1] == "-"):
-                    if count != "":
-                        if minusFlag:
-                            minusFlag = False
-                            num_arr.append(int(count) * -1)
+                    if exprFlag == True:
+                        if (self.checkArithStatement(parsedWord[i])):
+                            parsedWord[i] = "VALID"
                         else:
-                            num_arr.append(int(count))
-                        count = ""
-            elif arr[i].isalpha():
-                num_arr.append(arr[i])
+                            raise Exception(["Invalid expression"])
+        parsedStr = "".join(parsedWord)
+        toappend = ""
+        word = []
+        for i in parsedStr:
+            if i in opsSingleton:
+                if toappend != "":
+                    word.append(toappend)
+                word.append(i)
+                toappend = ""
             else:
-                if count != "":
-                    if count.isdigit():
-                        if minusFlag:
-                            minusFlag = False
-                            num_arr.append(int(count) * -1)
-                        else:
-                            num_arr.append(int(count))
-                        count = ""
+                toappend += i
+        if toappend != "":
+            word.append(toappend)
+        opStack = ["Z0"]
+        for i in word:
+            if i not in opsSingleton:
+                opStack.append("OPERAND")
+            else:
+                if i == "-" or i == "+":
+                    opStack.append(i)
+                elif i == "*":
+                    if (opStack[-1] == "*"):
+                        opStack.pop()
+                        opStack.append("**")
+                    elif (opStack[-1] == "OPERAND"):
+                        opStack.append(i)
                     else:
-                        num_arr.append(count)
-                        count = ""
-        if count != "":
-            if count.isdigit():
-                if minusFlag:
-                    minusFlag = False
-                    num_arr.append(int(count) * -1)
-                else:
-                    num_arr.append(int(count))
-                count = ""
-            else:
-                num_arr.append(count)
-                count = ""
-        print(num_arr)
+                        raise Exception(["Invalid expression"])
 
-        varCheck = FA_VALIDFUNVARNAMEC()
-        absFlag = False
-        for i in range(len(num_arr)):
-            if num_arr[i] < 0:
-                num_arr[i] = abs(num_arr[i])
-                absFlag = True
-            if not str(num_arr[i]).isdigit():
-                print(num_arr[i])
-                try:
-                    varCheck.check(num_arr[i])
-                except Exception as e:
-                    raise e
-            if absFlag == True:
-                num_arr[i] = -num_arr[i]
-        return num_arr
+                elif i == "/":
+                    if (opStack[-1] == "/"):
+                        opStack.pop()
+                        opStack.append("//")
+                    elif (opStack[-1] == "OPERAND"):
+                        opStack.append(i)
+                    else:
+                        raise Exception(["Invalid expression"])
+                else:
+                    if (opStack[-1] == "OPERAND"):
+                        opStack.append(i)
+                    else:
+                        raise Exception(["Invalid expression"])
+        if (opStack[-1] != "OPERAND"):
+            raise Exception(["Invalid expression"])
+        else:
+            try:
+                for i in word:
+                    if i not in opsSingleton:
+                        i = i.strip()
+                        i = i.replace(")", "")
+                        i = i.replace("(", "")
+                        if (i.isdigit()):
+                            pass
+                        else:
+                            instValid.check(i)
+            except Exception as e:
+                raise Exception(["Invalid expression"] + list(e.args)[0])
+            else:
+                return True                            
+    
