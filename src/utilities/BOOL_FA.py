@@ -45,7 +45,7 @@ class FA_boolean:
         for i in range(len(word)):
             if word[i] not in arr:
                 if word[i].isdigit():
-                    word[i] = "VAR"
+                    word[i] = "INT"
                 else:
                     try:
                         funcNameCheck.checkfuncall(word[i])
@@ -53,8 +53,7 @@ class FA_boolean:
                         try:
                             funVarCheck.check(word[i])
                         except Exception as e:
-                            word[i] = "INVALID"
-                            raise e
+                                word[i] = "INVALID"
                         else:
                             word[i] = "VAR"
                     else:
@@ -87,7 +86,7 @@ class FA_boolean:
                 word = str.split(comparisonOps[i])
         if (opsCount > 1):
             raise Exception("More than one comparison operator detected")
-
+        print(word)
         #cek arithmetic
         instArith = arithHelper()
         for i in range(len(word)):
