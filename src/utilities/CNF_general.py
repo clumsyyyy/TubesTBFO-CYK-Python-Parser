@@ -21,10 +21,27 @@ class CNF_Boolean:
             ("Not", ["not"]),
             ("Op", ["and"]),
             ("Op", ["or"]),
+            ("Op", ["is"]),
             ("H0", ["H2", "Not"]),
             ("H1", ["H3", "Not"]),
             ("H2", ["H4", "Op"]),
             ("H3", ["S1", "Op"]),
+            ("H4", ["Not", "S1"])
+        ]
+    def getIsRule(self):
+        return [
+            ("S", ["H0", "S2"]),
+            ("S", ["H1", "S2"]),
+            ("S", ["H2", "S2"]),
+            ("S", ["H3", "S2"]),
+            ("S1", ["VAR"]),
+            ("S2", ["VAR"]),
+            ("IS", ["is"]),
+            ("Not", ["not"]),
+            ("H0", ["H2", "Not"]),
+            ("H1", ["H3", "Not"]),
+            ("H2", ["H4", "IS"]),
+            ("H3", ["S1", "IS"]),
             ("H4", ["Not", "S1"])
         ]
 class CNF_IMPORT:

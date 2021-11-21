@@ -6,6 +6,8 @@ class FA_boolean:
     #the exceptions are still ambiguous because im confused
     #ini buat and/not/or
     def checkBoolStatement(self, str):
+        funVarCheck = FA_VALIDFUNVARNAMEC()
+        funcNameCheck = FA_function_HELPER()
         word = []
         buffer = ""
         length = len(str)
@@ -19,6 +21,7 @@ class FA_boolean:
             word.append(buffer)
         word = list(filter(lambda a: a != "", word))
         print(word)
+
         openingBracketCount = 0
         closingBracketCount = 0
         # asumsi kasusnya masih nerima True/False dulu
@@ -34,27 +37,24 @@ class FA_boolean:
                 else:
                     closingBracketCount += word[i].count(")")
         
-        funVarCheck = FA_VALIDFUNVARNAMEC()
-        funcNameCheck = FA_function_HELPER()
         
         for i in range(len(word)):
             if word[i][0] == "(": word[i] = word[i][1:]
             if word[i][-1] == ")" and word[i][-2] != "(": word[i] = word[i][:-1]
-        arr = ["not", "and", "or", "True", "False"]
-        print(word)
+        arr = ["not", "and", "or", "True", "False", "is"]
         for i in range(len(word)):
             if word[i] not in arr:
                 if word[i].isdigit():
                     word[i] = "VAR"
                 else:
                     try:
-                        print(word[i])
                         funcNameCheck.checkfuncall(word[i])
                     except Exception as e:
                         try:
                             funVarCheck.check(word[i])
                         except Exception as e:
-                            print(e)
+                            word[i] = "INVALID"
+                            raise e
                         else:
                             word[i] = "VAR"
                     else:
@@ -71,6 +71,8 @@ class FA_boolean:
         CYKChecker = CYKCHECKCLASS()
         CNF = CNF_Boolean()
         boolRule = CNF.getBooleanRule()
+        if "is" in word:
+            boolRule = CNF.getIsRule()
         if CYKChecker.check(boolRule, word):
             return True
         else:
