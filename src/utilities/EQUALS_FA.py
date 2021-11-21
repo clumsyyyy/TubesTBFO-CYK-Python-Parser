@@ -43,12 +43,10 @@ class FA_equals:
                     try:
                         funcCheck.checkfuncall(word[2])
                     except Exception as e:
-                        print(listCheck.checkList(word[2]))
                         if ("\"" in word[2] and word[2].count("\"") % 2 == 0) or word[2].isdigit() and not listCheck.checkList(word[2]):
                             word[2] = "ASSIGN"
                         else:
                             word[2] = "INVALID"
-                        
                     else:
                         word[2] = "FUNCALL"
                 else:

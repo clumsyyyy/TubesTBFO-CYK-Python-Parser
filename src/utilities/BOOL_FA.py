@@ -18,31 +18,11 @@ class FA_boolean:
         if (buffer != ""):
             word.append(buffer)
         word = list(filter(lambda a: a != "", word))
-        
+        print(word)
         openingBracketCount = 0
         closingBracketCount = 0
         # asumsi kasusnya masih nerima True/False dulu
-        for i in range(len(word)):
-            '''
-            if ("not" in word[i]):
-                if ("True" in word[i] or "False" in word[i]):
-                    raise Exception("'not' should be separated")
-                elif word[i + 1] == "and" or word[i + 1] == "or":
-                    if (len(word[i]) == 3):
-                        raise Exception("'not' should be followed by a constant/variable")
-                    else:
-                        arr = [x for x in word[i]]
-                        varFlag = False
-                        j = 0
-                        while (not varFlag and j < len(arr)):
-                            print(arr[j])
-                            if (arr[j].isnumeric()):
-                                varFlag = True
-                            j += 1
-                        if varFlag == False:
-                            raise Exception("'not' should be followed by a constant/variable")
-            '''
-            
+        for i in range(len(word)):            
             if ("(" in word[i]):
                 if ("and" in word[i] or "or" in word[i]):
                     raise Exception("'and/or' operator should not have an opening bracket")
@@ -60,28 +40,34 @@ class FA_boolean:
         for i in range(len(word)):
             if word[i][0] == "(": word[i] = word[i][1:]
             if word[i][-1] == ")" and word[i][-2] != "(": word[i] = word[i][:-1]
-        print(word)
         arr = ["not", "and", "or", "True", "False"]
+        print(word)
         for i in range(len(word)):
             if word[i] not in arr:
                 if word[i].isdigit():
                     word[i] = "VAR"
                 else:
                     try:
+                        print(word[i])
                         funcNameCheck.checkfuncall(word[i])
                     except Exception as e:
-                        raise e
+                        try:
+                            funVarCheck.check(word[i])
+                        except Exception as e:
+                            print(e)
+                        else:
+                            word[i] = "VAR"
                     else:
                         word[i] = "FUNCALL"
 
         if openingBracketCount != closingBracketCount:
-            raise Exception("open bracket detected but no close bracket")
+            raise Exception("Mismatching bracket count")
         for i in range(len(word)):
             if "(" in word[i]:
                 word[i] = word[i].replace("(", "")
             if ")" in word[i]:
                 word[i] = word[i].replace(")", "")
-        
+        print(word)
         CYKChecker = CYKCHECKCLASS()
         CNF = CNF_Boolean()
         boolRule = CNF.getBooleanRule()

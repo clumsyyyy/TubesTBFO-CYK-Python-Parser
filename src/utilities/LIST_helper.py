@@ -50,7 +50,7 @@ class listHelper:
             raise Exception("Too many commas")
         else:
             return True
-    
+'''
 listHelp = listHelper()
 try:
     listHelp.checkList("[\"-69\", \"cok\", 69*420, mengontol, jancok()]") #mengontol variabel misalnya
@@ -58,3 +58,4 @@ except Exception as e:
     print(e)
 else:
     print("Success")
+'''

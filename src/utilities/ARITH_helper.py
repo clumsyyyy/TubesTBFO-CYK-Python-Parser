@@ -63,6 +63,8 @@ class arithHelper:
                         else:
                             num_arr.append(int(count))
                         count = ""
+            elif arr[i].isalpha():
+                num_arr.append(arr[i])
             else:
                 if count != "":
                     if count.isdigit():
@@ -74,6 +76,7 @@ class arithHelper:
                         count = ""
                     else:
                         num_arr.append(count)
+                        count = ""
         if count != "":
             if count.isdigit():
                 if minusFlag:
@@ -84,14 +87,21 @@ class arithHelper:
                 count = ""
             else:
                 num_arr.append(count)
+                count = ""
         print(num_arr)
 
         varCheck = FA_VALIDFUNVARNAMEC()
+        absFlag = False
         for i in range(len(num_arr)):
-            if not str(num_arr[i]).lstrip("-").isdigit():
+            if num_arr[i] < 0:
+                num_arr[i] = abs(num_arr[i])
+                absFlag = True
+            if not str(num_arr[i]).isdigit():
+                print(num_arr[i])
                 try:
                     varCheck.check(num_arr[i])
                 except Exception as e:
                     raise e
-   
+            if absFlag == True:
+                num_arr[i] = -num_arr[i]
         return num_arr
