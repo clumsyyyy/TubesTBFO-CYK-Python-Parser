@@ -1,36 +1,45 @@
-from LOOP_FA_function import FA_VALIDFUNVARNAMEC
-from CYKCHECKER_general import CYKCHECKCLASS
 from BOOL_FA import FA_boolean
-
+from CYKCHECKER_general import CYKCHECKCLASS
+from CNF_general import CNF_CONDITIONAL
 class FA_conditional:
-    def checkConditional(self,str):
-        if "if" not in str and "else" not in str and "elif" not in str:
-            raise Exception("Tidak ada if/elif/else")
+    def checkConditionals(self, string):
+        keyWords = ["if", "elif", "else"]
+        # cek colon
+        if (string[-1] != ":"):
+            raise Exception("Colon sign missing")
+        if string.count(":") > 1:
+            raise Exception("Too many colon signs")
+        #cek apakah bener depannya keyword
         
-        word = []
-        buffer = ""
-        length = len(str)
-        boolCheck = FA_boolean()
-        for i in range(length):
-            if (str[i] == " "):
-                word.append(buffer)
-                buffer = ""
-            elif (str[i] == "(" or str[i] == ")"):
-                word.append(buffer)
-                word.append(str[i])
-                buffer = ""
+        arr = (' '.join(string.split())).split(' ')
+
+        if ":" in arr[-1] and arr[-1] != ":":
+            arr[-1] = arr[-1][:-1]
+            arr.append(":")
+
+        if (arr[0] not in keyWords):
+            raise Exception("Missing if/else keyword")
+        if (arr[0] == "else") and (arr[1] != ":"):
+            raise Exception("else statement wrong")
+        statement = ' '.join(arr[1:-1])
+        
+        bool = FA_boolean()
+        try:
+            bool.checkBoolStatement(statement)
+        except Exception as e:
+            try:
+                bool.checkComparisonStatement(statement)
+            except Exception as e:
+                statement = "INVALID"
             else:
-                buffer += str[i]
-        if(buffer != ""):
-            word.append(buffer)
-        word = list(filter(lambda a: a!="", word))
-        
-        arr = ["if", "elif", "else",":","(",")"]
-        for i in range(len(word)):
-            if word[i] not in arr:
-                try:
-                    boolCheck.checkBoolStatement(word[i])     
-                except Exception as e: 
-                    raise e
-                else:
-                    word[i] = "VAR"
+                statement = "STATEMENT"
+        else:
+            statement = "STATEMENT"
+        print(statement)
+
+        cyk = CYKCHECKCLASS()
+        condRule = CNF_CONDITIONAL()
+        if cyk.check(condRule.getNewCondRule(), [arr[0], statement, arr[-1]]):
+            return True
+        else:
+            raise Exception("Incompatible grammar!")

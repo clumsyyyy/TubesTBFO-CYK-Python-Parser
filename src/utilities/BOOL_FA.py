@@ -7,7 +7,7 @@ class FA_boolean:
     #ini buat and/not/or
     def checkBoolStatement(self, str):
         funVarCheck = FA_VALIDFUNVARNAMEC()
-        funcNameCheck = FA_function_HELPER()
+        funcNameCheck = FA_function_HELPER() 
         word = []
         buffer = ""
         length = len(str)
@@ -20,7 +20,6 @@ class FA_boolean:
         if (buffer != ""):
             word.append(buffer)
         word = list(filter(lambda a: a != "", word))
-        print(word)
 
         openingBracketCount = 0
         closingBracketCount = 0
@@ -42,6 +41,28 @@ class FA_boolean:
             if word[i][0] == "(": word[i] = word[i][1:]
             if word[i][-1] == ")" and word[i][-2] != "(": word[i] = word[i][:-1]
         arr = ["not", "and", "or", "True", "False", "is"]
+        tokenWord = []
+        token = ""
+        for i in range(len(word)):
+            if word[i] in arr:
+                if word[i] == "not":
+                    tokenWord.append(word[i])
+                    if token != "":
+                        tokenWord.append(token)
+                        token = ""
+                elif word[i] == "and" or word[i] == "or":
+                    if token != "":
+                        tokenWord.append(token)
+                        token = ""
+                    tokenWord.append(word[i])
+                else:
+                    token += word[i]
+            else:
+                token += word[i]
+        if token != "":
+            tokenWord.append(token)
+        print(tokenWord)
+        word = tokenWord
         for i in range(len(word)):
             if word[i] not in arr:
                 if word[i].isdigit():
@@ -53,7 +74,14 @@ class FA_boolean:
                         try:
                             funVarCheck.check(word[i])
                         except Exception as e:
+                            try:
+                                self.checkComparisonStatement(word[i])
+                            except Exception as e:
                                 word[i] = "INVALID"
+                                raise e
+                                
+                            else:
+                                word[i] = "COMPARISON"
                         else:
                             word[i] = "VAR"
                     else:
@@ -78,16 +106,25 @@ class FA_boolean:
             raise Exception("Grammar incompatible!")
 
     def checkComparisonStatement(self, str):
-        comparisonOps = ["<", "<=", ">", ">=", "==", "!="]
+        print(str)
+        comparisonOps = [ "<=", ">=", ">", "<", "==", "!="]
         opsCount = 0;
         for i in range(len(comparisonOps)):
             if (comparisonOps[i] in str):
                 opsCount += 1
                 word = str.split(comparisonOps[i])
+                break
         if (opsCount > 1):
             raise Exception("More than one comparison operator detected")
-        print(word)
         #cek arithmetic
         instArith = arithHelper()
+        var = FA_VALIDFUNVARNAMEC()
         for i in range(len(word)):
-            instArith.checkArithStatement(word[i].replace(" ", ""))
+            if not word[i].replace(" ", "").isdigit():
+                try:
+                    instArith.checkArithStatement(word[i].replace(" ", ""))
+                except Exception as e:
+                    try:
+                        var.check(word[i].replace(" ", ""))
+                    except Exception as e:
+                        raise e

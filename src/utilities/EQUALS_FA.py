@@ -1,5 +1,5 @@
 from ARITH_helper import arithHelper
-from LIST_helper import listHelper
+#from LIST_helper import listHelper
 from CNF_general import CNF_Equals
 from CYKCHECKER_general import CYKCHECKCLASS
 from LOOP_FA_function import FA_VALIDFUNVARNAMEC, FA_function_HELPER
@@ -7,7 +7,6 @@ from LOOP_FA_function import FA_VALIDFUNVARNAMEC, FA_function_HELPER
 class FA_equals:
     def checkEqual(self, str):
         strArr = str.split()
-        print(strArr)
         equalArr = ['=', '+=', '-=', '//=', '*=', '/=', '%=', "**="]
         equalCount = 0
         equalSign = ""
@@ -40,31 +39,32 @@ class FA_equals:
         #cek sisi kanan
         arithCheck = arithHelper()
         funcCheck = FA_function_HELPER()
-        listCheck = listHelper()
+        #listCheck = listHelper()
+        print(word)
+        # try:
+        #     listCheck.checkList(word[2])
+        # except Exception as e:
         try:
-            listCheck.checkList(word[2])
+            arithCheck.checkArithStatement(word[2])
         except Exception as e:
             try:
-                arithCheck.checkArithStatement(word[2])
+                varCheck.check(word[2])
             except Exception as e:
                 try:
-                    varCheck.check(word[2])
+                    funcCheck.checkfuncall(word[2])
                 except Exception as e:
-                    try:
-                        funcCheck.checkfuncall(word[2])
-                    except Exception as e:
-                        if ("\"" in word[2] and word[2].count("\"") % 2 == 0) or word[2].isdigit() and not listCheck.checkList(word[2]):
-                            word[2] = "ASSIGN"
-                        else:
-                            word[2] = "INVALID"
+                    if ("\"" in word[2] and word[2].count("\"") % 2 == 0) or word[2].isdigit() and not listCheck.checkList(word[2]):
+                        word[2] = "ASSIGN"
                     else:
-                        word[2] = "FUNCALL"
+                        word[2] = "INVALID"
                 else:
-                    word[2] = "VAR"
+                    word[2] = "FUNCALL"
             else:
-                word[2] = "ARITH"
+                word[2] = "VAR"
         else:
-            word[2] = "LIST"
+            word[2] = "ARITH"
+        # else:
+        #     word[2] = "LIST"
 
         CYKChecker = CYKCHECKCLASS()
         print(word)
