@@ -3,15 +3,25 @@ from LIST_helper import listHelper
 from CNF_general import CNF_Equals
 from CYKCHECKER_general import CYKCHECKCLASS
 from LOOP_FA_function import FA_VALIDFUNVARNAMEC, FA_function_HELPER
-import re
 
 class FA_equals:
     def checkEqual(self, str):
-        if "=" not in str:
-            raise Exception("where =")
-
-        word = str.split("=")
-        word.insert(1, '=')
+        strArr = str.split()
+        print(strArr)
+        equalArr = ['=', '+=', '-=', '//=', '*=', '/=', '%=', "**="]
+        equalCount = 0
+        equalSign = ""
+        for i in range(len(strArr)):
+            for j in range(len(equalArr)):
+                if strArr[i] == equalArr[j]:
+                    equalSign = equalArr[j]
+                    equalCount += 1;
+        if equalCount == 0:
+            raise Exception(["No equal sign"])
+        elif equalCount > 1:
+            raise Exception(["Too many equal signs"])
+        word = str.split(equalSign)
+        word.insert(1, equalSign)
         
         #cek sisi kiri harusnya variabel
         varCheck = FA_VALIDFUNVARNAMEC()
@@ -62,4 +72,4 @@ class FA_equals:
         if CYKChecker.check(CNF.getEqualsRule(), word):
             return True
         else:
-            raise Exception("Grammar incompatible!")
+            raise Exception(["Grammar incompatible!"])

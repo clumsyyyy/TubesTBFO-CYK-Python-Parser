@@ -69,7 +69,7 @@ class FA_boolean:
         print(word)
         CYKChecker = CYKCHECKCLASS()
         CNF = CNF_Boolean()
-        boolRule = CNF.getBooleanRule()
+        boolRule = CNF.getBoolRule()
         if "is" in word:
             boolRule = CNF.getIsRule()
         if CYKChecker.check(boolRule, word):

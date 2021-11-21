@@ -1,35 +1,19 @@
 class CNF_Boolean:
-    def getBooleanRule(self):
-        return [
-            ("S", ["H0", "S2"]),
-            ("S", ["Not", "S1"]),
-            ("S", ["H1", "S2"]),
-            ("S", ["H2", "S2"]),
-            ("S", ["H3", "S2"]),
+    def getBoolRule(self):
+        return[
             ("S", ["True"]),
             ("S", ["False"]),
             ("S", ["VAR"]),
             ("S", ["FUNCALL"]),
             ("S", ["INT"]),
-            ("S1", ["True"]),
-            ("S1", ["False"]),
-            ("S1", ["VAR"]),
-            ("S1", ["FUNCALL"]),
-            ("S1", ["INT"]),
-            ("S2", ["True"]),
-            ("S2", ["False"]),
-            ("S2", ["VAR"]),
-            ("S2", ["FUNCALL"]),
-            ("S2", ["INT"]),
-            ("Not", ["not"]),
-            ("Op", ["and"]),
-            ("Op", ["or"]),
-            ("Op", ["is"]),
-            ("H0", ["H2", "Not"]),
-            ("H1", ["H3", "Not"]),
-            ("H2", ["H4", "Op"]),
-            ("H3", ["S1", "Op"]),
-            ("H4", ["Not", "S1"])
+            ("S", ["H0", "S"]),
+            ("S", ["H1", "S"]),
+            ("S", ["H2", "S"]),
+            ("H0", ["not"]),
+            ("H1", ["S", "H3"]),
+            ("H2", ["S", "H4"]),
+            ("H3", ["and"]),
+            ("H4", ["or"])
         ]
     def getIsRule(self):
         return [
@@ -110,12 +94,19 @@ class CNF_LOOP:
         ]
 
 class CNF_Equals:
+    #equalArr = ['=', '+=', '-=', '//=', '*=', '/=', '%=']
     def getEqualsRule(self):
         return [
             ("S", ["H0", "S2"]),
             ("S", ["H1", "S2"]),
             ("S1", ["VAR"]),
             ("EQ", ["="]),
+            ("EQ", ["+="]),
+            ("EQ", ["-="]),
+            ("EQ", ["//="]),
+            ("EQ", ['*=']),
+            ("EQ", ["/="]),
+            ("EQ", ["%="]),
             ("S2", ["VAR"]),
             ("S2", ["LIST"]),
             ("S2", ["ARITH"]),
