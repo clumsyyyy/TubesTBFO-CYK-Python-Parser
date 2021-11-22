@@ -133,14 +133,17 @@ class CNF_CONDITIONAL:
         return [
             ("S", ["H0", "THEN"]),
             ("S", ["H1", "THEN"]),
+            ("S", ["H2", "THEN"]),
             ("S", ["ELSE", "THEN"]),
             ("IF", ["if"]),
+            ("WHILE", ["while"]),
             ("STATEMENT", ["STATEMENT"]),
             ("ELIF", ["elif"]),
             ("ELSE", ["else"]),
             ("THEN", [":"]),
             ("H0", ["IF", "STATEMENT"]),
             ("H1", ["ELIF", "STATEMENT"]),
+            ("H2", ["WHILE", "STATEMENT"])
         ]
 '''
   S -> H0 S2
@@ -163,6 +166,7 @@ class CNF_MISC:
             ("S",["FUNCTION","THEN"]),
             ("S",["CLASS","THEN"]),
             ("FUNC",["FUNNAME","ARGS"]),
+            ("FUNC", ["FUNNAME"]),
             ("ARGS",["VAR"]),
             ("ARGS",["VAR","ARGS"]),
             ("VAR",["VAR"]),

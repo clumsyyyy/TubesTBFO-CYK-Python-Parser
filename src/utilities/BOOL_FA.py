@@ -1,7 +1,8 @@
 from ARITH_helper import arithHelper
 from CNF_general import CNF_Boolean
 from CYKCHECKER_general import CYKCHECKCLASS
-from LOOP_FA_function import FA_VALIDFUNVARNAMEC, FA_function_HELPER
+from LOOP_FA_function import FA_function_HELPER
+from LOOP_FA_varchecker import FA_VALIDFUNVARNAMEC
 class FA_boolean:
     #the exceptions are still ambiguous because im confused
     #ini buat and/not/or
@@ -20,7 +21,7 @@ class FA_boolean:
         if (buffer != ""):
             word.append(buffer)
         word = list(filter(lambda a: a != "", word))
-
+        
         openingBracketCount = 0
         closingBracketCount = 0
         # asumsi kasusnya masih nerima True/False dulu
@@ -62,6 +63,7 @@ class FA_boolean:
         if token != "":
             tokenWord.append(token)
         word = tokenWord
+        print(word)
         for i in range(len(word)):
             if word[i] not in arr:
                 if word[i].isdigit():
@@ -77,15 +79,14 @@ class FA_boolean:
                                 self.checkComparisonStatement(word[i])
                             except Exception as e:
                                 word[i] = "INVALID"
-                                raise e
-                                
+                                raise e  
                             else:
                                 word[i] = "COMPARISON"
                         else:
                             word[i] = "VAR"
                     else:
                         word[i] = "FUNCALL"
-
+        print(word)
         if openingBracketCount != closingBracketCount:
             raise Exception(["Mismatching bracket count"])
         for i in range(len(word)):
@@ -112,6 +113,8 @@ class FA_boolean:
                 opsCount += 1
                 word = str.split(comparisonOps[i])
                 break
+        if (opsCount == 0):
+            raise Exception(["No comparison operator"])
         if (opsCount > 1):
             raise Exception(["More than one comparison operator detected"])
         #cek arithmetic

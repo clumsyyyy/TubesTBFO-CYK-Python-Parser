@@ -349,6 +349,7 @@ class FA_function_HELPER:
         if (len(word) > 4):
             word[3] = ' '.join(word[3:-1])
             del word[4:-1]
+        print(word)
         try:
             self.checkFunction(word[3])
         except Exception as e:

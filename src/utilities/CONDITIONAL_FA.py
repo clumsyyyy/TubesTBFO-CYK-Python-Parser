@@ -3,7 +3,7 @@ from CYKCHECKER_general import CYKCHECKCLASS
 from CNF_general import CNF_CONDITIONAL
 class FA_conditional:
     def checkConditionals(self, string):
-        keyWords = ["if", "elif", "else"]
+        keyWords = ["if", "elif", "else", "while"]
         # cek colon
         if (string[-1] != ":"):
             raise Exception(["Colon sign missing"])
@@ -18,24 +18,25 @@ class FA_conditional:
             arr.append(":")
 
         if (arr[0] not in keyWords):
-            raise Exception(["Missing if/else keyword"])
+            raise Exception(["Missing if/else/while keyword"])
         if (arr[0] == "else") and (arr[1] != ":"):
             raise Exception(["else statement wrong"])
         statement = ' '.join(arr[1:-1])
         
         bool = FA_boolean()
-        try:
-            bool.checkBoolStatement(statement)
-        except Exception as e:
+        if len(arr) != 2:
             try:
-                bool.checkComparisonStatement(statement)
+                bool.checkBoolStatement(statement)
             except Exception as e:
-                statement = "INVALID"
-                raise e
+                try:
+                    bool.checkComparisonStatement(statement)
+                except Exception as e:
+                    statement = "INVALID"
+                    raise e
+                else:
+                    statement = "STATEMENT"
             else:
                 statement = "STATEMENT"
-        else:
-            statement = "STATEMENT"
 
 
         cyk = CYKCHECKCLASS()
