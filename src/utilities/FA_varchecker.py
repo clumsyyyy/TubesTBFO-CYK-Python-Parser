@@ -1,4 +1,4 @@
-class FA_VALIDFUNVARNAMEC:
+class varNameChecker:
     def __init__(self):
         self.res = True
 

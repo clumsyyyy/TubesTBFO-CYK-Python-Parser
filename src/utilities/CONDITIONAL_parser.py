@@ -1,7 +1,7 @@
-from BOOL_parser import FA_boolean
+from LOOP_FA_function import FA_function_HELPER
 from CYKcheck import CYKCHECKCLASS
 from CNF import CNF_CONDITIONAL
-class FA_conditional:
+class conditionalParser:
     def checkConditionals(self, string):
         keyWords = ["if", "elif", "else", "while"]
         # cek colon
@@ -23,13 +23,13 @@ class FA_conditional:
             raise Exception(["else statement wrong"])
         statement = ' '.join(arr[1:-1])
         
-        bool = FA_boolean()
+        bool = FA_function_HELPER()
         if len(arr) != 2:
             try:
-                bool.checkBoolStatement(statement)
+                bool.checkBool(statement)
             except Exception as e:
                 try:
-                    bool.checkComparisonStatement(statement)
+                    bool.checkComparison(statement)
                 except Exception as e:
                     statement = "INVALID"
                     raise e

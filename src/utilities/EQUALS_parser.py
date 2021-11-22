@@ -1,9 +1,8 @@
 from CNF import CNF_Equals
 from CYKcheck import CYKCHECKCLASS
 from LOOP_FA_function import FA_function_HELPER
-from FA_varchecker import FA_VALIDFUNVARNAMEC
-from BOOL_parser import FA_boolean
-class FA_equals:
+from FA_varchecker import varNameChecker
+class equalsParser:
     def checkEqual(self, str):
         strArr = [x for x in ' '.join(str.strip().split())]
         equalArr =  ['+=', '-=', '//=', '*=', '/=', '%=', "**=", "=", ":=", "@="]
@@ -31,7 +30,7 @@ class FA_equals:
 
         
         #cek sisi kiri harusnya variabel
-        varCheck = FA_VALIDFUNVARNAMEC()
+        varCheck = varNameChecker()
         try:
             varCheck.check(word[0])
         except Exception as e:
@@ -43,7 +42,7 @@ class FA_equals:
         #cek sisi kanan
 
         funcCheck = FA_function_HELPER()
-        boolCheck = FA_boolean()
+        boolCheck = FA_function_HELPER()
         print(word)
         try:
             funcCheck.checkList(word[2])
@@ -78,7 +77,8 @@ class FA_equals:
         CYKChecker = CYKCHECKCLASS()
         print(word)
         CNF = CNF_Equals()
-        if CYKChecker.check(CNF.getNewEqRule(), word):
+        if CYKChecker.check(CNF.getEqualsRule(), word):
             return True
         else:
             raise Exception(["Grammar incompatible!"])
+

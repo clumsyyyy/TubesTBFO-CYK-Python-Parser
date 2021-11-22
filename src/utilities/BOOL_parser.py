@@ -1,12 +1,12 @@
 from CNF import CNF_Boolean
 from CYKcheck import CYKCHECKCLASS
 from LOOP_FA_function import FA_function_HELPER
-from FA_varchecker import FA_VALIDFUNVARNAMEC
-class FA_boolean:
+from FA_varchecker import varNameChecker
+class booleanParser:
     #the exceptions are still ambiguous because im confused
     #ini buat and/not/or
     def checkBoolStatement(self, str):
-        funVarCheck = FA_VALIDFUNVARNAMEC()
+        funVarCheck = varNameChecker()
         funcNameCheck = FA_function_HELPER() 
         word = []
         buffer = ""
@@ -118,7 +118,7 @@ class FA_boolean:
             raise Exception(["More than one comparison operator detected"])
         #cek arithmetic
         instArith = FA_function_HELPER()
-        var = FA_VALIDFUNVARNAMEC()
+        var = varNameChecker()
         for i in range(len(word)):
             if not word[i].replace(" ", "").isdigit():
                 try:

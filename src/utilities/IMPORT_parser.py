@@ -1,9 +1,9 @@
 import CNF as CNFINST
 import CYKcheck as CYKCHECK
 import LOOP_FA_function as LOOP_FA
-
+import FA_varchecker as varCheck
 faInst = CNFINST.CNF_IMPORT()
-funvarChecker = LOOP_FA.FA_VALIDFUNVARNAMEC()
+funvarChecker = varCheck.varNameChecker()
 
 def checkmethod(str):
     trig = False

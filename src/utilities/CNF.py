@@ -194,7 +194,7 @@ class CNF_CONDITIONAL:
             ("H2", ["WHILE", "STATEMENT"])
         ]
  
-class CNF_MISC:
+class CNF_Freetype:
     # class, def, pass, raise, return
     def getDefClass(self):
         return [

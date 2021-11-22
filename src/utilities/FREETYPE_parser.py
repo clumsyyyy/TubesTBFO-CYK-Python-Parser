@@ -1,12 +1,10 @@
-from LOOP_FA_function import FA_VALIDFUNVARNAMEC
 from CYKcheck import CYKCHECKCLASS
-from BOOL_parser import FA_boolean
-from CNF import CNF_MISC
-from FA_varchecker import FA_VALIDFUNVARNAMEC
+from CNF import CNF_Freetype
+from FA_varchecker import varNameChecker
 from LOOP_FA_function import FA_function_HELPER
 
 
-class MISC_PARSER:
+class freetypeParser:
     # buat def,class,try,raise,return,pass, di sini
     
     def checkDefClass(self, string):
@@ -27,13 +25,11 @@ class MISC_PARSER:
         #print(arr)
         if (arr[0] not in keyWords):
             raise Exception(["Missing def/class keyword"])
-        #if (arr[0] == "else") and (arr[1] != ":"):
-        #    raise Exception(["else statement wrong"])
 
         func = (' '.join(arr[1:-1]))
         #print(func)
         
-        varFunChecker = FA_VALIDFUNVARNAMEC()
+        varFunChecker = varNameChecker()
         if "(" in func:
             if ")" not in func:
                 raise Exception(["Missing ')'"])
@@ -73,7 +69,7 @@ class MISC_PARSER:
         word.extend(arguments)
         word.append(arr[-1])
         cyk = CYKCHECKCLASS()
-        defClassRule = CNF_MISC()
+        defClassRule = CNF_Freetype()
         if cyk.check(defClassRule.getDefClass(), word):
             return True
         else:
@@ -87,12 +83,12 @@ class MISC_PARSER:
                 raise Exception(["return to monke"])
             else:
                 statement = ' '.join(word[1:])
-                bool = FA_boolean()
+                bool = FA_function_HELPER()
                 try:
-                    bool.checkBoolStatement(statement)
+                    bool.checkBool(statement)
                 except Exception as e:
                     try:
-                        bool.checkComparisonStatement(statement)
+                        bool.checkComparison(statement)
                     except Exception as e:
                         if type(statement) == type(""):
                             statement = "STATEMENT"
@@ -121,7 +117,7 @@ class MISC_PARSER:
                         word = [word[0],exception]
                     
         cyk = CYKCHECKCLASS()
-        passReturnRule = CNF_MISC()
+        passReturnRule = CNF_Freetype()
         if cyk.check(passReturnRule.getPassReturnRaise(),word):
             return True
         else:
