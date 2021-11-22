@@ -93,6 +93,16 @@ class CNF_LOOP:
             ("H5", ["for"]),
             ("H6", ["VAR"]),
         ]
+    def getWhileLoopRule(self):
+        return [
+            ("START", ["H1", "H0"]),
+            ("H1", ["H4", "TYP"]),
+            ("TYP", ["VAR"]),
+            ("TYP", ["FUNCALL"]),
+            ("TYP", ["BOOL"]),
+            ("H4", ["while"]),
+            ("H0", [":"]),
+        ]
 
 class CNF_Equals:
     #equalArr = ['=', '+=', '-=', '//=', '*=', '/=', '%=']

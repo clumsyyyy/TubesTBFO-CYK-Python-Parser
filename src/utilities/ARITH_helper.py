@@ -1,9 +1,15 @@
-from LOOP_FA_function import FA_VALIDFUNVARNAMEC, FA_function_HELPER
-
+from LOOP_FA_varchecker import FA_VALIDFUNVARNAMEC
+from LOOP_FA_function import FA_function_HELPER
 class arithHelper:
+    def checkfloat(self, value):
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
     def checkArithStatement(self, string):
         instValid = FA_VALIDFUNVARNAMEC()
-        if (string.isdigit()):
+        if (string.isdigit() or self.checkfloat(string)):
             return True
         arithOps = ["+", "-", "/", "//", "%", "*", "**"]
         opsSingleton = ["+", "-", "*", "/", "%"]
@@ -16,6 +22,8 @@ class arithHelper:
             if arithOps[i] in string:
                 arithFlag = True
                 break
+        if (openingBracketCount > 0):
+            arithFlag = True
         if arithFlag == False:
             raise Exception(["No operator in sentence"])
         wordSep = []
@@ -120,18 +128,24 @@ class arithHelper:
         if (opStack[-1] != "OPERAND"):
             raise Exception(["Invalid expression"])
         else:
-            try:
-                for i in word:
-                    if i not in opsSingleton:
-                        i = i.strip()
-                        i = i.replace(")", "")
-                        i = i.replace("(", "")
-                        if (i.isdigit()):
-                            pass
-                        else:
+            for i in word:
+                if i not in opsSingleton:
+                    i = i.strip()
+                    i = i.replace(")", "")
+                    i = i.replace("(", "")
+                    if (i.isdigit() or self.checkfloat(i)):
+                        pass
+                    else:
+                        try:
                             instValid.check(i)
-            except Exception as e:
-                raise Exception(["Invalid expression"] + list(e.args)[0])
-            else:
-                return True                            
+                        except Exception as e:
+                            try:
+                                FA_function_HELPER().checkFunction(i)
+                            except Exception as e:
+                                raise Exception(["Invalid expression"])
+                            else:
+                                pass
+                        else:
+                            pass
+            return True                            
     

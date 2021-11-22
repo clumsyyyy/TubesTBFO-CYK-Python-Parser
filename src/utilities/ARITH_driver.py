@@ -2,7 +2,7 @@ from ARITH_helper import arithHelper
 
 inst = arithHelper()
 try:
-    inst.checkArithStatement("2 **              (-420*s//(2*x**                    3)) *           (2 + (2         //3))") #mengontol variabel misalnya
+    inst.checkArithStatement("(2.22)") #mengontol variabel misalnya
 except Exception as e:
     print(e)
 else:
