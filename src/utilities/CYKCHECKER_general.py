@@ -13,6 +13,8 @@ class CYKCHECKCLASS:
         return availrule
 
     def check(self, rule, word) -> bool:
+        if (len(word) == 0):
+            return False
         word = list(filter(lambda x: x != '', word))
         tablesize = len(word)
         cyktable = [[None for i in range(tablesize)] for j in range(tablesize)]

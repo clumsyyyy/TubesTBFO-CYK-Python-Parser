@@ -73,6 +73,45 @@ class CNF_IMPORT:
         ]
 
 class CNF_LOOP:
+    def getBoolRule(self):
+        return [
+            ("START", ["H0", "TWO"]),
+            ("START", ["H1", "INST"]),
+            ("START", ["H2", "TWO"]),
+            ("TWO", ["H1", "INST"]),
+            ("TWO", ["H2", "TWO"]),
+            ("TWO", ["H0", "TWO"]),
+            ("TWO", ["INT"]),
+            ("TWO", ["VAR"]),
+            ("TWO", ["FUNCALL"]),
+            ("TWO", ["COMP"]),
+            ("INST", ["INT"]),
+            ("INST", ["VAR"]),
+            ("INST", ["FUNCALL"]),
+            ("INST", ["COMP"]),
+            ("H0", ["INST", "BIN"]),
+            ("H1", ["not"]),
+            ("H2", ["H3", "BIN"]),
+            ("H3", ["H1", "INST"]),
+            ("BIN", ["and"]),
+            ("BIN", ["or"]),
+        ]
+    def getListElRule(self):
+        return [
+            ("START", ["H0", "EC"]),
+            ("EC", ["H1", "EC"]),
+            ("EC", ["H3", "H2"]),
+            ("CALEE", ["VAR"]),
+            ("CALEE", ["NUM"]),
+            ("CALEE", ["BOOL"]),
+            ("CALEE", ["FUNCALL"]),
+            ("CALEE", ["ARITH"]),
+            ("H0", ["VAR"]),
+            ("H1", ["H3", "H2"]),
+            ("H2", ["]"]),
+            ("H3", ["H4", "CALEE"]),
+            ("H4", ["["]),
+        ]
     def getArgsRule(self):
         return [
         ("S", ["H0", "S"]),
