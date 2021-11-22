@@ -43,10 +43,10 @@ file.close()
 
 for i in range(len(lineArr)):
     if lineArr[i] != '\n':
-        # print("Line", count, ": ", end = "")
+        print("Line", count, ": ", end = "")
         expression = lineArr[i][0].strip("\n").strip()
         indent = lineArr[i][1]
-        # print(expression)
+        print(expression)
         loopIndent = [x for x in loopIndent if x < indent]
         defIndent = [x for x in defIndent if x <= indent]
         returnIndent = [x for x in returnIndent if x <= max(defIndent)]
@@ -98,15 +98,15 @@ for i in range(len(lineArr)):
                                             break
                                     else:
                                         pass
-                                        # print("function call")
+                                        print("function call")
                                 else:
                                     pass
-                                    #print("import statement")
+                                    print("import statement")
                             else:
                                 pass
-                                #print("equal statement")
+                                print("equal statement")
                         else:
-                            #print("while statement")
+                            print("while statement")
                             loopIndent.append(indent)
                     else:
                         print("loop statement")
@@ -115,11 +115,15 @@ for i in range(len(lineArr)):
                     if "return" in expression:
                         if indent not in returnIndent:
                             returnIndent.append(indent) 
-                        if indent <= max(defIndent):
-                            print("wrong indentation position for return")
+                        if len(defIndent) != 0:
+                            if indent <= max(defIndent):
+                                print("wrong indentation position for return")
+                                break
+                        else:
+                            print("return not initiated with def")
                             break
             else: #cek def
-                #print("def statement")
+                print("def statement")
                 if indent not in defIndent:
                     defIndent.append(indent)
         else: #cek indentasi if else
@@ -132,11 +136,11 @@ for i in range(len(lineArr)):
                     try:
                         conditionals.checkConditionals(lineArr[i + 1][0].strip('\n').strip())
                     except Exception as e:
-                        #print("else statement")
+                        print("else statement")
                         ifIndent = [x for x in ifIndent if x < indent]
                     else:
                         if lineArr[i + 1][1] > indent:
-                            #print("else statement")
+                            print("else statement")
                             print(indent)
                             ifIndent = [x for x in ifIndent if x < indent]
                         elif indent not in ifIndent:
@@ -153,10 +157,10 @@ for i in range(len(lineArr)):
                         conditionals.checkConditionals(lineArr[i + 1][0].strip('\n').strip())
                     except:
                         pass
-                        #print("elif statement")
+                        print("elif statement")
                     else:
                         if lineArr[i + 1][1] > indent:
-                            #print("elif statement")
+                            print("elif statement")
                             pass
                         else:
                             print("Error in line", count, "->", expression)
@@ -166,7 +170,7 @@ for i in range(len(lineArr)):
                 try:
                     conditionals.checkConditionals(lineArr[i + 1][0].strip('\n').strip())
                 except:
-                    #print("if statement")
+                    print("if statement")
                     if indent not in ifIndent:
                         ifIndent.append(indent)
                 else:
