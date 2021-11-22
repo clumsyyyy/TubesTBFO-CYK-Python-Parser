@@ -3,6 +3,7 @@ from CYKCHECKER_general import CYKCHECKCLASS
 from BOOL_FA import FA_boolean
 from CNF_general import CNF_MISC
 from LOOP_FA_function import FA_VALIDFUNVARNAMEC
+from LOOP_FA_function import FA_function_HELPER
 
 
 class MISC_PARSER:
@@ -78,3 +79,50 @@ class MISC_PARSER:
             return True
         else:
             raise Exception(["Incompatible grammar!"])
+    
+    def checkPassReturnRaise(self,string):
+        funcallCheck = FA_function_HELPER()
+        word = (' '.join(string.split())).split(' ')
+        if(word[0] == "return"):
+            if (len(word) == 1):
+                raise Exception(["return to monke"])
+            else:
+                statement = ' '.join(word[1])
+                bool = FA_boolean()
+                try:
+                    bool.checkBoolStatement(statement)
+                except Exception as e:
+                    try:
+                        bool.checkComparisonStatement(statement)
+                    except Exception as e:
+                        statement = "INVALID"
+                        raise e
+                    else:
+                        statement = "STATEMENT"
+                else:
+                    statement = "STATEMENT"
+                word = [word[0],statement]
+                
+        elif (word[0] == "raise"):
+            exception = ' '.join(word[1:])
+            if len(exception) < 9:
+                raise Exception(["No Exception"])
+            else:
+                if exception[:9] != "Exception":
+                    raise Exception(["No Exception"])
+                else:
+                    try:
+                        funcallCheck.checkfuncall(exception)
+                    except Exception as e:
+                        raise(e)
+                    else:
+                        exception = "EXCEPTION"
+                        word = [word[0],exception]
+                    
+        cyk = CYKCHECKCLASS()
+        passReturnRule = CNF_MISC()
+        if cyk.check(passReturnRule.getPassReturnRaise(),word):
+            return True
+        else:
+            raise Exception(["Incompatible grammar!"])
+        

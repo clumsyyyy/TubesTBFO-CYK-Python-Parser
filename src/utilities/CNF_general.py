@@ -165,6 +165,17 @@ class CNF_MISC:
             ("CLASSKEYWORD",["class"]),
             ("DEF",["def"]),
         ]
+    
+    def getPassReturnRaise(self):
+        return[
+            ("S",["pass"]),
+            ("S",["RETURN","STATEMENT"]),
+            ("S",["RAISE","EXCEPTION"]),
+            ("STATEMENT",["STATEMENT"]),
+            ("RETURN",["return"]),
+            ("RAISE",["raise"]),
+            ("EXCEPTION",["EXCEPTION"])
+        ]
         
 '''
    S -> H1 H0

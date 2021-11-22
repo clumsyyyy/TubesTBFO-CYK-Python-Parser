@@ -3,7 +3,7 @@ from MISC_parser import MISC_PARSER
 Checker = MISC_PARSER()
 
 try:
-    Checker.checkDefClass("def   hehe  (   test   ) :")
+    Checker.checkPassReturnRaise("raise Exception()")
 except Exception as e:
     print(e)
 else:
