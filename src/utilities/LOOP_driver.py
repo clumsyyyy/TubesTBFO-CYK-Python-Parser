@@ -1,6 +1,6 @@
-import CNF_general as CNF_functionargs
-import CYKCHECKER_general as cykcheck
-import LOOP_FA_varchecker as VARCHECK
+import CNF as CNF_functionargs
+import CYKcheck as cykcheck
+import FA_varchecker as VARCHECK
 import LOOP_FA_function as FA_function
 
 varCheck = VARCHECK.FA_VALIDFUNVARNAMEC()
@@ -34,7 +34,8 @@ def checkComparisonStatement(str):
                         raise e
 
 try:
-    fa_helper.checkForLoop("for x+2=3")
+    fa_helper.checkBool("True and False or not True or fun(2, False and 2rue)")
+    # fa_helper.checkWhileLoop("while True and False or not True or fun(2,3):")
 except Exception as e:
     print(e)
 else:

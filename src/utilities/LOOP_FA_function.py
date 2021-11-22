@@ -54,15 +54,17 @@ class FA_function_HELPER:
             return True
     def findIndexwithoutHandling(self, arr, target):
         try:
-            res = arr.index(target)
+            res = len(arr) - arr[::-1].index(target) - 1
         except:
             return -1
         else:
             return res
     def checkBool(self, str):
         str = str.strip()
+        if str in ["True", "False", "None"]:
+            return True
         argsRule = CNF_LOOP()
-        logicOp = ["and", "or", "not"]
+        logicOp = ["and", "or", "not", "in", "not in"]
         if (str.count("(") != str.count(")")):
             raise Exception(["Missing Brackets"])
         else:
@@ -119,6 +121,44 @@ class FA_function_HELPER:
                         if exprFlag == True:
                             try:
                                 self.checkArgs(parsedWord[i])
+                                if (len(parsedWord) <= 2):
+                                    raise Exception(["Invalid Args"])
+                                strcheck = parsedWord[i-2]
+                                oldWord = strcheck.split(" ")
+                                word = []
+                                wordBlock = ""
+                                owlen = len(oldWord)
+                                skipone = False
+                                for j in range(owlen):
+                                    if  skipone == True:
+                                        skipone = False
+                                        continue
+                                    if j < owlen-1:
+                                        if ((oldWord[j] + " " + oldWord[j+1]) == "not in"):
+                                            skipone = True
+                                            if wordBlock != "":
+                                                word.append(wordBlock.strip())
+                                                wordBlock = ""
+                                            word.append(oldWord[j] + " " + oldWord[j+1])
+                                        elif oldWord[j] in logicOp:
+                                            if wordBlock != "":
+                                                word.append(wordBlock.strip())
+                                                wordBlock = ""
+                                            word.append(oldWord[j])
+                                        else:
+                                            wordBlock += oldWord[j]
+                                    elif oldWord[j] in logicOp:
+                                        if wordBlock != "":
+                                            word.append(wordBlock.strip())
+                                            wordBlock = ""
+                                        word.append(oldWord[j])
+                                    else:
+                                        wordBlock += oldWord[j]
+                                if wordBlock != "":
+                                    word.append(wordBlock.strip())
+                                    wordBlock = ""
+                                if (word[-1] in logicOp):
+                                    raise Exception(["Invalid Args"])
                             except:
                                 try:
                                     self.checkBool(parsedWord[i])
@@ -127,18 +167,20 @@ class FA_function_HELPER:
                                 else:
                                     parsedWord[i] = "BOOLOPS"
                             else:
-                                strcheck = parsedWord[i-2]
-                                wordCheck = strcheck.split(" ")
-                                andpos = self.findIndexwithoutHandling(wordCheck, "and")
-                                orpos = self.findIndexwithoutHandling(wordCheck, "or")
-                                notpos = self.findIndexwithoutHandling(wordCheck, "not")
-                                latestpos = max(andpos, orpos, notpos)
+                                print("wordbracs:", word)
+                                andpos = self.findIndexwithoutHandling(word, "and")
+                                orpos = self.findIndexwithoutHandling(word, "or")
+                                notpos = self.findIndexwithoutHandling(word, "not")
+                                inpos = self.findIndexwithoutHandling(word, "in")
+                                notinpos = self.findIndexwithoutHandling(word, "not in")
+                                latestpos = max(andpos, orpos, notpos, notinpos, inpos)
                                 if (latestpos != -1):
-                                    del wordCheck[latestpos+1]
-                                    parsedWord[i-2] = " ".join(wordCheck)
+                                    del word[latestpos+1]
+                                    parsedWord[i-2] = " ".join(word)
                                 else:
                                     delFirst = True
                                 parsedWord[i] = "BOOLOPS"
+                                print("pw:", parsedWord)
                 if (delFirst == True):
                     del parsedWord[0]
                 print("parsedaft:", parsedWord)
@@ -153,20 +195,39 @@ class FA_function_HELPER:
                 oldWord = str.split()
                 word = []
                 wordBlock = ""
-                for i in oldWord:
-                    if i in logicOp:
+                owlen = len(oldWord)
+                skipone = False
+                for i in range(owlen):
+                    if  skipone == True:
+                        skipone = False
+                        continue
+                    if i < owlen-1:
+                        if ((oldWord[i] + " " + oldWord[i+1]) == "not in"):
+                            skipone = True
+                            if wordBlock != "":
+                                word.append(wordBlock.strip())
+                                wordBlock = ""
+                            word.append(oldWord[i] + " " + oldWord[i+1])
+                        elif oldWord[i] in logicOp:
+                            if wordBlock != "":
+                                word.append(wordBlock.strip())
+                                wordBlock = ""
+                            word.append(oldWord[i])
+                        else:
+                            wordBlock += oldWord[i]
+                    elif oldWord[i] in logicOp:
                         if wordBlock != "":
                             word.append(wordBlock.strip())
                             wordBlock = ""
-                        word.append(i)
+                        word.append(oldWord[i])
                     else:
-                        wordBlock += i
+                        wordBlock += oldWord[i]
                 if wordBlock != "":
                     word.append(wordBlock.strip())
                     wordBlock = ""
                 print("basecasebef: ", str, word)
                 for i in range(len(word)):
-                    if word[i] not in ["and", "or", "not"]:
+                    if word[i] not in ["and", "or", "not", "not in", "in"]:
                         if (word[i] == "True" or word[i] == "False" or word[i] == "None"):
                             word[i] = word[i]
                         else:
@@ -177,18 +238,29 @@ class FA_function_HELPER:
                                     self.checkVar(word[i])
                                 except:
                                     try:
-                                        self.checkFunction(word[i])
+                                        self.checkString(word[i])
                                     except:
-                                        try: 
-                                            self.checkComparison(word[i])
+                                        try:
+                                            self.checkList(word[i])
                                         except:
-                                            raise Exception(["Invalid Boolean Expression"])
+                                            try:
+                                                self.checkFunction(word[i])
+                                            except:
+                                                try: 
+                                                    self.checkComparison(word[i])
+                                                except:
+                                                    raise Exception(["Invalid Boolean Expression"])
+                                                else:
+                                                    word[i] = "COMP"
+                                            else:
+                                                word[i] = "FUNCALL"
                                         else:
-                                            word[i] = "COMP"
+                                            word[i] = "LIST"
                                     else:
-                                        word[i] = "FUNCALL"
+                                        word[i] = "STR"
                                 else:
-                                    word[i] = "VAR"
+                                    if (word[i] != "BOOLOPS"):
+                                        word[i] = "VAR"
                             else:
                                 word[i] = "INT"
                 print("basecaseaft: ",  word)
@@ -426,8 +498,7 @@ class FA_function_HELPER:
             try:
                 strictlyVar.check(word[0])
             except Exception as e:
-                word[0] = "INVALID"
-                print(word)
+                raise Exception(["Invalid list element call"])
             else:
                 word[0] = "VAR"
                 wlen = len(word)
@@ -598,8 +669,8 @@ class FA_function_HELPER:
             if to == 0:
                 raise Exception(["Missing opening bracket"])
             else:
-                wordFun.append(str[:to])
-                wordFun.append(str[to+1:slen-1])
+                wordFun.append(str[:to].strip())
+                wordFun.append(str[to+1:slen-1].strip())
                 try:
                     self.checkVar(wordFun[0])
                     self.checkArgs(wordFun[1])
@@ -608,8 +679,10 @@ class FA_function_HELPER:
                 else:
                     return True
     def checkList(self, str):
+        if (str == ""):
+            raise Exception(["Empty String"])
         str = str.strip()
-        if str[0] != "[" or str[-1] != "]":
+        if (str[0] != "[" or str[-1] != "]") and (str[0] != "(" or str[-1] != ")"):
             raise Exception(["Missing Brackets"])
         else:
             str = str[1:-1]
@@ -621,19 +694,26 @@ class FA_function_HELPER:
                 return True
             
     def checkForLoop(self, str):
+        if str == "":
+            raise Exception(["Empty String"])
         argsRule = CNF_LOOP()
         word = str.strip().split()
+        print(word)
         if (word[0] != "for"):
             raise Exception(["Invalid for loop"])
+        if (word[2] != "in"):
+            raise Exception(["Invalid for loop"])
+        if (word[-1] != ":"):
+            if (word[-1][-1] != ":"):
+                raise Exception(["Invalid for loop"])
+            else:
+                word[-1] = word[-1][:-1]
+                word.append(":")
         wlen = len(word)
-        tempo = word[wlen-1]
-        word[wlen-1] = word[wlen-1][0:-1]
-        word.append(tempo[-1])
-        word = list(filter(lambda a: a != "", word))
-        if (len(word) > 4):
+        if (wlen > 4):
             word[3] = ' '.join(word[3:-1])
             del word[4:-1]
-
+        print(word)
         try:
             self.checkFunction(word[3])
         except Exception as e:
@@ -660,24 +740,31 @@ class FA_function_HELPER:
                     return True
                 else:
                     if (trig):
-                        raise Exception(["Invalid For Loop Statement"] + list(LatestCatch.args)[0])
+                        raise Exception(["Invalid For Loop Statement"])
                         return
                     else:
                         raise Exception(["Invalid For Loop Statement"])
     def checkWhileLoop(self, str):
+        if str == "":
+            raise Exception(["Empty String"])
         argsRule = CNF_LOOP()
         str = str.strip()
-        word = (' '.join(str.split())).split(" ")
-        if (len(word[-1]) > 1):
-            tempo = word[-1]
-            word[-1] = word[-1][0:-1]
-            word.append(tempo[-1])
-        tempblock = ' '.join(word[1:-1])
-        word[1] = tempblock
-        del word[2:-1]
-
+        argsRule = CNF_LOOP()
+        word = str.strip().split()
+        print(word)
+        if (word[0] != "while"):
+            raise Exception(["Invalid while loop"])
+        if (word[-1] != ":"):
+            if (word[-1][-1] != ":"):
+                raise Exception(["Invalid while loop"])
+            else:
+                word[-1] = word[-1][:-1]
+                word.append(":")        
+        wlen = len(word)
+        if (wlen > 2):
+            word[1] = ' '.join(word[1:-1])
+            del word[2:-1]
         tocheck = word[1]
-        tocheck = tocheck.strip()
         try:
             self.checkInt(tocheck)
         except:
@@ -715,11 +802,3 @@ class FA_function_HELPER:
             return True
         else:
             raise Exception(["Invalid While Loop Statement"])
-    
-
-
-
-
-
-            
-                        
