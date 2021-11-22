@@ -3,6 +3,7 @@ class CNF_Boolean:
         return[
             ("S", ["True"]),
             ("S", ["False"]),
+            ("S", ["None"]),
             ("S", ["VAR"]),
             ("S", ["FUNCALL"]),
             ("S", ["COMPARISON"]),
@@ -116,7 +117,10 @@ class CNF_Equals:
             ("EQ", ["-="]),
             ("EQ", ["//="]),
             ("EQ", ['*=']),
+            ("EQ", ['**=']),
             ("EQ", ["/="]),
+            ("EQ", [":="]),
+            ("EQ", ["@="]),
             ("EQ", ["%="]),
             ("S2", ["VAR"]),
             ("S2", ["LIST"]),
@@ -145,19 +149,6 @@ class CNF_CONDITIONAL:
             ("H1", ["ELIF", "STATEMENT"]),
             ("H2", ["WHILE", "STATEMENT"])
         ]
-'''
-  S -> H0 S2
-     | H1 S2
- S1 -> "VAR"
- EQ -> "="
- S2 -> "VAR"
-     | "LIST"
-     | "ARITH"
-     | "FUNCALL"
-NOT -> "not"
- H0 -> H1 NOT
- H1 -> S1 EQ
- '''
  
 class CNF_MISC:
     # class, def, pass, raise, return
@@ -190,21 +181,4 @@ class CNF_MISC:
             ("RAISE",["raise"]),
             ("EXCEPTION",["EXCEPTION"])
         ]
-        
-'''
-   S -> H1 H0
-      | H2 H0
-ARGS -> VAR
-      | H3 ARGS
-  H0 -> :
-  H1 -> H4 ARGS
-  H2 -> H5 H6
-  H3 -> H7 H8
-  H4 -> H9 H6
-  H5 -> class
-  H6 -> FUNCAL
-  H7 -> VAR
-  H8 -> ,
-  H9 -> def
-
-'''
+    

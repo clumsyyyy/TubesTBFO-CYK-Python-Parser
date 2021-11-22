@@ -87,7 +87,6 @@ class MISC_PARSER:
                 raise Exception(["return to monke"])
             else:
                 statement = ' '.join(word[1:])
-                print(statement)
                 bool = FA_boolean()
                 try:
                     bool.checkBoolStatement(statement)
@@ -104,7 +103,7 @@ class MISC_PARSER:
                 else:
                     statement = "STATEMENT"
             word = [word[0],statement]
-            print(word)
+
         elif (word[0] == "raise"):
             exception = ' '.join(word[1:])
             if len(exception) < 9:

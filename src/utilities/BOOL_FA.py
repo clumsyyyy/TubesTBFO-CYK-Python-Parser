@@ -63,7 +63,7 @@ class FA_boolean:
         if token != "":
             tokenWord.append(token)
         word = tokenWord
-        print(word)
+
         for i in range(len(word)):
             if word[i] not in arr:
                 if word[i].isdigit():
@@ -86,7 +86,7 @@ class FA_boolean:
                             word[i] = "VAR"
                     else:
                         word[i] = "FUNCALL"
-        print(word)
+
         if openingBracketCount != closingBracketCount:
             raise Exception(["Mismatching bracket count"])
         for i in range(len(word)):
