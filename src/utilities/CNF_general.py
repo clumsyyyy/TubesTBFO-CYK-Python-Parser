@@ -145,3 +145,41 @@ NOT -> "not"
  H0 -> H1 NOT
  H1 -> S1 EQ
  '''
+ 
+class CNF_MISC:
+    # class, def, pass, raise, return
+    def getDefClass(self):
+        return [
+            ("S",["FUNCTION","THEN"]),
+            ("S",["CLASS","THEN"]),
+            ("FUNC",["FUNNAME","ARGS"]),
+            ("ARGS",["VAR"]),
+            ("ARGS",["VAR","ARGS"]),
+            ("VAR",["VAR"]),
+            ("CLASSNAME",["FUNNAME"]),
+            ("CLASSNAME",["FUNNAME","ARGS"]),
+            ("FUNNAME",["FUNNAME"]),
+            ("THEN",[":"]),
+            ("FUNCTION",["DEF","FUNC"]),
+            ("CLASS",["CLASSKEYWORD","CLASSNAME"]),
+            ("CLASSKEYWORD",["class"]),
+            ("DEF",["def"]),
+        ]
+        
+'''
+   S -> H1 H0
+      | H2 H0
+ARGS -> VAR
+      | H3 ARGS
+  H0 -> :
+  H1 -> H4 ARGS
+  H2 -> H5 H6
+  H3 -> H7 H8
+  H4 -> H9 H6
+  H5 -> class
+  H6 -> FUNCAL
+  H7 -> VAR
+  H8 -> ,
+  H9 -> def
+
+'''
