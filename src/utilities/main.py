@@ -1,9 +1,10 @@
 import os
-from CONDITIONAL_FA import FA_conditional
-from MISC_parser import MISC_PARSER
+from CONDITIONAL_parser import FA_conditional
+from FREETYPE_parser import MISC_PARSER
+from IMPORT_parser import checkimp
 from LOOP_FA_function import FA_function_HELPER
-from EQUALS_FA import FA_equals
-from IMPORT_driver import checkimp
+from EQUALS_parser import FA_equals
+
 #class instantiazitonsfd
 loopFuncCheck = FA_function_HELPER()
 conditionals = FA_conditional()

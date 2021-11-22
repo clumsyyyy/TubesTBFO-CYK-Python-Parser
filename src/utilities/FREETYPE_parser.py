@@ -1,8 +1,8 @@
 from LOOP_FA_function import FA_VALIDFUNVARNAMEC
-from CYKCHECKER_general import CYKCHECKCLASS
-from BOOL_FA import FA_boolean
-from CNF_general import CNF_MISC
-from LOOP_FA_varchecker import FA_VALIDFUNVARNAMEC
+from CYKcheck import CYKCHECKCLASS
+from BOOL_parser import FA_boolean
+from CNF import CNF_MISC
+from FA_varchecker import FA_VALIDFUNVARNAMEC
 from LOOP_FA_function import FA_function_HELPER
 
 

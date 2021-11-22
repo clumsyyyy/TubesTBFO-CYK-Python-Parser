@@ -1,5 +1,5 @@
-import CNF_general as CNFINST
-import CYKCHECKER_general as CYKCHECK
+import CNF as CNFINST
+import CYKcheck as CYKCHECK
 import LOOP_FA_function as LOOP_FA
 
 faInst = CNFINST.CNF_IMPORT()
@@ -18,7 +18,7 @@ def checkmethod(str):
         if (i != twlen - 1):
             word.append(".")
     wlen = len(word)
-    print(word)
+
     for i in range(wlen):
         if (i % 2 == 0):
             try:
@@ -29,7 +29,7 @@ def checkmethod(str):
                 word[i] = "INVALID"
             else:
                 word[i] = "VAR"
-    print(word)
+
     cykCheck = CYKCHECK.CYKCHECKCLASS()
     RuleInst = CNFINST.CNF_IMPORT()
     res = cykCheck.check(RuleInst.getMethodRule(), word)
@@ -92,7 +92,7 @@ def checkimp(str):
                     LatestCatch = e
             else:
                 word[i] = "VAR"
-    print(word)
+
     res = cykCheck.check(RuleInst.getImportRule(), word)
     if (res):
         return True

@@ -1,6 +1,6 @@
-from BOOL_FA import FA_boolean
-from CYKCHECKER_general import CYKCHECKCLASS
-from CNF_general import CNF_CONDITIONAL
+from BOOL_parser import FA_boolean
+from CYKcheck import CYKCHECKCLASS
+from CNF import CNF_CONDITIONAL
 class FA_conditional:
     def checkConditionals(self, string):
         keyWords = ["if", "elif", "else", "while"]

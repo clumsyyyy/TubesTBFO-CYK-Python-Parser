@@ -1,8 +1,7 @@
-from ARITH_helper import arithHelper
-from CNF_general import CNF_Boolean
-from CYKCHECKER_general import CYKCHECKCLASS
+from CNF import CNF_Boolean
+from CYKcheck import CYKCHECKCLASS
 from LOOP_FA_function import FA_function_HELPER
-from LOOP_FA_varchecker import FA_VALIDFUNVARNAMEC
+from FA_varchecker import FA_VALIDFUNVARNAMEC
 class FA_boolean:
     #the exceptions are still ambiguous because im confused
     #ini buat and/not/or
@@ -63,14 +62,14 @@ class FA_boolean:
         if token != "":
             tokenWord.append(token)
         word = tokenWord
-
+        print(word)
         for i in range(len(word)):
             if word[i] not in arr:
                 if word[i].isdigit():
                     word[i] = "INT"
                 else:
                     try:
-                        funcNameCheck.checkfuncall(word[i])
+                        funcNameCheck.checkFunction(word[i])
                     except Exception as e:
                         try:
                             funVarCheck.check(word[i])
@@ -118,12 +117,12 @@ class FA_boolean:
         if (opsCount > 1):
             raise Exception(["More than one comparison operator detected"])
         #cek arithmetic
-        instArith = arithHelper()
+        instArith = FA_function_HELPER()
         var = FA_VALIDFUNVARNAMEC()
         for i in range(len(word)):
             if not word[i].replace(" ", "").isdigit():
                 try:
-                    instArith.checkArithStatement(word[i].replace(" ", ""))
+                    instArith.checkArith(word[i].replace(" ", ""))
                 except Exception as e:
                     try:
                         var.check(word[i].replace(" ", ""))

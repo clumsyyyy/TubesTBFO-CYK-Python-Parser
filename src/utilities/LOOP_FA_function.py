@@ -1,6 +1,6 @@
-from CNF_general import CNF_LOOP
-from LOOP_FA_varchecker import FA_VALIDFUNVARNAMEC
-from CYKCHECKER_general import CYKCHECKCLASS
+from CNF import CNF_LOOP
+from FA_varchecker import FA_VALIDFUNVARNAMEC
+from CYKcheck import CYKCHECKCLASS
 class FA_function_HELPER:
     def checkComparison(self, str):
         comparisonOps = [ "<=", ">=", ">", "<", "==", "!="]
@@ -633,7 +633,7 @@ class FA_function_HELPER:
         if (len(word) > 4):
             word[3] = ' '.join(word[3:-1])
             del word[4:-1]
-        print(word)
+
         try:
             self.checkFunction(word[3])
         except Exception as e:
@@ -675,7 +675,7 @@ class FA_function_HELPER:
         tempblock = ' '.join(word[1:-1])
         word[1] = tempblock
         del word[2:-1]
-        print(word)
+
         tocheck = word[1]
         tocheck = tocheck.strip()
         try:
@@ -710,11 +710,12 @@ class FA_function_HELPER:
         else:
             word[1] = "VAR"
         res = self.checkCyk(argsRule.getWhileLoopRule(), word)
-        print(word)
+
         if (res):
             return True
         else:
             raise Exception(["Invalid While Loop Statement"])
+    
 
 
 

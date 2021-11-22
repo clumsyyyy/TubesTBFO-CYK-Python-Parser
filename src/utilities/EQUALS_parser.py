@@ -1,8 +1,8 @@
-from ARITH_helper import arithHelper
-from CNF_general import CNF_Equals
-from CYKCHECKER_general import CYKCHECKCLASS
-from LOOP_FA_function import FA_VALIDFUNVARNAMEC, FA_function_HELPER
-
+from CNF import CNF_Equals
+from CYKcheck import CYKCHECKCLASS
+from LOOP_FA_function import FA_function_HELPER
+from FA_varchecker import FA_VALIDFUNVARNAMEC
+from BOOL_parser import FA_boolean
 class FA_equals:
     def checkEqual(self, str):
         strArr = [x for x in ' '.join(str.strip().split())]
@@ -22,7 +22,7 @@ class FA_equals:
                     word.append(equalSign)
                     break
 
-        word = [token.strip(), equalSign, ' '.join(strArr[i + 1:]) ]
+        word = [token.strip(), equalSign, ''.join(strArr[i + 1:]).strip() ]
 
         if equalSign == "":
             raise Exception(["No equal sign"])
@@ -41,14 +41,15 @@ class FA_equals:
  
 
         #cek sisi kanan
-        arithCheck = arithHelper()
-        funcCheck = FA_function_HELPER()
 
+        funcCheck = FA_function_HELPER()
+        boolCheck = FA_boolean()
+        print(word)
         try:
             funcCheck.checkList(word[2])
         except Exception as e:
             try:
-                arithCheck.checkArithStatement(word[2])
+                funcCheck.checkArith(word[2])
             except Exception as e:
                 try:
                     varCheck.check(word[2])
@@ -56,10 +57,15 @@ class FA_equals:
                     try:
                         funcCheck.checkfuncall(word[2])
                     except Exception as e:
-                        if ("\"" in word[2] and word[2].count("\"") % 2 == 0) or word[2].isdigit() and not funcCheck.checkList(word[2]):
-                            word[2] = "ASSIGN"
+                        try:
+                            boolCheck.checkBoolStatement(word[2])
+                        except Exception as e:
+                            if ("\"" in word[2] and word[2].count("\"") % 2 == 0) or word[2].isdigit() and not funcCheck.checkList(word[2]):
+                                word[2] = "ASSIGN"
+                            else:
+                                word[2] = "INVALID"
                         else:
-                            word[2] = "INVALID"
+                            word[2] = "BOOL"
                     else:
                         word[2] = "FUNCALL"
                 else:
@@ -70,9 +76,9 @@ class FA_equals:
             word[2] = "LIST"
 
         CYKChecker = CYKCHECKCLASS()
-
+        print(word)
         CNF = CNF_Equals()
-        if CYKChecker.check(CNF.getEqualsRule(), word):
+        if CYKChecker.check(CNF.getNewEqRule(), word):
             return True
         else:
             raise Exception(["Grammar incompatible!"])
