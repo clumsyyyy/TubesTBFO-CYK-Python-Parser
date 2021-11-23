@@ -830,7 +830,7 @@ class FA_function_HELPER:
                     else:
                         word[3] = "VAR"
                 else:
-                    word[3] = "STRING"
+                    word[3] = "STR"
             else:
                 word[3] = "FLOAT"
         else:
