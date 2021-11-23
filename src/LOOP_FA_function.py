@@ -788,37 +788,65 @@ class FA_function_HELPER:
         if (wlen > 4):
             word[3] = ' '.join(word[3:-1])
             del word[4:-1]
-        #print(word)
+        print("herenow", word)
         try:
-            self.checkFunction(word[3])
-        except Exception as e:
+            self.checkInt(word[3])
+        except:
             try:
-                self.checkVar(word[3])
-            except Exception as e:
-                word[3] = "INVALID"
-                trig = True
-                LatestCatch = e
+                self.checkFloat(word[3])
+            except:
+                try:
+                    self.checkString(word[3])
+                except:
+                    try:
+                        self.checkVar(word[3])
+                    except:
+                        try:
+                            self.checkList(word[3])
+                        except:
+                            try:
+                                self.checkFunction(word[3])
+                            except:
+                                try:
+                                    self.checkBool(word[3])
+                                except:
+                                    try:
+                                        self.checkComparison(word[3])
+                                    except:
+                                        try:
+                                            self.checkArith(word[3])
+                                        except:
+                                            raise Exception(["Invalid for loop"])
+                                        else:
+                                            word[3] = "ARITH"
+                                    else:
+                                        word[3] = "COMP"
+                                else:
+                                    word[3] = "BOOLOPS"
+                            else:
+                                word[3] = "FUNCALL"
+                        else:
+                            word[3] = "LIST"
+                    else:
+                        word[3] = "VAR"
+                else:
+                    word[3] = "STRING"
             else:
-                word[3] = "VAR"
+                word[3] = "FLOAT"
         else:
-            word[3] = "FUNCALL"
+            word[3] = "INT" 
         finally:
+            print("herenow", word)
             try:
                 self.checkVar(word[1])
             except Exception as e:
                 word[1] = "INVALID"
-                trig = True
-                LatestCatch = e
             else:
                 word[1] = "VAR"
                 if (self.checkCyk(argsRule.getForLoopRule(), word)):
                     return True
                 else:
-                    if (trig):
-                        raise Exception(["Invalid For Loop Statement"])
-                        return
-                    else:
-                        raise Exception(["Invalid For Loop Statement"])
+                    raise Exception(["Invalid For Loop Statement"])
     def checkWhileLoop(self, str):
         if str == "":
             raise Exception(["Empty String"])
