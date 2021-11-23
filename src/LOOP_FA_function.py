@@ -90,7 +90,7 @@ class FA_function_HELPER:
         str = str.strip()
         if str in ["True", "False", "None"]:
             return True
-        argsRule = CNF_Boolean()
+        argsRule = CNF_LOOP()
         logicOp = ["and", "or", "not", "in", "not in"]
         if (str.count("(") != str.count(")")):
             raise Exception(["Missing Brackets"])
@@ -242,14 +242,14 @@ class FA_function_HELPER:
                                 wordBlock = ""
                             word.append(oldWord[i])
                         else:
-                            wordBlock += oldWord[i]
+                            wordBlock += oldWord[i] + " "
                     elif oldWord[i] in logicOp:
                         if wordBlock != "":
                             word.append(wordBlock.strip())
                             wordBlock = ""
-                        word.append(oldWord[i])
+                        word.append(oldWord[i].strip())
                     else:
-                        wordBlock += oldWord[i]
+                        wordBlock += oldWord[i] + " "
                 if wordBlock != "":
                     word.append(wordBlock.strip())
                     wordBlock = ""

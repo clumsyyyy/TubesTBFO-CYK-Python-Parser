@@ -72,23 +72,11 @@ class IMPORT_PARSER:
             word[0] = " "
         wlen = len(word)
         for i in range(wlen):
-            if i % 2 == 1:
+            if i % 2 == 1 and i != 1:
                 try:
                     funvarChecker.check(word[i])
                 except Exception as e:
-                    if (i == 1):
-                        try:
-                            self.checkmethod(word[i])
-                        except Exception as e:
-                            trig = True
-                            LatestCatch = e
-                            word[i] = "INVALID"
-                        else:
-                            word[i] = "METHOD"
-                    else:
-                        trig = True
-                        word[i] = "INVALID"
-                        LatestCatch = e
+                    word[i] = "INVALID"
                 else:
                     word[i] = "VAR"
 
