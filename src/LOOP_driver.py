@@ -33,7 +33,7 @@ def checkComparisonStatement(str):
                         raise e
 
 try:
-    fa_helper.checkVar("(ansds.dsa[123])")
+    fa_helper.checkFunction("(  fun(2,3,3) ) )")
     # fa_helper.checkWhileLoop("while True and False or not True or fun(2,3):")
 except Exception as e:
     print(e)

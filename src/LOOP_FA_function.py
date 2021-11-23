@@ -3,16 +3,41 @@ from FA_varchecker import varNameChecker as FA_VALIDFUNVARNAMEC
 from CYKcheck import CYKCHECKCLASS
 from IMPORT_parser import IMPORT_PARSER
 class FA_function_HELPER:
-    def checkComparison(self, str):
-        # SETUP:
+    def remove_leading_brackets_and_strips(self, str):
         str = str.strip()
         leadingbraces = 0
+        startcut = 0
+        leadbracidx = []
         for i in str:
             if i == "(":
                 leadingbraces += 1
+                startcut += 1
+                leadbracidx.append(startcut-1)
+            elif i == " ":
+                startcut += 1
+            else:
+                break
         strlen = len(str)
-        str = str[leadingbraces:strlen-leadingbraces]
-        # END SETUP
+        endcut = strlen
+        trailbracesidx = []
+        trailbraces = 0
+        for i in str[::-1]:
+            if i == ")":
+                endcut -= 1
+                trailbracesidx.append(endcut)
+                trailbraces += 1
+            elif i == " ":
+                endcut -= 1
+            else:
+                break
+        newStr = ""
+        toelim = min(leadingbraces, trailbraces)
+        if (toelim == 0):
+            return str.strip()
+        else:
+            return str[leadbracidx[toelim-1]+1:trailbracesidx[toelim-1]].strip()
+    def checkComparison(self, str):
+        str = self.remove_leading_brackets_and_strips(str)
         comparisonOps = [ "<=", ">=", ">", "<", "==", "!="]
         opsCount = 0;
         for i in range(len(comparisonOps)):
@@ -70,15 +95,7 @@ class FA_function_HELPER:
         else:
             return res
     def checkBool(self, str):
-        # SETUP:
-        str = str.strip()
-        leadingbraces = 0
-        for i in str:
-            if i == "(":
-                leadingbraces += 1
-        strlen = len(str)
-        str = str[leadingbraces:strlen-leadingbraces]
-        # END SETUP
+        str = self.remove_leading_brackets_and_strips(str)
         str = str.strip()
         if str in ["True", "False", "None"]:
             return True
@@ -289,16 +306,7 @@ class FA_function_HELPER:
                 else:
                     raise Exception(["Invalid boolean"])
     def checkString(self, string):
-        # SETUP:
-        string = string.strip()
-        leadingbraces = 0
-        for i in string:
-            if i == "(":
-                leadingbraces += 1
-        strlen = len(string)
-        string = string[leadingbraces:strlen-leadingbraces]
-        # END SETUP
-        string = string.strip()
+        string = self.remove_leading_brackets_and_strips(string)
         if len(string) <= 0:
             raise Exception(["Empty string"])
         else:
@@ -307,29 +315,13 @@ class FA_function_HELPER:
             else:
                 raise Exception(["Not a string"])
     def checkInt(self, string):
-        # SETUP:
-        string = string.strip()
-        leadingbraces = 0
-        for i in string:
-            if i == "(":
-                leadingbraces += 1
-        strlen = len(string)
-        string = string[leadingbraces:strlen-leadingbraces]
-        # END SETUP
+        string = self.remove_leading_brackets_and_strips(string)
         if string.isdigit():
             return True
         else:
             raise Exception(["Not an integer"])
     def checkFloat(self, string):
-        # SETUP:
-        string = string.strip()
-        leadingbraces = 0
-        for i in string:
-            if i == "(":
-                leadingbraces += 1
-        strlen = len(string)
-        string = string[leadingbraces:strlen-leadingbraces]
-        # END SETUP
+        string = self.remove_leading_brackets_and_strips(string)
         try:
             float(string)
         except ValueError:
@@ -337,15 +329,7 @@ class FA_function_HELPER:
         else:
             return True
     def checkFloatArith(self, str):
-        # SETUP:
-        str = str.strip()
-        leadingbraces = 0
-        for i in str:
-            if i == "(":
-                leadingbraces += 1
-        strlen = len(str)
-        str = str[leadingbraces:strlen-leadingbraces]
-        # END SETUP
+        str = self.remove_leading_brackets_and_strips(str)
         try:
             float(str)
         except ValueError:
@@ -353,15 +337,7 @@ class FA_function_HELPER:
         else:
             return True
     def checkComplexArith(self, str):
-        # SETUP:
-        str = str.strip()
-        leadingbraces = 0
-        for i in str:
-            if i == "(":
-                leadingbraces += 1
-        strlen = len(str)
-        str = str[leadingbraces:strlen-leadingbraces]
-        # END SETUP
+        str = self.remove_leading_brackets_and_strips(str)
         token = []
         compOp = ["+", "-", "/", "*"]
         wordBlock = ""
@@ -383,15 +359,7 @@ class FA_function_HELPER:
         else:
             return True
     def checkArith(self, string):
-        # SETUP:
-        string = string.strip()
-        leadingbraces = 0
-        for i in string:
-            if i == "(":
-                leadingbraces += 1
-        strlen = len(string)
-        string = string[leadingbraces:strlen-leadingbraces]
-        # END SETUP
+        string = self.remove_leading_brackets_and_strips(string)
         instValid = FA_VALIDFUNVARNAMEC()
         if (string.isdigit() or self.checkFloatArith(string) or self.checkComplexArith(string)):
             return True
@@ -551,15 +519,7 @@ class FA_function_HELPER:
                             pass
             return True   
     def checkListElCall(self, str):
-        # SETUP:
-        str = str.strip()
-        leadingbraces = 0
-        for i in str:
-            if i == "(":
-                leadingbraces += 1
-        strlen = len(str)
-        str = str[leadingbraces:strlen-leadingbraces]
-        # END SETUP
+        str = self.remove_leading_brackets_and_strips(str)
         strictlyVar = FA_VALIDFUNVARNAMEC()
         getArgs = CNF_LOOP()
         str = str.strip()
@@ -618,15 +578,7 @@ class FA_function_HELPER:
                     raise Exception(["Invalid list element call"])
 
     def checkVar(self, string): #can accept array too
-        # SETUP:
-        string = string.strip()
-        leadingbraces = 0
-        for i in string:
-            if i == "(":
-                leadingbraces += 1
-        strlen = len(string)
-        string = string[leadingbraces:strlen-leadingbraces]
-        # END SETUP
+        string = self.remove_leading_brackets_and_strips(string)
         print("Str:", string)
         inst = FA_VALIDFUNVARNAMEC()
         if ("." in string):
@@ -664,15 +616,7 @@ class FA_function_HELPER:
         return inst.check(rule, str)
     
     def checkArgs(self, str):
-        # SETUP:
-        str = str.strip()
-        leadingbraces = 0
-        for i in str:
-            if i == "(":
-                leadingbraces += 1
-        strlen = len(str)
-        str = str[leadingbraces:strlen-leadingbraces]
-        # END SETUP
+        str = self.remove_leading_brackets_and_strips(str)
         if str == "":
             return True
         else:
@@ -776,15 +720,7 @@ class FA_function_HELPER:
             else:
                 raise Exception(["Invalid arguments"])                
     def checkFunction(self, str):
-        # SETUP:
-        str = str.strip()
-        leadingbraces = 0
-        for i in str:
-            if i == "(":
-                leadingbraces += 1
-        strlen = len(str)
-        str = str[leadingbraces:strlen-leadingbraces]
-        # END SETUP
+        str = self.remove_leading_brackets_and_strips(str)
         wordFun = []
         if str[-1] != ")":
             raise Exception(["Missing closing bracket"])
@@ -808,15 +744,7 @@ class FA_function_HELPER:
                 else:
                     return True
     def checkList(self, str):
-        # SETUP:
-        str = str.strip()
-        leadingbraces = 0
-        for i in str:
-            if i == "(":
-                leadingbraces += 1
-        strlen = len(str)
-        str = str[leadingbraces:strlen-leadingbraces]
-        # END SETUP
+        str = self.remove_leading_brackets_and_strips(str)
         if (str == ""):
             raise Exception(["Empty String"])
         str = str.strip()
