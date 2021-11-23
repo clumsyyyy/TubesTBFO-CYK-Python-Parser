@@ -207,4 +207,6 @@ def checker(path):
     elif count - 1 == len(lineArr) and not commentStart:
         print("Program accepted!\n")
 
+
+
 checker("inputLoops.py")

@@ -3,10 +3,7 @@ from CNF import CNF_Freetype
 from FA_varchecker import varNameChecker
 from LOOP_FA_function import FA_function_HELPER
 
-
-class freetypeParser:
-    # buat def,class,try,raise,return,pass, di sini
-    
+class freetypeParser:    
     def checkDefClass(self, string):
         # def class di sini
         keyWords = ["def", "class"]
@@ -22,12 +19,12 @@ class freetypeParser:
             arr[-1] = arr[-1][:-1]
             arr.append(":")
 
-        #print(arr)
+
         if (arr[0] not in keyWords):
             raise Exception(["Missing def/class keyword"])
 
         func = (' '.join(arr[1:-1]))
-        #print(func)
+
         
         varFunChecker = varNameChecker()
         if "(" in func:
@@ -44,7 +41,7 @@ class freetypeParser:
                         arguments[i]= arguments[i].strip()
                 else:
                     arguments = []
-                #print(arguments)
+
                     
                 for i in range(len(arguments)):
                     try:
@@ -54,7 +51,7 @@ class freetypeParser:
                     else:
                         arguments[i] = "VAR"
         
-                #print(arguments)
+
         else:
             funcName = func
             arguments = []

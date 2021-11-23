@@ -38,9 +38,7 @@ class equalsParser:
         else:
             word[0] = "VAR"     
  
-
         #cek sisi kanan
-
         funcCheck = FA_function_HELPER()
         boolCheck = FA_function_HELPER()
         print(word)
@@ -57,7 +55,7 @@ class equalsParser:
                         funcCheck.checkfuncall(word[2])
                     except Exception as e:
                         try:
-                            boolCheck.checkBoolStatement(word[2])
+                            boolCheck.checkBool(word[2])
                         except Exception as e:
                             if ("\"" in word[2] and word[2].count("\"") % 2 == 0) or word[2].isdigit() and not funcCheck.checkList(word[2]):
                                 word[2] = "ASSIGN"
@@ -75,10 +73,11 @@ class equalsParser:
             word[2] = "LIST"
 
         CYKChecker = CYKCHECKCLASS()
-        print(word)
-        CNF = CNF_Equals()
-        if CYKChecker.check(CNF.getEqualsRule(), word):
+        CNFEq = CNF_Equals()
+
+        if CYKChecker.check(CNFEq.getEqualsRule(), word):
             return True
         else:
             raise Exception(["Grammar incompatible!"])
+            
 

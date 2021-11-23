@@ -102,9 +102,3 @@ def checkimp(str):
             return
         else:
             raise Exception(["Invalid Import Statement"])
-# try:
-#     checkimp("from a import b as c")
-# except Exception as e:
-#     print(e)
-# else:
-#     print("Success")
