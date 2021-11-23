@@ -75,22 +75,31 @@ class freetypeParser:
     def checkPassReturnRaise(self,string):
         funcallCheck = FA_function_HELPER()
         word = (' '.join(string.split())).split(' ')
+        if ":" in word[-1] and word[-1] != ":":
+            word[-1] = word[-1][:-1]
+            word.append(":")
+
+        if word[-1] == ":":
+            raise Exception(["Colon detected at the end of statement"])
         if(word[0] == "return"):
             if (len(word) == 1):
-                raise Exception(["return to monke"])
+                raise Exception(["return nothing"])
             else:
                 statement = ' '.join(word[1:])
                 bool = FA_function_HELPER()
+                checker =  FA_function_HELPER()
                 try:
                     bool.checkBool(statement)
                 except Exception as e:
                     try:
                         bool.checkComparison(statement)
                     except Exception as e:
-                        if type(statement) == type(""):
-                            statement = "STATEMENT"
-                        else:
+                        try:
+                            checker.checkString(statement)
+                        except Exception as e:
                             statement = "INVALID"
+                        else:
+                            statement = "STATEMENT"
                     else:
                         statement = "STATEMENT"
                 else:

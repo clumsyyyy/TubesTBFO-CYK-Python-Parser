@@ -47,8 +47,8 @@ def checker(path):
     file.close()
 
     for i in range(len(lineArr)):
-        
-        if lineArr[i] != '\n':
+        print(len(lineArr[i][0]))
+        if lineArr[i][0] != '\n' or len(lineArr[i][0]) != 0:
             expression = lineArr[i][0].strip("\n").strip()
             indent = lineArr[i][1]
             print("Line", count, ": ", end = "")
@@ -60,6 +60,8 @@ def checker(path):
             
             if expression[0] == "#": #comment
                 pass
+            elif "#" in expression:
+                expression = expression.split("#")[0].strip()
             elif expression[:3] == "\'\'\'" and expression[-3:] == "\'\'\'" and len(expression) != 3:
                 continue
             elif expression[:3] == "\'\'\'" or expression[-3:] == "\'\'\'" :
@@ -209,4 +211,4 @@ def checker(path):
 
 
 
-checker("inputLoops.py")
+checker("inputList.py")

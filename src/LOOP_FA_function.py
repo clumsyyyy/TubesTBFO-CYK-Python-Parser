@@ -279,6 +279,7 @@ class FA_function_HELPER:
             else:
                 raise Exception(["Not a string"])
     def checkInt(self, string):
+        string = string.strip("(").strip(")")
         if string.isdigit():
             return True
         else:
@@ -536,6 +537,7 @@ class FA_function_HELPER:
 
     def checkVar(self, string): #can accept array too
         inst = FA_VALIDFUNVARNAMEC()
+        string = string.strip("(").strip(")")
         try:
             inst.check(string)
         except Exception as e:
