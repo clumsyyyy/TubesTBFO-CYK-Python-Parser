@@ -4,38 +4,29 @@ from CYKcheck import CYKCHECKCLASS
 from IMPORT_parser import IMPORT_PARSER
 class FA_function_HELPER:
     def remove_leading_brackets_and_strips(self, str):
+        if str == "":
+            return str
         str = str.strip()
-        leadingbraces = 0
-        startcut = 0
-        leadbracidx = []
-        for i in str:
-            if i == "(":
-                leadingbraces += 1
-                startcut += 1
-                leadbracidx.append(startcut-1)
-            elif i == " ":
-                startcut += 1
-            else:
-                break
+        startBracesIdx = -1
         strlen = len(str)
-        endcut = strlen
-        trailbracesidx = []
-        trailbraces = 0
-        for i in str[::-1]:
-            if i == ")":
-                endcut -= 1
-                trailbracesidx.append(endcut)
-                trailbraces += 1
-            elif i == " ":
-                endcut -= 1
-            else:
-                break
-        newStr = ""
-        toelim = min(leadingbraces, trailbraces)
-        if (toelim == 0):
-            return str.strip()
+        if str[0] != "(":
+            return str
+        startBracesIdx = 0
+        bracketStack = ["("]
+        firstBracketPoppedin = -1
+        for i in range(startBracesIdx + 1, strlen):
+            if str[i] == "(":
+                bracketStack.append("(")
+            elif str[i] == ")":
+                bracketStack.pop()
+                if len(bracketStack) == 0:
+                    firstBracketPoppedin = i
+                    break
+        if firstBracketPoppedin == strlen - 1:
+            return self.remove_leading_brackets_and_strips(str[1:-1].strip())
         else:
-            return str[leadbracidx[toelim-1]+1:trailbracesidx[toelim-1]].strip()
+            return str.strip()
+
     def checkComparison(self, str):
         str = self.remove_leading_brackets_and_strips(str)
         comparisonOps = [ "<=", ">=", ">", "<", "==", "!="]
@@ -157,7 +148,7 @@ class FA_function_HELPER:
                         if exprFlag == True:
                             try:
                                 self.checkArgs(parsedWord[i])
-                                if (len(parsedWord) <= 2):
+                                if (len(parsedWord) <= 2 or i - 2 < 0):
                                     raise Exception(["Invalid Args"])
                                 strcheck = parsedWord[i-2]
                                 oldWord = strcheck.split(" ")

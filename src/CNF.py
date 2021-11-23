@@ -74,66 +74,146 @@ class CNF_IMPORT:
 
 class CNF_LOOP:
     def getBoolRule(self):
+        """
+         START -> H0 INST
+        | H1 TWO
+        | INT
+        | VAR
+        | BOOLOPS
+        | STR
+        | LIST
+        | FUNCALL
+        | COMP
+        | H2 INST
+   TWO -> H3 TWO
+        | BOOLOPS
+        | STR
+        | LIST
+        | FUNCALL
+        | VAR
+  INST -> INT
+        | VAR
+        | BOOLOPS
+        | STR
+        | LIST
+        | FUNCALL
+        | COMP
+        | H0 INST
+        | H2 INST
+NIINST -> BOOLOPS
+        | STR
+        | LIST
+        | FUNCALL
+        | VAR
+    NI -> notin
+        | in
+   BIN -> and
+        | or
+    H0 -> INST BIN
+    H1 -> INST NI
+    H2 -> not
+    H3 -> NIINST NI
+        """
         return [
-            ("START", ["H0", "TWO"]),
-            ("START", ["H1", "INST"]),
-            ("START", ["H2", "TWO"]),
-            ("START", ["H3", "NIREP"]),
-            ("NIREP", ["H4", "NIREP"]),
-            ("NIREP", ["VAR"]),
-            ("NIREP", ["LIST"]),
-            ("NIREP", ["STR"]),
-            ("NIREP", ["FUNCALL"]),
-            ("NIREP", ["BOOLOPS"]),
-            ("NOTINFINST", ["INT"]),
-            ("NOTINFINST", ["VAR"]),
-            ("NOTINFINST", ["STR"]),
-            ("NOTINFINST", ["LIST"]),
-            ("NOTINFINST", ["FUNCALL"]),
-            ("NOTINFINST", ["BOOLOPS"]),
-            ("NOTINFINST", ["COMP"]),
-            ("NOTINSINST", ["VAR"]),
-            ("NOTINSINST", ["LIST"]),
-            ("NOTINSINST", ["STR"]),
-            ("NOTINSINST", ["FUNCALL"]),
-            ("NOTINSINST", ["BOOLOPS"]),
-            ("NOTINSINST", ["True"]),
-            ("NOTINSINST", ["False"]),
-            ("NOTINSINST", ["None"]),
-            ("TWO", ["H1", "INST"]),
-            ("TWO", ["H2", "TWO"]),
-            ("TWO", ["H0", "TWO"]),
-            ("TWO", ["INT"]),
-            ("TWO", ["VAR"]),
-            ("TWO", ["FUNCALL"]),
-            ("TWO", ["COMP"]),
+            ("START", ["H0", "INST"]),
+            ("START", ["H1", "TWO"]),
+            ("START", ["INT"]),
+            ("START", ["VAR"]),
+            ("START", ["BOOLOPS"]),
+            ("START", ["STR"]),
+            ("START", ["LIST"]),
+            ("START", ["FUNCALL"]),
+            ("START", ["COMP"]),
+            ("START", ["H2", "INST"]),
+            ("TWO", ["H3", "TWO"]),
+            ("TWO", ["BOOLOPS"]),
             ("TWO", ["STR"]),
             ("TWO", ["LIST"]),
-            ("TWO", ["BOOLOPS"]),
-            ("TWO", ["True"]),
-            ("TWO", ["False"]),
-            ("TWO", ["None"]),
+            ("TWO", ["FUNCALL"]),
+            ("TWO", ["VAR"]),
             ("INST", ["INT"]),
             ("INST", ["VAR"]),
-            ("INST", ["FUNCALL"]),
-            ("INST", ["COMP"]),
+            ("INST", ["BOOLOPS"]),
             ("INST", ["STR"]),
             ("INST", ["LIST"]),
-            ("INST", ["True"]),
-            ("INST", ["False"]),
-            ("INST", ["None"]),
-            ("INST", ["BOOLOPS"]),
-            ("BIN", ["and"]),
-            ("BIN", ["or"]),
+            ("INST", ["FUNCALL"]),
+            ("INST", ["COMP"]),
+            ("INST", ["H0", "INST"]),
+            ("INST", ["H2", "INST"]),
+            ("NIINST", ["BOOLOPS"]),
+            ("NIINST", ["STR"]),
+            ("NIINST", ["LIST"]),
+            ("NIINST", ["FUNCALL"]),
+            ("NIINST", ["VAR"]),
             ("NI", ["not in"]),
             ("NI", ["in"]),
+            ("BIN", ["and"]),
+            ("BIN", ["or"]),
             ("H0", ["INST", "BIN"]),
-            ("H1", ["not"]),
-            ("H2", ["H5", "BIN"]),
-            ("H3", ["NOTINFINST", "NI"]),
-            ("H4", ["NOTINSINST", "NI"]),
-            ("H5", ["H1", "INST"])
+            ("H1", ["INST", "NI"]),
+            ("H2", ["not"]),
+            ("H3", ["NIINST", "NI"])
         ]
+        # return [
+        #     ("START", ["H0", "TWO"]),
+        #     ("START", ["H1", "INST"]),
+        #     ("START", ["H2", "TWO"]),
+        #     ("START", ["H3", "NIREP"]),
+        #     ("NIREP", ["H4", "NIREP"]),
+        #     ("NIREP", ["VAR"]),
+        #     ("NIREP", ["LIST"]),
+        #     ("NIREP", ["STR"]),
+        #     ("NIREP", ["FUNCALL"]),
+        #     ("NIREP", ["BOOLOPS"]),
+        #     ("NOTINFINST", ["INT"]),
+        #     ("NOTINFINST", ["VAR"]),
+        #     ("NOTINFINST", ["STR"]),
+        #     ("NOTINFINST", ["LIST"]),
+        #     ("NOTINFINST", ["FUNCALL"]),
+        #     ("NOTINFINST", ["BOOLOPS"]),
+        #     ("NOTINFINST", ["COMP"]),
+        #     ("NOTINSINST", ["VAR"]),
+        #     ("NOTINSINST", ["LIST"]),
+        #     ("NOTINSINST", ["STR"]),
+        #     ("NOTINSINST", ["FUNCALL"]),
+        #     ("NOTINSINST", ["BOOLOPS"]),
+        #     ("NOTINSINST", ["True"]),
+        #     ("NOTINSINST", ["False"]),
+        #     ("NOTINSINST", ["None"]),
+        #     ("TWO", ["H1", "INST"]),
+        #     ("TWO", ["H2", "TWO"]),
+        #     ("TWO", ["H0", "TWO"]),
+        #     ("TWO", ["INT"]),
+        #     ("TWO", ["VAR"]),
+        #     ("TWO", ["FUNCALL"]),
+        #     ("TWO", ["COMP"]),
+        #     ("TWO", ["STR"]),
+        #     ("TWO", ["LIST"]),
+        #     ("TWO", ["BOOLOPS"]),
+        #     ("TWO", ["True"]),
+        #     ("TWO", ["False"]),
+        #     ("TWO", ["None"]),
+        #     ("INST", ["INT"]),
+        #     ("INST", ["VAR"]),
+        #     ("INST", ["FUNCALL"]),
+        #     ("INST", ["COMP"]),
+        #     ("INST", ["STR"]),
+        #     ("INST", ["LIST"]),
+        #     ("INST", ["True"]),
+        #     ("INST", ["False"]),
+        #     ("INST", ["None"]),
+        #     ("INST", ["BOOLOPS"]),
+        #     ("BIN", ["and"]),
+        #     ("BIN", ["or"]),
+        #     ("NI", ["not in"]),
+        #     ("NI", ["in"]),
+        #     ("H0", ["INST", "BIN"]),
+        #     ("H1", ["not"]),
+        #     ("H2", ["H5", "BIN"]),
+        #     ("H3", ["NOTINFINST", "NI"]),
+        #     ("H4", ["NOTINSINST", "NI"]),
+        #     ("H5", ["H1", "INST"])
+        # ]
     def getListElRule(self):
         return [
             ("START", ["H0", "EC"]),
