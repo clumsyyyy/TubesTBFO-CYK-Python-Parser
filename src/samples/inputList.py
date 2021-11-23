@@ -1,18 +1,19 @@
-def teeteedGwKecil():
-    return 5 <= 6 & "a" in "yahoo
+def someFunc(a,b,c):
+    return 5 <= 6 and "a" in "maklo"
 
 def list():
     N = int(input("Input N: "))
-    stocks = []
-    for i in range(N):
-        stocks[i] = int(input("stonks today: "))
-    profit = 0
+    a = [1,2,3]
+
+    b = 0
     for i in range(N):
         for j in range(i, N):
-            if stocks[j] - stocks[i] >= profit:
-                profit = stocks[j] - stocks[i]
-    if ((profit)>0) and (teeteedGwKecil()):
-        print("stonks")
+            if a[j] - a[i] >= b:
+                b = a[j] - a[i]
+            else:
+                print("spmething")
+    if ((b)>0 and someFunc()):
+        print("nice")
     else:
-        print("not stonks")
+        print("not nice")
 

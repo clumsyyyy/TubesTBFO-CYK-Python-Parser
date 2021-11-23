@@ -4,7 +4,7 @@ from CONDITIONAL_parser import conditionalParser
 from FREETYPE_parser import freetypeParser
 from LOOP_FA_function import FA_function_HELPER
 from EQUALS_parser import equalsParser
-from IMPORT_parser import checkimp
+from IMPORT_parser import IMPORT_PARSER
 
 def checker(path):
     #class instantiations
@@ -12,6 +12,7 @@ def checker(path):
     conditionals = conditionalParser()
     defcheck = freetypeParser()
     equal = equalsParser()
+    importCheck = IMPORT_PARSER()
 
     #flags
     ifIndent = []
@@ -92,7 +93,7 @@ def checker(path):
                                             equal.checkEqual(expression)
                                         except Exception as e:
                                             try:
-                                                checkimp(expression)
+                                                importCheck.checkimp(expression)
                                             except Exception as e:
                                                 try:
                                                     loopFuncCheck.checkFunction(expression)

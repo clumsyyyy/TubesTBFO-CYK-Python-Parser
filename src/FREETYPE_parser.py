@@ -25,46 +25,20 @@ class freetypeParser:
 
         func = (' '.join(arr[1:-1]))
 
-        
         varFunChecker = varNameChecker()
-        if "(" in func:
-            if ")" not in func:
-                raise Exception(["Missing ')'"])
-            else:
-                funcName = func[:func.find('(')]
-                funcName = funcName.strip()
-                #print(funcName)
-                if(func.find('(')+1 != func.find(')')):
-                    arguments = func[func.find('(')+1:-1]
-                    arguments = arguments.split(',')
-                    for i in range(len(arguments)):
-                        arguments[i]= arguments[i].strip()
-                else:
-                    arguments = []
+        funcCheck = FA_function_HELPER()
 
-                    
-                for i in range(len(arguments)):
-                    try:
-                        varFunChecker.check(arguments[i])
-                    except Exception as e:
-                        raise(e)
-                    else:
-                        arguments[i] = "VAR"
-        
-
-        else:
-            funcName = func
-            arguments = []
         try: 
-            varFunChecker.check(funcName)
+            funcCheck.checkFunction(func)
         except Exception as e:
             raise(e)
         else:
-            funcName = "FUNNAME"
+            func = "FUNNAME"
                         
-        word = [arr[0],funcName]
-        word.extend(arguments)
+        word = [arr[0],func]
+
         word.append(arr[-1])
+        print(word)
         cyk = CYKCHECKCLASS()
         defClassRule = CNF_Freetype()
         if cyk.check(defClassRule.getDefClass(), word):
@@ -88,6 +62,7 @@ class freetypeParser:
                 statement = ' '.join(word[1:])
                 bool = FA_function_HELPER()
                 checker =  FA_function_HELPER()
+                var = varNameChecker()
                 try:
                     bool.checkBool(statement)
                 except Exception as e:
@@ -97,9 +72,24 @@ class freetypeParser:
                         try:
                             checker.checkString(statement)
                         except Exception as e:
-                            statement = "INVALID"
+                            try:
+                                checker.checkInt(statement)
+                            except Exception as e:
+                                try:
+                                    checker.checkList(statement)
+                                except Exception as e:
+                                    try:
+                                        var.check(statement)
+                                    except Exception as e:
+                                        statement = "INVALID"
+                                    else:
+                                        statement = "VAR"
+                                else:
+                                    statement = "LIST"
+                            else:
+                                statement = "INT"
                         else:
-                            statement = "STATEMENT"
+                            statement = "STRING"
                     else:
                         statement = "STATEMENT"
                 else:
@@ -107,6 +97,7 @@ class freetypeParser:
             word = [word[0],statement]
 
         elif (word[0] == "raise"):
+            checker =  FA_function_HELPER()
             exception = ' '.join(word[1:])
             if len(exception) < 9:
                 raise Exception(["No Exception"])
@@ -115,16 +106,17 @@ class freetypeParser:
                     raise Exception(["No Exception"])
                 else:
                     try:
-                        funcallCheck.checkfuncall(exception)
+                        checker.checkFunction(exception)
                     except Exception as e:
                         raise(e)
                     else:
                         exception = "EXCEPTION"
                         word = [word[0],exception]
-                    
+        print(word)
         cyk = CYKCHECKCLASS()
-        passReturnRule = CNF_Freetype()
-        if cyk.check(passReturnRule.getPassReturnRaise(),word):
+        returnRule = CNF_Freetype()
+        print(returnRule.getPassReturnRaise())
+        if cyk.check(returnRule.getPassReturnRaise(),word):
             return True
         else:
             raise Exception(["Incompatible grammar!"])
