@@ -3,7 +3,6 @@ import CYKcheck as cykcheck
 import FA_varchecker as VARCHECK
 import LOOP_FA_function as FA_function
 
-varCheck = VARCHECK.FA_VALIDFUNVARNAMEC()
 argsRule =  CNF_functionargs.CNF_LOOP()
 cykChecker = cykcheck.CYKCHECKCLASS()
 fa_helper = FA_function.FA_function_HELPER()
@@ -22,7 +21,7 @@ def checkComparisonStatement(str):
             raise Exception(["More than one comparison operator detected"])
         #cek arithmetic
         instArith = FA_function.FA_function_HELPER()
-        var = VARCHECK.FA_VALIDFUNVARNAMEC()
+        var = VARCHECK.varNameChecker()
         for i in range(len(word)):
             if not word[i].replace(" ", "").isdigit():
                 try:
@@ -34,7 +33,7 @@ def checkComparisonStatement(str):
                         raise e
 
 try:
-    fa_helper.checkBool("True and False or not True or fun(2, False and 2rue)")
+    fa_helper.checkVar("(ansds.dsa[123])")
     # fa_helper.checkWhileLoop("while True and False or not True or fun(2,3):")
 except Exception as e:
     print(e)

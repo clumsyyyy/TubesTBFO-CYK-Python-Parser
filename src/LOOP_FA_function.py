@@ -1,8 +1,18 @@
 from CNF import CNF_LOOP
 from FA_varchecker import varNameChecker as FA_VALIDFUNVARNAMEC
 from CYKcheck import CYKCHECKCLASS
+from IMPORT_parser import IMPORT_PARSER
 class FA_function_HELPER:
     def checkComparison(self, str):
+        # SETUP:
+        str = str.strip()
+        leadingbraces = 0
+        for i in str:
+            if i == "(":
+                leadingbraces += 1
+        strlen = len(str)
+        str = str[leadingbraces:strlen-leadingbraces]
+        # END SETUP
         comparisonOps = [ "<=", ">=", ">", "<", "==", "!="]
         opsCount = 0;
         for i in range(len(comparisonOps)):
@@ -60,6 +70,15 @@ class FA_function_HELPER:
         else:
             return res
     def checkBool(self, str):
+        # SETUP:
+        str = str.strip()
+        leadingbraces = 0
+        for i in str:
+            if i == "(":
+                leadingbraces += 1
+        strlen = len(str)
+        str = str[leadingbraces:strlen-leadingbraces]
+        # END SETUP
         str = str.strip()
         if str in ["True", "False", "None"]:
             return True
@@ -270,6 +289,15 @@ class FA_function_HELPER:
                 else:
                     raise Exception(["Invalid boolean"])
     def checkString(self, string):
+        # SETUP:
+        string = string.strip()
+        leadingbraces = 0
+        for i in string:
+            if i == "(":
+                leadingbraces += 1
+        strlen = len(string)
+        string = string[leadingbraces:strlen-leadingbraces]
+        # END SETUP
         string = string.strip()
         if len(string) <= 0:
             raise Exception(["Empty string"])
@@ -279,12 +307,29 @@ class FA_function_HELPER:
             else:
                 raise Exception(["Not a string"])
     def checkInt(self, string):
-        string = string.strip("(").strip(")")
+        # SETUP:
+        string = string.strip()
+        leadingbraces = 0
+        for i in string:
+            if i == "(":
+                leadingbraces += 1
+        strlen = len(string)
+        string = string[leadingbraces:strlen-leadingbraces]
+        # END SETUP
         if string.isdigit():
             return True
         else:
             raise Exception(["Not an integer"])
     def checkFloat(self, string):
+        # SETUP:
+        string = string.strip()
+        leadingbraces = 0
+        for i in string:
+            if i == "(":
+                leadingbraces += 1
+        strlen = len(string)
+        string = string[leadingbraces:strlen-leadingbraces]
+        # END SETUP
         try:
             float(string)
         except ValueError:
@@ -292,6 +337,15 @@ class FA_function_HELPER:
         else:
             return True
     def checkFloatArith(self, str):
+        # SETUP:
+        str = str.strip()
+        leadingbraces = 0
+        for i in str:
+            if i == "(":
+                leadingbraces += 1
+        strlen = len(str)
+        str = str[leadingbraces:strlen-leadingbraces]
+        # END SETUP
         try:
             float(str)
         except ValueError:
@@ -299,7 +353,15 @@ class FA_function_HELPER:
         else:
             return True
     def checkComplexArith(self, str):
+        # SETUP:
         str = str.strip()
+        leadingbraces = 0
+        for i in str:
+            if i == "(":
+                leadingbraces += 1
+        strlen = len(str)
+        str = str[leadingbraces:strlen-leadingbraces]
+        # END SETUP
         token = []
         compOp = ["+", "-", "/", "*"]
         wordBlock = ""
@@ -321,165 +383,183 @@ class FA_function_HELPER:
         else:
             return True
     def checkArith(self, string):
-            instValid = FA_VALIDFUNVARNAMEC()
-            if (string.isdigit() or self.checkFloatArith(string) or self.checkComplexArith(string)):
-                return True
-            arithOps = ["+", "-", "/", "//", "%", "*", "**", "&", "|", "^"]
-            opsSingleton = ["+", "-", "*", "/", "%", "&", "|", "^"]
-            openingBracketCount = string.count("(")
-            closingBracketCount = string.count(")")
-            if (openingBracketCount != closingBracketCount):
-                raise Exception(["Non-matching brackets"])
-            arithFlag = False
-            for i in range(len(arithOps)):
-                if arithOps[i] in string:
-                    arithFlag = True
-                    break
-            if (openingBracketCount > 0):
+        # SETUP:
+        string = string.strip()
+        leadingbraces = 0
+        for i in string:
+            if i == "(":
+                leadingbraces += 1
+        strlen = len(string)
+        string = string[leadingbraces:strlen-leadingbraces]
+        # END SETUP
+        instValid = FA_VALIDFUNVARNAMEC()
+        if (string.isdigit() or self.checkFloatArith(string) or self.checkComplexArith(string)):
+            return True
+        arithOps = ["+", "-", "/", "//", "%", "*", "**", "&", "|", "^"]
+        opsSingleton = ["+", "-", "*", "/", "%", "&", "|", "^"]
+        openingBracketCount = string.count("(")
+        closingBracketCount = string.count(")")
+        if (openingBracketCount != closingBracketCount):
+            raise Exception(["Non-matching brackets"])
+        arithFlag = False
+        for i in range(len(arithOps)):
+            if arithOps[i] in string:
                 arithFlag = True
-            if arithFlag == False:
-                raise Exception(["No operator in sentence"])
-            wordSep = []
-            operand = ""
-            for i in string:
-                if i in ["(", ")"]:
-                    if operand != "":
-                        wordSep.append(operand)
-                        operand = ""
-                    wordSep.append(i)
+                break
+        if (openingBracketCount > 0):
+            arithFlag = True
+        if arithFlag == False:
+            raise Exception(["No operator in sentence"])
+        wordSep = []
+        operand = ""
+        for i in string:
+            if i in ["(", ")"]:
+                if operand != "":
+                    wordSep.append(operand)
+                    operand = ""
+                wordSep.append(i)
+            else:
+                operand = operand + i
+        if operand != "":
+            wordSep.append(operand)
+        openInsideFirstBracket = 0
+        f = True
+        wslen = len(wordSep)
+        parsedWord = []
+        insideapp = ""
+        isThereParen = False
+        for i in range(wslen):
+            if wordSep[i] == "(":
+                isThereParen = True
+                if f:
+                    parsedWord.append("(")
+                    f = False
                 else:
-                    operand = operand + i
-            if operand != "":
-                wordSep.append(operand)
-            openInsideFirstBracket = 0
-            f = True
-            wslen = len(wordSep)
-            parsedWord = []
-            insideapp = ""
-            isThereParen = False
-            for i in range(wslen):
-                if wordSep[i] == "(":
-                    isThereParen = True
-                    if f:
-                        parsedWord.append("(")
-                        f = False
-                    else:
-                        openInsideFirstBracket += 1
-                        insideapp += wordSep[i]
-                elif wordSep[i] == ")":
-                    if openInsideFirstBracket == 0:
-                        parsedWord.append(insideapp)
-                        parsedWord.append(wordSep[i])
-                        insideapp = ""
-                        f = True
-                    else:
-                        openInsideFirstBracket -= 1
-                        insideapp += wordSep[i]
+                    openInsideFirstBracket += 1
+                    insideapp += wordSep[i]
+            elif wordSep[i] == ")":
+                if openInsideFirstBracket == 0:
+                    parsedWord.append(insideapp)
+                    parsedWord.append(wordSep[i])
+                    insideapp = ""
+                    f = True
                 else:
-                    if (f == True):
-                        parsedWord.append(wordSep[i])
-                    else:
-                        insideapp += wordSep[i]
-            
-            #parsedWord = [x.strip() for x in parsedWord]
-            pwlen = len(parsedWord)
-            if isThereParen:
-                exprFlag = False
-                for i in range(pwlen):
-                    if parsedWord[i] == "(":
-                        exprFlag = True
-                    elif parsedWord[i] == ")":
-                        exprFlag = False
-                    else:
-                        if exprFlag == True:
-                            try:
-                                self.checkArgs(parsedWord[i])
-                            except:
-                                if (self.checkArith(parsedWord[i])):
-                                    parsedWord[i] = "VALID"
-                                else:
-                                    raise Exception(["Invalid expression"])
-                            else:
+                    openInsideFirstBracket -= 1
+                    insideapp += wordSep[i]
+            else:
+                if (f == True):
+                    parsedWord.append(wordSep[i])
+                else:
+                    insideapp += wordSep[i]
+        
+        #parsedWord = [x.strip() for x in parsedWord]
+        pwlen = len(parsedWord)
+        if isThereParen:
+            exprFlag = False
+            for i in range(pwlen):
+                if parsedWord[i] == "(":
+                    exprFlag = True
+                elif parsedWord[i] == ")":
+                    exprFlag = False
+                else:
+                    if exprFlag == True:
+                        try:
+                            self.checkArgs(parsedWord[i])
+                        except:
+                            if (self.checkArith(parsedWord[i])):
                                 parsedWord[i] = "VALID"
-            parsedStr = "".join(parsedWord)
-            toappend = ""
-            word = []
-            for i in parsedStr:
-                if i in opsSingleton:
-                    if toappend != "":
-                        word.append(toappend)
-                    word.append(i)
-                    toappend = ""
+                            else:
+                                raise Exception(["Invalid expression"])
+                        else:
+                            parsedWord[i] = "VALID"
+        parsedStr = "".join(parsedWord)
+        toappend = ""
+        word = []
+        for i in parsedStr:
+            if i in opsSingleton:
+                if toappend != "":
+                    word.append(toappend)
+                word.append(i)
+                toappend = ""
+            else:
+                toappend += i
+        if toappend != "":
+            word.append(toappend)
+        opStack = ["Z0"]
+        for i in word:
+            if i not in opsSingleton:
+                # if (" " in i.strip()):
+                #     opStack.append("INVALID")
+                # else:
+                opStack.append("OPERAND")
+            else:
+                if i == "-" or i == "+":
+                    opStack.append(i)
+                elif i == "*":
+                    if (opStack[-1] == "*"):
+                        opStack.pop()
+                        opStack.append("**")
+                    elif (opStack[-1] == "OPERAND"):
+                        opStack.append(i)
+                    else:
+                        raise Exception(["Invalid expression"])
+
+                elif i == "/":
+                    if (opStack[-1] == "/"):
+                        opStack.pop()
+                        opStack.append("//")
+                    elif (opStack[-1] == "OPERAND"):
+                        opStack.append(i)
+                    else:
+                        raise Exception(["Invalid expression"])
                 else:
-                    toappend += i
-            if toappend != "":
-                word.append(toappend)
-            opStack = ["Z0"]
+                    if (opStack[-1] == "OPERAND"):
+                        opStack.append(i)
+                    else:
+                        raise Exception(["Invalid expression"])
+        if (opStack[-1] != "OPERAND"):
+            raise Exception(["Invalid expression"])
+        else:
             for i in word:
                 if i not in opsSingleton:
-                    # if (" " in i.strip()):
-                    #     opStack.append("INVALID")
-                    # else:
-                    opStack.append("OPERAND")
-                else:
-                    if i == "-" or i == "+":
-                        opStack.append(i)
-                    elif i == "*":
-                        if (opStack[-1] == "*"):
-                            opStack.pop()
-                            opStack.append("**")
-                        elif (opStack[-1] == "OPERAND"):
-                            opStack.append(i)
-                        else:
-                            raise Exception(["Invalid expression"])
-
-                    elif i == "/":
-                        if (opStack[-1] == "/"):
-                            opStack.pop()
-                            opStack.append("//")
-                        elif (opStack[-1] == "OPERAND"):
-                            opStack.append(i)
-                        else:
-                            raise Exception(["Invalid expression"])
+                    i = i.strip()
+                    i = i.replace(")", "")
+                    i = i.replace("(", "")
+                    if (i.isdigit() or self.checkFloatArith(i) or self.checkComplexArith(i)):
+                        pass
                     else:
-                        if (opStack[-1] == "OPERAND"):
-                            opStack.append(i)
-                        else:
-                            raise Exception(["Invalid expression"])
-            if (opStack[-1] != "OPERAND"):
-                raise Exception(["Invalid expression"])
-            else:
-                for i in word:
-                    if i not in opsSingleton:
-                        i = i.strip()
-                        i = i.replace(")", "")
-                        i = i.replace("(", "")
-                        if (i.isdigit() or self.checkFloatArith(i) or self.checkComplexArith(i)):
-                            pass
-                        else:
+                        try:
+                            self.checkVar(i)
+                        except Exception as e:
                             try:
-                                self.checkVar(i)
+                                self.checkFunction(i)
                             except Exception as e:
                                 try:
-                                    self.checkFunction(i)
-                                except Exception as e:
+                                    self.checkList(i)
+                                except:
                                     try:
-                                        self.checkList(i)
+                                        self.checkBool(i)
                                     except:
-                                        try:
-                                            self.checkBool(i)
-                                        except:
-                                            raise Exception(["Invalid expression"])
-                                        else:
-                                            pass
+                                        raise Exception(["Invalid expression"])
                                     else:
                                         pass
                                 else:
                                     pass
                             else:
                                 pass
-                return True   
+                        else:
+                            pass
+            return True   
     def checkListElCall(self, str):
+        # SETUP:
+        str = str.strip()
+        leadingbraces = 0
+        for i in str:
+            if i == "(":
+                leadingbraces += 1
+        strlen = len(str)
+        str = str[leadingbraces:strlen-leadingbraces]
+        # END SETUP
         strictlyVar = FA_VALIDFUNVARNAMEC()
         getArgs = CNF_LOOP()
         str = str.strip()
@@ -496,6 +576,8 @@ class FA_function_HELPER:
                     word.append(i)
                 else:
                     toappend += i
+            if toappend != "":
+                word.append(toappend)
             try:
                 strictlyVar.check(word[0])
             except Exception as e:
@@ -536,24 +618,61 @@ class FA_function_HELPER:
                     raise Exception(["Invalid list element call"])
 
     def checkVar(self, string): #can accept array too
+        # SETUP:
+        string = string.strip()
+        leadingbraces = 0
+        for i in string:
+            if i == "(":
+                leadingbraces += 1
+        strlen = len(string)
+        string = string[leadingbraces:strlen-leadingbraces]
+        # END SETUP
+        print("Str:", string)
         inst = FA_VALIDFUNVARNAMEC()
-        string = string.strip("(").strip(")")
-        try:
-            inst.check(string)
-        except Exception as e:
+        if ("." in string):
+            methodcheck = IMPORT_PARSER()
+            word = string.split(".")
+            themethodstr = '.'.join(word[:-1])
             try:
-                self.checkListElCall(string)
-            except Exception as e:
-                raise e
+                try:
+                    methodcheck.checkmethod(themethodstr)
+                except:
+                    try:
+                        self.checkVar(themethodstr)
+                    except:
+                        raise Exception(["Invalid variable"])
+                finally:
+                    self.checkVar(word[-1])
+            except:
+                raise Exception(["Invalid variable"])
             else:
                 return True
         else:
-            return True
+            try:
+                inst.check(string)
+            except Exception as e:
+                try:
+                    self.checkListElCall(string)
+                except Exception as e:
+                    raise Exception(["Invalid variable"])
+                else:
+                    return True
+            else:
+                return True
     def checkCyk(self, rule, str):
         inst = CYKCHECKCLASS()
         return inst.check(rule, str)
     
     def checkArgs(self, str):
+        # SETUP:
+        str = str.strip()
+        leadingbraces = 0
+        for i in str:
+            if i == "(":
+                leadingbraces += 1
+        strlen = len(str)
+        str = str[leadingbraces:strlen-leadingbraces]
+        # END SETUP
         if str == "":
             return True
         else:
@@ -657,7 +776,15 @@ class FA_function_HELPER:
             else:
                 raise Exception(["Invalid arguments"])                
     def checkFunction(self, str):
+        # SETUP:
         str = str.strip()
+        leadingbraces = 0
+        for i in str:
+            if i == "(":
+                leadingbraces += 1
+        strlen = len(str)
+        str = str[leadingbraces:strlen-leadingbraces]
+        # END SETUP
         wordFun = []
         if str[-1] != ")":
             raise Exception(["Missing closing bracket"])
@@ -681,6 +808,15 @@ class FA_function_HELPER:
                 else:
                     return True
     def checkList(self, str):
+        # SETUP:
+        str = str.strip()
+        leadingbraces = 0
+        for i in str:
+            if i == "[":
+                leadingbraces += 1
+        strlen = len(str)
+        str = str[leadingbraces:strlen-leadingbraces]
+        # END SETUP
         if (str == ""):
             raise Exception(["Empty String"])
         str = str.strip()
