@@ -1,5 +1,5 @@
 from BOOL_FA import FA_equals as FAe
-
+a += a = a
 def makloGaming(count):
     for i in range(1, 10, 3):
         if count % 2 == 0 and teeteed:

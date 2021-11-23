@@ -1,5 +1,5 @@
 from CNF import CNF_LOOP
-from FA_varchecker import FA_VALIDFUNVARNAMEC
+from FA_varchecker import varNameChecker as FA_VALIDFUNVARNAMEC
 from CYKcheck import CYKCHECKCLASS
 class FA_function_HELPER:
     def checkComparison(self, str):
