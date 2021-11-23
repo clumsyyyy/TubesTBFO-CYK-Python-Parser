@@ -25,4 +25,7 @@ class varNameChecker:
             self.res = False
             
     def check(self, str):
-        return self._start(str)
+        if str in ["True", "False", "None"]:
+            raise Exception(["Boolean not a string"])
+        else:
+            return self._start(str)

@@ -1,86 +1,5 @@
 class CNF_Boolean:
     def getBoolRule(self):
-        return[
-            ("S", ["True"]),
-            ("S", ["False"]),
-            ("S", ["None"]),
-            ("S", ["VAR"]),
-            ("S", ["FUNCALL"]),
-            ("S", ["COMPARISON"]),
-            ("S", ["INT"]),
-            ("S", ["VAR"]),
-            ("S", ["LIST"]),
-            ("S", ["STR"]),
-            ("S", ["COMP"]),
-            ("S", ["BOOLOPS"]),
-            ("S", ["H0", "S"]),
-            ("S", ["H1", "S"]),
-            ("S", ["H2", "S"]),
-            ("H0", ["not"]),
-            ("H1", ["S", "H3"]),
-            ("H2", ["S", "H4"]),
-            ("H3", ["and"]),
-            ("H3", ["not in"]),
-            ("H3", ["in"]),
-            ("H4", ["or"])
-        ]
-    def getIsRule(self):
-        return [
-            ("S", ["H0", "S2"]),
-            ("S", ["H1", "S2"]),
-            ("S", ["H2", "S2"]),
-            ("S", ["H3", "S2"]),
-            ("S1", ["VAR"]),
-            ("S2", ["VAR"]),
-            ("IS", ["is"]),
-            ("Not", ["not"]),
-            ("H0", ["H2", "Not"]),
-            ("H1", ["H3", "Not"]),
-            ("H2", ["H4", "IS"]),
-            ("H3", ["S1", "IS"]),
-            ("H4", ["Not", "S1"])
-        ]
-class CNF_IMPORT:
-    def getImportRule(self):
-        # from METHOD import VAR as VAR
-        # from METHOD import VAR
-        # import METHOD
-        # import METHOD as VAR 
-        # from VAR import VAR as VAR
-        # from VAR import VAR
-        # import VAR
-        # import VAR as VAR
-        return [
-            ("START", ["H1", "H0"]),
-            ("START", ["H2", "H0"]),
-            ("START", ["H3", "MV"]),
-            ("START", ["H4", "H0"]),
-            ("MV", ["METHOD"]),
-            ("MV", ["VAR"]),
-            ("H0", ["VAR"]),
-            ("H1", ["H5", "H3"]),
-            ("H2", ["H7", "H6"]),
-            ("H3", ["import"]),
-            ("H4", ["H8", "H6"]),
-            ("H5", ["H9", "MV"]),
-            ("H6", ["as"]),
-            ("H7", ["H1", "H0"]),
-            ("H8", ["H3", "MV"]),
-            ("H9", ["from"])
-        ]
-    def getMethodRule(self):
-        # VAR. ... VAR
-        return [
-            ("START", ["H0", "B"]),
-            ("B", ["H0", "B"]),
-            ("B", ["VAR"]),
-            ("H0", ["H1", "H2"]),
-            ("H1", ["VAR"]),
-            ("H2", ["."])
-        ]
-
-class CNF_LOOP:
-    def getBoolRule(self):
         return [
             ("START", ["H0", "INST"]),
             ("START", ["H1", "TWO"]),
@@ -130,108 +49,56 @@ class CNF_LOOP:
             ("H2", ["not"]),
             ("H3", ["NIINST", "NI"])
         ]
+    def getIsRule(self):
+        return [
+            ("S", ["H0", "S2"]),
+            ("S", ["H1", "S2"]),
+            ("S", ["H2", "S2"]),
+            ("S", ["H3", "S2"]),
+            ("S1", ["VAR"]),
+            ("S2", ["VAR"]),
+            ("IS", ["is"]),
+            ("Not", ["not"]),
+            ("H0", ["H2", "Not"]),
+            ("H1", ["H3", "Not"]),
+            ("H2", ["H4", "IS"]),
+            ("H3", ["S1", "IS"]),
+            ("H4", ["Not", "S1"])
+        ]
+class CNF_IMPORT:
+    def getImportRule(self):
+        return [
+            ("START", ["H1", "H0"]),
+            ("START", ["H2", "H0"]),
+            ("START", ["H3", "MV"]),
+            ("START", ["H4", "H0"]),
+            ("MV", ["METHOD"]),
+            ("MV", ["VAR"]),
+            ("H0", ["VAR"]),
+            ("H1", ["H5", "H3"]),
+            ("H2", ["H7", "H6"]),
+            ("H3", ["import"]),
+            ("H4", ["H8", "H6"]),
+            ("H5", ["H9", "MV"]),
+            ("H6", ["as"]),
+            ("H7", ["H1", "H0"]),
+            ("H8", ["H3", "MV"]),
+            ("H9", ["from"])
+        ]
+    def getMethodRule(self):
+        # VAR. ... VAR
+        return [
+            ("START", ["H0", "B"]),
+            ("B", ["H0", "B"]),
+            ("B", ["VAR"]),
+            ("H0", ["H1", "H2"]),
+            ("H1", ["VAR"]),
+            ("H2", ["."])
+        ]
 
-    """
-         START -> H0 INST
-        | H1 TWO
-        | INT
-        | VAR
-        | BOOLOPS
-        | STR
-        | LIST
-        | FUNCALL
-        | COMP
-        | H2 INST
-   TWO -> H3 TWO
-        | BOOLOPS
-        | STR
-        | LIST
-        | FUNCALL
-        | VAR
-  INST -> INT
-        | VAR
-        | BOOLOPS
-        | STR
-        | LIST
-        | FUNCALL
-        | COMP
-        | H0 INST
-        | H2 INST
-NIINST -> BOOLOPS
-        | STR
-        | LIST
-        | FUNCALL
-        | VAR
-    NI -> notin
-        | in
-   BIN -> and
-        | or
-    H0 -> INST BIN
-    H1 -> INST NI
-    H2 -> not
-    H3 -> NIINST NI
-        """
+class CNF_LOOP:
+    
 
-        # return [
-        #     ("START", ["H0", "TWO"]),
-        #     ("START", ["H1", "INST"]),
-        #     ("START", ["H2", "TWO"]),
-        #     ("START", ["H3", "NIREP"]),
-        #     ("NIREP", ["H4", "NIREP"]),
-        #     ("NIREP", ["VAR"]),
-        #     ("NIREP", ["LIST"]),
-        #     ("NIREP", ["STR"]),
-        #     ("NIREP", ["FUNCALL"]),
-        #     ("NIREP", ["BOOLOPS"]),
-        #     ("NOTINFINST", ["INT"]),
-        #     ("NOTINFINST", ["VAR"]),
-        #     ("NOTINFINST", ["STR"]),
-        #     ("NOTINFINST", ["LIST"]),
-        #     ("NOTINFINST", ["FUNCALL"]),
-        #     ("NOTINFINST", ["BOOLOPS"]),
-        #     ("NOTINFINST", ["COMP"]),
-        #     ("NOTINSINST", ["VAR"]),
-        #     ("NOTINSINST", ["LIST"]),
-        #     ("NOTINSINST", ["STR"]),
-        #     ("NOTINSINST", ["FUNCALL"]),
-        #     ("NOTINSINST", ["BOOLOPS"]),
-        #     ("NOTINSINST", ["True"]),
-        #     ("NOTINSINST", ["False"]),
-        #     ("NOTINSINST", ["None"]),
-        #     ("TWO", ["H1", "INST"]),
-        #     ("TWO", ["H2", "TWO"]),
-        #     ("TWO", ["H0", "TWO"]),
-        #     ("TWO", ["INT"]),
-        #     ("TWO", ["VAR"]),
-        #     ("TWO", ["FUNCALL"]),
-        #     ("TWO", ["COMP"]),
-        #     ("TWO", ["STR"]),
-        #     ("TWO", ["LIST"]),
-        #     ("TWO", ["BOOLOPS"]),
-        #     ("TWO", ["True"]),
-        #     ("TWO", ["False"]),
-        #     ("TWO", ["None"]),
-        #     ("INST", ["INT"]),
-        #     ("INST", ["VAR"]),
-        #     ("INST", ["FUNCALL"]),
-        #     ("INST", ["COMP"]),
-        #     ("INST", ["STR"]),
-        #     ("INST", ["LIST"]),
-        #     ("INST", ["True"]),
-        #     ("INST", ["False"]),
-        #     ("INST", ["None"]),
-        #     ("INST", ["BOOLOPS"]),
-        #     ("BIN", ["and"]),
-        #     ("BIN", ["or"]),
-        #     ("NI", ["not in"]),
-        #     ("NI", ["in"]),
-        #     ("H0", ["INST", "BIN"]),
-        #     ("H1", ["not"]),
-        #     ("H2", ["H5", "BIN"]),
-        #     ("H3", ["NOTINFINST", "NI"]),
-        #     ("H4", ["NOTINSINST", "NI"]),
-        #     ("H5", ["H1", "INST"])
-        # ]
     def getListElRule(self):
         return [
             ("START", ["H0", "EC"]),

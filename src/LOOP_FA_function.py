@@ -90,7 +90,7 @@ class FA_function_HELPER:
         str = str.strip()
         if str in ["True", "False", "None"]:
             return True
-        argsRule = CNF_LOOP()
+        argsRule = CNF_Boolean()
         logicOp = ["and", "or", "not", "in", "not in"]
         if (str.count("(") != str.count(")")):
             raise Exception(["Missing Brackets"])

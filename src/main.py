@@ -22,7 +22,7 @@ def checker(path):
     commentStart = False
 
     path = "samples/" + path
-    print("\nMembuka file", path, "...\n")
+    print("\nOpening file", path, "...\n")
     if not os.path.exists(path):
         print("File '", path, "' tidak ada!\n")
         
@@ -41,8 +41,8 @@ def checker(path):
         if lineArr[i][0] != '\n' or len(lineArr[i][0]) != 0:
             expression = lineArr[i][0].strip("\n").strip()
             indent = lineArr[i][1]
-            print("Line", count, ": ", end = "")
-            print(expression)
+            # print("Line", count, ": ", end = "")
+            # print(expression)
 
             loopIndent = [x for x in loopIndent if x < indent]
             defIndent = [x for x in defIndent if x <= indent]
@@ -52,16 +52,16 @@ def checker(path):
                 continue
             elif "#" in expression:
                 expression = expression.split("#")[0].strip()
-                print(expression)
+                #print(expression)
             elif expression[:3] == "\'\'\'" and expression[-3:] == "\'\'\'" and len(expression) != 3:
                 continue
             elif expression[:3] == "\'\'\'" or expression[-3:] == "\'\'\'" :
                 if commentStart == False:
                     commentStart = True
-                    print("comment start")
+                    #print("comment start")
                 elif commentStart == True:
                     commentStart = False
-                    print("comment end")
+                    #print("comment end")
 
             if not commentStart and (expression[:3] != "\'\'\'" and expression[-3:] != "\'\'\'"):
                 try:
@@ -91,31 +91,32 @@ def checker(path):
                                                 if expression in contextedKeywords:
                                                     if len(loopIndent) != 0:
                                                         if indent > max(loopIndent):
-                                                            print(expression)
+                                                            pass
+                                                            #print(expression)
                                                         else:
-                                                            print("Error in line", count, "->", expression)
+                                                            print('\033[93m' + "Error in line", count, "->", expression)
                                                             break
                                                     else:
-                                                        print("Error: no loop initiated")
+                                                        print('\033[93m' + "Error: no loop initiated")
                                                         break
                                                 
                                                 else:
-                                                    print("Error in line", count, "->", expression)
+                                                    print('\033[93m' + "Error in line", count, "->", expression)
                                                     break
                                             else:
                                                 pass
-                                                print("function call")
+                                                #print("function call")
                                         else:
                                             pass
-                                            print("import statement")
+                                            #print("import statement")
                                     else:
                                         pass
-                                        print("equal statement")
+                                        #print("equal statement")
                                 else:
-                                    print("while statement")
+                                    #print("while statement")
                                     loopIndent.append(indent)
                             else:
-                                print("loop statement")
+                                #print("loop statement")
                                 loopIndent.append(indent)
                         else: #cek return
                             if "return" in expression:
@@ -129,55 +130,55 @@ def checker(path):
                                     print("return not initiated with def")
                                     break
                     else: #cek def
-                        print("def statement")
+                        #print("def statement")
                         if indent not in defIndent:
                             defIndent.append(indent)
                 else: #cek indentasi if else
-                    print("conditionals")
+                    #print("conditionals")
                     if "else" in expression:
                         if indent not in ifIndent:
-                            print("Error in line", count, "->", expression)
-                            print("Error: else initiated before if")
+                            print('\033[93m' + "Error in line", count, "->", expression)
+                            print('\033[93m' + "Error: else initiated before if")
                             break
                         else:
                             try:
                                 conditionals.checkConditionals(lineArr[i + 1][0].strip('\n').strip())
                             except Exception as e:
-                                print("else statement")
+                                #print("else statement")
                                 ifIndent = [x for x in ifIndent if x < indent]
                             else:
                                 if lineArr[i + 1][1] > indent:
-                                    print("else statement")
+                                    #print("else statement")
                                     print(indent)
                                     ifIndent = [x for x in ifIndent if x < indent]
                                 elif indent not in ifIndent:
-                                    print("Error in line", count, "->", expression)
-                                    print("Error: else should be followed with a statement")
+                                    print('\033[93m' + "Error in line", count, "->", expression)
+                                    print('\033[93m' + "Error: else should be followed with a statement")
                                     break
                     elif "elif" in expression:
                         if indent not in ifIndent:
-                            print("Error in line", count, "->", expression)
-                            print("Error: elif initiated before if")
+                            print('\033[93m' + "Error in line", count, "->", expression)
+                            print('\033[93m' + "Error: elif initiated before if")
                             break
                         else:
                             try:
                                 conditionals.checkConditionals(lineArr[i + 1][0].strip('\n').strip())
                             except:
                                 pass
-                                print("elif statement")
+                                #print("elif statement")
                             else:
                                 if lineArr[i + 1][1] > indent:
-                                    print("elif statement")
+                                    #print("elif statement")
                                     pass
                                 else:
-                                    print("Error in line", count, "->", expression)
-                                    print("Error: elif should be followed with a statement")
+                                    print('\033[93m' + "Error in line", count, "->", expression)
+                                    print('\033[93m' + "Error: elif should be followed with a statement")
                                     break
                     elif "if" in expression:
                         try:
                             conditionals.checkConditionals(lineArr[i + 1][0].strip('\n').strip())
                         except:
-                            print("if statement")
+                            #print("if statement")
                             if indent not in ifIndent:
                                 ifIndent.append(indent)
                         else:
@@ -188,20 +189,18 @@ def checker(path):
                                 if lineArr[i + 1][1] not in ifIndent:
                                     ifIndent.append(lineArr[i + 1][1])
                             else:
-                                print("Error in line", count, "->", expression)
-                                print("Error: if should be followed with a statement")
+                                print('\033[93m' + "Error in line", count, "->", expression)
+                                print('\033[93m' + "Error: if should be followed with a statement")
                                 break    
                 # # evaluasi tiap line
                     
         count += 1
 
-    print("")
     if commentStart:
         print("Comment started but not ended")
     elif count >= len(lineArr) and not commentStart:
-        print("Program accepted!\n")
+        print('\033[92m' + "Program accepted!\n")
+    print('\033[0m')
 
 
-
-#checker(sys.argv[1])
-checker("input1.py")
+checker(sys.argv[1])

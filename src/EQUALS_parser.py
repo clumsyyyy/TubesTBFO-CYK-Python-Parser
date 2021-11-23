@@ -89,7 +89,7 @@ class equalsParser:
                 word[2] = "INT"
         else:
             word[2] = "ASSIGN"
-        print(word)
+
         CYKChecker = CYKCHECKCLASS()
         CNFEq = CNF_Equals()
         if CYKChecker.check(CNFEq.getEqualsRule(), word):
