@@ -19,3 +19,8 @@ if count == n - 2:
     print("A dan B merupakan double magic sequence")
 else:
     print("A dan B bukan merupakan double magic sequence")
+
+
+
+
+    

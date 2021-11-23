@@ -1,6 +1,6 @@
 len = int(input("Input string length: "))
 word = input("Input string: ")
-arr = [] #each character in word
+arr = word.split()
 
 arr_len = 0
 count = 0
@@ -20,4 +20,5 @@ if arr_len == len:
         print("not a palindrome")
 else:
     print("Different string length.")
+
 

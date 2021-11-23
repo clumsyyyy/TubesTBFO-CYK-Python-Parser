@@ -20,7 +20,7 @@ def checker(path):
     returnIndent = []
     loopIndent = []
     commentStart = False
-
+    errFlag = False
     path = "samples/" + path
     print("\nOpening file", path, "...\n")
     if not os.path.exists(path):
@@ -28,7 +28,7 @@ def checker(path):
         
     
     errArr = []
-    count = 1
+    count = 0
     file = open(path, "r", encoding="utf8")
     lineArr = []
     contextedKeywords = ["break", "continue", "pass"]
@@ -38,6 +38,7 @@ def checker(path):
     file.close()
 
     for i in range(len(lineArr)):
+        count += 1
         if lineArr[i][0] != '\n' or len(lineArr[i][0]) != 0:
             expression = lineArr[i][0].strip("\n").strip()
             indent = lineArr[i][1]
@@ -97,13 +98,16 @@ def checker(path):
                                                             #print(expression)
                                                         else:
                                                             print('\033[93m' + "Syntax Error in line", count, ": ", expression)
+                                                            errFlag = True
                                                             break
                                                     else:
-                                                        print('\033[93m' + "Error: no loop initiated")
+                                                        print('\033[93m' + "Error: no loop initiated for context keywords (break/continue/pass)")
+                                                        errFlag = True
                                                         break
                                                 
                                                 else:
                                                     print('\033[93m' + "Syntax Error in line", count, ": ", expression)
+                                                    errFlag = True
                                                     break
                                             else:
                                                 pass
@@ -128,10 +132,12 @@ def checker(path):
                                     if indent <= max(defIndent):
                                         print('\033[93m' + "Error in line", count, ": ", expression)
                                         print('\033[93m' + "wrong indentation position for return")
+                                        errFlag = True
                                         break
                                 else:
                                     print('\033[93m' + "Error in line", count, ": ", expression)
                                     print('\033[93m' + "return not initiated with def")
+                                    errFlag = True
                                     break
                     else: #cek def
                         #print("def statement")
@@ -143,6 +149,7 @@ def checker(path):
                         if indent not in ifIndent:
                             print('\033[93m' + "Error in line", count, ": ", expression)
                             print('\033[93m' + "Error: else initiated before if")
+                            errFlag = True
                             break
                         else:
                             try:
@@ -157,11 +164,13 @@ def checker(path):
                                 elif indent not in ifIndent:
                                     print('\033[93m' + "Error in line", count, ": ", expression)
                                     print('\033[93m' + "Error: else should be followed with a statement")
+                                    errFlag = True
                                     break
                     elif "elif" in expression:
                         if indent not in ifIndent:
                             print('\033[93m' + "Error in line", count, ": ", expression)
                             print('\033[93m' + "Error: elif initiated before if")
+                            errFlag = True
                             break
                         else:
                             try:
@@ -176,6 +185,7 @@ def checker(path):
                                 else:
                                     print('\033[93m' + "Error in line", count, ": ", expression)
                                     print('\033[93m' + "Error: elif should be followed with a statement")
+                                    errFlag = True
                                     break
                     elif "if" in expression:
                         try:
@@ -194,14 +204,14 @@ def checker(path):
                             else:
                                 print('\033[93m' + "Error in line", count, ": ", expression)
                                 print('\033[93m' + "Error: if should be followed with a statement")
-                                break    
+                                errFlag = True  
+                                break
                 # # evaluasi tiap line
                     
-        count += 1
 
     if commentStart:
         print("Comment started but not ended")
-    elif count >= len(lineArr) and not commentStart:
+    elif not errFlag and not commentStart:
         print('\033[92m' + "Program accepted!\n")
     print('\033[0m')
 

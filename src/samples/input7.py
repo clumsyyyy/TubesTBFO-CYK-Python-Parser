@@ -12,8 +12,12 @@ def list():
                 b = a[j] - a[i]
             else:
                 print("something")
-    if ((b)>0 and someFunc()):
-        print("nice"
+    if ((b)>0 and someFunc(a,b,1)):
+        print("nice")
     else:
         print("not nice")
+
+
+return 0
+
 

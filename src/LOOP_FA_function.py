@@ -788,7 +788,7 @@ class FA_function_HELPER:
         if (wlen > 4):
             word[3] = ' '.join(word[3:-1])
             del word[4:-1]
-        print("herenow", word)
+        #print("herenow", word)
         try:
             self.checkInt(word[3])
         except:
@@ -836,7 +836,7 @@ class FA_function_HELPER:
         else:
             word[3] = "INT" 
         finally:
-            print("herenow", word)
+            #print("herenow", word)
             try:
                 self.checkVar(word[1])
             except Exception as e:
