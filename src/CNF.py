@@ -341,7 +341,7 @@ class CNF_Freetype:
             ("STATEMENT", ["STATEMENT"]),
             ("STATEMENT", ["INT"]),
             ("STATEMENT", ["STRING"]),
-            ("STATEMENT", ["LIST"])
+            ("STATEMENT", ["LIST"]),
             ("STATEMENT", ["VAR"]),
             ("RETURN",["return"]),
             ("RAISE",["raise"]),
