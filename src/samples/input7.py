@@ -1,5 +1,5 @@
 def someFunc(a,b,c):
-    return 5 <= 6 and "a" in "maklo"
+    return 5 <= 6 and "a" in "flag"
 
 def list():
     N = int(input("Input N: "))
@@ -11,7 +11,7 @@ def list():
             if a[j] - a[i] >= b:
                 b = a[j] - a[i]
             else:
-                print("spmething")
+                print("something")
     if ((b)>0 and someFunc()):
         print("nice")
     else:

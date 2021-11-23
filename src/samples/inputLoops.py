@@ -12,5 +12,6 @@ for i in range(1, 3, 1):
                 else:
                     break
 
+
 isTrue = "Yes" if aFunction() == "Apple" else "No"
 

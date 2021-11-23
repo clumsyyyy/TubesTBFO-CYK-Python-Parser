@@ -1,4 +1,4 @@
-from CNF import CNF_LOOP
+from CNF import CNF_LOOP, CNF_Boolean
 from FA_varchecker import varNameChecker as FA_VALIDFUNVARNAMEC
 from CYKcheck import CYKCHECKCLASS
 from IMPORT_parser import IMPORT_PARSER
@@ -90,7 +90,7 @@ class FA_function_HELPER:
         str = str.strip()
         if str in ["True", "False", "None"]:
             return True
-        argsRule = CNF_LOOP()
+        argsRule = CNF_Boolean()
         logicOp = ["and", "or", "not", "in", "not in"]
         if (str.count("(") != str.count(")")):
             raise Exception(["Missing Brackets"])
@@ -138,7 +138,7 @@ class FA_function_HELPER:
                 pwlen = len(parsedWord)
                 exprFlag = False
                 delFirst = False
-                ##print("parsedbef:", parsedWord)
+                print("parsedbef:", parsedWord)
                 for i in range(pwlen):
                     if parsedWord[i] == "(":
                         exprFlag = True
@@ -194,7 +194,7 @@ class FA_function_HELPER:
                                 else:
                                     parsedWord[i] = "BOOLOPS"
                             else:
-                                ##print("wordbracs:", word)
+                                print("wordbracs:", word)
                                 andpos = self.findIndexwithoutHandling(word, "and")
                                 orpos = self.findIndexwithoutHandling(word, "or")
                                 notpos = self.findIndexwithoutHandling(word, "not")
@@ -207,10 +207,10 @@ class FA_function_HELPER:
                                 else:
                                     delFirst = True
                                 parsedWord[i] = "BOOLOPS"
-                                #print("pw:", parsedWord)
+                                print("pw:", parsedWord)
                 if (delFirst == True):
                     del parsedWord[0]
-                #print("parsedaft:", parsedWord)
+                print("parsedaft:", parsedWord)
                 parsedWord = list(filter(lambda a: a != "(" and a != ")", parsedWord))
                 strIncheck = " ".join(parsedWord)
                 res = self.checkBool(strIncheck)
@@ -224,6 +224,7 @@ class FA_function_HELPER:
                 wordBlock = ""
                 owlen = len(oldWord)
                 skipone = False
+
                 for i in range(owlen):
                     if  skipone == True:
                         skipone = False
@@ -253,6 +254,7 @@ class FA_function_HELPER:
                     word.append(wordBlock.strip())
                     wordBlock = ""
                 #print("basecasebef: ", str, word)
+
                 for i in range(len(word)):
                     if word[i] not in ["and", "or", "not", "not in", "in"]:
                         if (word[i] == "True" or word[i] == "False" or word[i] == "None"):
@@ -291,6 +293,7 @@ class FA_function_HELPER:
                             else:
                                 word[i] = "INT"
                 #print("basecaseaft: ",  word)
+                print(word)
                 res = self.checkCyk(argsRule.getBoolRule(), word)
                 if (res):
                     return True
@@ -434,17 +437,27 @@ class FA_function_HELPER:
         parsedStr = "".join(parsedWord)
         toappend = ""
         word = []
+        openBracket = False
         for i in parsedStr:
+            if i == "[":
+                openBracket = True
+            elif i == "]":
+                openBracket = False
             if i in opsSingleton:
-                if toappend != "":
-                    word.append(toappend)
-                word.append(i)
-                toappend = ""
+                if openBracket == False:
+                    if toappend != "":
+                        word.append(toappend)
+                    word.append(i)
+                    toappend = ""
+                else:
+                    toappend += i
             else:
                 toappend += i
         if toappend != "":
             word.append(toappend)
         opStack = ["Z0"]
+
+
         for i in word:
             if i not in opsSingleton:
                 # if (" " in i.strip()):

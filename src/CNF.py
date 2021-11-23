@@ -8,6 +8,11 @@ class CNF_Boolean:
             ("S", ["FUNCALL"]),
             ("S", ["COMPARISON"]),
             ("S", ["INT"]),
+            ("S", ["VAR"]),
+            ("S", ["LIST"]),
+            ("S", ["STR"]),
+            ("S", ["COMP"]),
+            ("S", ["BOOLOPS"]),
             ("S", ["H0", "S"]),
             ("S", ["H1", "S"]),
             ("S", ["H2", "S"]),
@@ -15,6 +20,8 @@ class CNF_Boolean:
             ("H1", ["S", "H3"]),
             ("H2", ["S", "H4"]),
             ("H3", ["and"]),
+            ("H3", ["not in"]),
+            ("H3", ["in"]),
             ("H4", ["or"])
         ]
     def getIsRule(self):
@@ -74,46 +81,6 @@ class CNF_IMPORT:
 
 class CNF_LOOP:
     def getBoolRule(self):
-        """
-         START -> H0 INST
-        | H1 TWO
-        | INT
-        | VAR
-        | BOOLOPS
-        | STR
-        | LIST
-        | FUNCALL
-        | COMP
-        | H2 INST
-   TWO -> H3 TWO
-        | BOOLOPS
-        | STR
-        | LIST
-        | FUNCALL
-        | VAR
-  INST -> INT
-        | VAR
-        | BOOLOPS
-        | STR
-        | LIST
-        | FUNCALL
-        | COMP
-        | H0 INST
-        | H2 INST
-NIINST -> BOOLOPS
-        | STR
-        | LIST
-        | FUNCALL
-        | VAR
-    NI -> notin
-        | in
-   BIN -> and
-        | or
-    H0 -> INST BIN
-    H1 -> INST NI
-    H2 -> not
-    H3 -> NIINST NI
-        """
         return [
             ("START", ["H0", "INST"]),
             ("START", ["H1", "TWO"]),
@@ -154,6 +121,48 @@ NIINST -> BOOLOPS
             ("H2", ["not"]),
             ("H3", ["NIINST", "NI"])
         ]
+
+    """
+         START -> H0 INST
+        | H1 TWO
+        | INT
+        | VAR
+        | BOOLOPS
+        | STR
+        | LIST
+        | FUNCALL
+        | COMP
+        | H2 INST
+   TWO -> H3 TWO
+        | BOOLOPS
+        | STR
+        | LIST
+        | FUNCALL
+        | VAR
+  INST -> INT
+        | VAR
+        | BOOLOPS
+        | STR
+        | LIST
+        | FUNCALL
+        | COMP
+        | H0 INST
+        | H2 INST
+NIINST -> BOOLOPS
+        | STR
+        | LIST
+        | FUNCALL
+        | VAR
+    NI -> notin
+        | in
+   BIN -> and
+        | or
+    H0 -> INST BIN
+    H1 -> INST NI
+    H2 -> not
+    H3 -> NIINST NI
+        """
+
         # return [
         #     ("START", ["H0", "TWO"]),
         #     ("START", ["H1", "INST"]),

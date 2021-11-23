@@ -4,7 +4,7 @@ b = int(input("Masukkan bilangan kedua: "))
 c = int(input("Masukkan bilangan ketiga: "))
 d = int(input("Masukkan bilangan keempat: "))
 max = 0#Kemungkinan range adalah nilai terbesar, karena nilai terbesar bisa saja menjadi FPB
-if d >= c and d >= b and d >= a: #jika d lebih besar dari nilai lain
+if d >= c and d <= b and d >= a: #jika d lebih besar dari nilai lain
     max = d
 elif a >= b and a >= c and a >= d: #jika a lebih besar dari nilai lain
     max = a

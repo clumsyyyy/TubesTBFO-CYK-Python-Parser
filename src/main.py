@@ -135,7 +135,6 @@ def checker(path):
                 else: #cek indentasi if else
                     print("conditionals")
                     if "else" in expression:
-                        print("something")
                         if indent not in ifIndent:
                             print("Error in line", count, "->", expression)
                             print("Error: else initiated before if")
@@ -156,7 +155,6 @@ def checker(path):
                                     print("Error: else should be followed with a statement")
                                     break
                     elif "elif" in expression:
-                        print("something")
                         if indent not in ifIndent:
                             print("Error in line", count, "->", expression)
                             print("Error: elif initiated before if")
@@ -176,7 +174,6 @@ def checker(path):
                                     print("Error: elif should be followed with a statement")
                                     break
                     elif "if" in expression:
-                        print("something")
                         try:
                             conditionals.checkConditionals(lineArr[i + 1][0].strip('\n').strip())
                         except:
@@ -207,4 +204,4 @@ def checker(path):
 
 
 #checker(sys.argv[1])
-checker("input3.py")
+checker("inputLoops.py")

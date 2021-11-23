@@ -15,7 +15,8 @@ try:
     #loopFuncCheck.checkComparison("a[i] + a[i - 1]==selisih")
     #loopFuncCheck.checkListElCall("arr[i-1]")
     #loopFuncCheck.checkBool("selisih_a == arr_a[i + 1] - arr_a[i] and selisih_b == arr_b[i + 1] - arr_b[i]")
-    loopFuncCheck.checkComparison("selisih_a == arr_a[j] - arr_a[i]")
+    #loopFuncCheck.checkComparison("arr_a[j + 1] - arr_a[i] == selisih_a")
+    loopFuncCheck.checkBool("a >= b a >= c and a >= d")
 except Exception as e:
     print(e)
 else:
