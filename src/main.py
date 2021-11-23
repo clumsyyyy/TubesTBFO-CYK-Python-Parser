@@ -204,4 +204,4 @@ def checker(path):
 
 
 #checker(sys.argv[1])
-checker("inputLoops.py")
+checker("input1.py")

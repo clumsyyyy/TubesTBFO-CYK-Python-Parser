@@ -22,7 +22,7 @@ class conditionalParser:
         if (arr[0] == "else") and (arr[1] != ":"):
             raise Exception(["else statement wrong"])
         statement = ' '.join(arr[1:-1])
-        print(statement)
+
         bool = FA_function_HELPER()
         if len(arr) != 2:
             try:

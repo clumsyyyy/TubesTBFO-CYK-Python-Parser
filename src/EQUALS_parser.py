@@ -17,7 +17,7 @@ class equalsParser:
                 token += strArr[i]
             else:
                 if strArr[i + 1].isdigit() and strArr[i] != "=":
-                    print(strArr[i])
+                    #print(strArr[i])
                     continue
                 else:
                     equalSign += strArr[i]
@@ -50,40 +50,48 @@ class equalsParser:
             word[0] = "VAR"     
  
         #cek sisi kanan
-        
         try:
-            funcCheck.checkList(word[2])
+            funcCheck.checkString(word[2])
         except Exception as e:
             try:
-                funcCheck.checkArith(word[2])
+                funcCheck.checkInt(word[2])
             except Exception as e:
                 try:
-                    varCheck.check(word[2])
+                    funcCheck.checkList(word[2])
                 except Exception as e:
                     try:
-                        funcCheck.checkfuncall(word[2])
+                        varCheck.check(word[2])
                     except Exception as e:
                         try:
-                            boolCheck.checkBool(word[2])
+                            funcCheck.checkFunction(word[2])
                         except Exception as e:
-                            if ("\"" in word[2] and word[2].count("\"") % 2 == 0) or word[2].isdigit() and not funcCheck.checkList(word[2]):
-                                word[2] = "ASSIGN"
+                            try:
+                                funcCheck.checkArith(word[2])
+                            except Exception as e:
+                                try:
+                                    funcCheck.checkBool(word[2])
+                                except Exception as e:
+                                    if ("\"" in word[2] and word[2].count("\"") % 2 == 0) or word[2].isdigit() and not funcCheck.checkList(word[2]):
+                                        word[2] = "ASSIGN"
+                                    else:
+                                        word[2] = "INVALID"
+                                else:
+                                    word[2] = "BOOL"
                             else:
-                                word[2] = "INVALID"
+                                word[2] = "ARITH"
                         else:
-                            word[2] = "BOOL"
+                            word[2] = "FUNCALL"
                     else:
-                        word[2] = "FUNCALL"
+                        word[2] = "VAR"
                 else:
-                    word[2] = "VAR"
+                    word[2] = "LIST"
             else:
-                word[2] = "ARITH"
+                word[2] = "INT"
         else:
-            word[2] = "LIST"
-
+            word[2] = "ASSIGN"
+        print(word)
         CYKChecker = CYKCHECKCLASS()
         CNFEq = CNF_Equals()
-        print(word)
         if CYKChecker.check(CNFEq.getEqualsRule(), word):
             return True
         else:

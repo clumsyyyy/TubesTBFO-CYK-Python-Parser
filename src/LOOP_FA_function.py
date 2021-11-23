@@ -138,7 +138,7 @@ class FA_function_HELPER:
                 pwlen = len(parsedWord)
                 exprFlag = False
                 delFirst = False
-                print("parsedbef:", parsedWord)
+                #("parsedbef:", parsedWord)
                 for i in range(pwlen):
                     if parsedWord[i] == "(":
                         exprFlag = True
@@ -194,7 +194,7 @@ class FA_function_HELPER:
                                 else:
                                     parsedWord[i] = "BOOLOPS"
                             else:
-                                print("wordbracs:", word)
+                                #print("wordbracs:", word)
                                 andpos = self.findIndexwithoutHandling(word, "and")
                                 orpos = self.findIndexwithoutHandling(word, "or")
                                 notpos = self.findIndexwithoutHandling(word, "not")
@@ -207,10 +207,10 @@ class FA_function_HELPER:
                                 else:
                                     delFirst = True
                                 parsedWord[i] = "BOOLOPS"
-                                print("pw:", parsedWord)
+                                #("pw:", parsedWord)
                 if (delFirst == True):
                     del parsedWord[0]
-                print("parsedaft:", parsedWord)
+                #print("parsedaft:", parsedWord)
                 parsedWord = list(filter(lambda a: a != "(" and a != ")", parsedWord))
                 strIncheck = " ".join(parsedWord)
                 res = self.checkBool(strIncheck)
@@ -293,7 +293,7 @@ class FA_function_HELPER:
                             else:
                                 word[i] = "INT"
                 #print("basecaseaft: ",  word)
-                print(word)
+                #print(word)
                 res = self.checkCyk(argsRule.getBoolRule(), word)
                 if (res):
                     return True
