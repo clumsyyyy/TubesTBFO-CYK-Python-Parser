@@ -1,3 +1,6 @@
+def aFunction():
+    return "a" and 5 <= 6 * 8
+
 a = [1,2,3,4,5,[6,[7,8]]]
 b = int(input("Input number"))
 str = "yahoo"
@@ -11,7 +14,7 @@ for i in range(1, 3, 1):
                     pass
                 else:
                     break
-
+                            return 0
 
 isTrue = "Yes" if aFunction() == "Apple" else "No"
 

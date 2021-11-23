@@ -1,11 +1,11 @@
 len = int(input("Input string length: "))
 word = input("Input string: ")
-arr = [x for x in word] #each character in word
+arr = [] #each character in word
 
 arr_len = 0
 count = 0
 
-for i in 5makau:
+for i in word:
     if "a" <= arr[i] <= "z" or "A" <= arr[i] <= "Z":
         arr_len += 1
 

@@ -1,7 +1,7 @@
-    from 5fa import FA_equals as yunus
-def makloGaming(count):
+from 5fa import FA_equals as equal
+def gaming(count):
     for i in range(1, 10, 3):
-        if count % 2 == 0 and teeteed:
+        if count % 2 == 0 and flag:
             if count == 3:
                 count += 1
             elif count == 4:
@@ -17,10 +17,10 @@ def makloGaming(count):
                 count += 0
         else:
             count -= 2
-            if maklo:
-                menggokil()
+            if flag:
+                nice()
             else:
-                tidakmengogkil()
+                notnice()
     while a == 5:
         count //= 2
     return count

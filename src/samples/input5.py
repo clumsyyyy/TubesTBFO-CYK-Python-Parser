@@ -15,7 +15,7 @@ elif str(a/2) == "-1.0": #jika koefisien a dibagi 2 sama dengan -1, maka print -
         print("Integral dari f(x) adalah -x^2 + " + str(b) + "x + C")
     elif b == 0:
         print("Integral dari f(x) adalah -x^2 + C")
-    elif b == 1:
+    else:
         print("Integral dari f(x) adalah -x^2 + x + C")
     elif b == -1:
         print("Integral dari f(x) adalah -x^2 - x + C")

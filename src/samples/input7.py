@@ -13,7 +13,7 @@ def list():
             else:
                 print("something")
     if ((b)>0 and someFunc()):
-        print("nice")
+        print("nice"
     else:
         print("not nice")
 

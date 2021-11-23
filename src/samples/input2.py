@@ -8,7 +8,7 @@ if d >= c and d <= b and d >= a: #jika d lebih besar dari nilai lain
     max = d
 elif a >= b and a >= c and a >= d: #jika a lebih besar dari nilai lain
     max = a
-elif c >= a and c >= b and c >= d: #jika c lebih besar dari nilai lain
+elif c >= a  c >= b and c >= d: #jika c lebih besar dari nilai lain
     max = c
 elif b >= a and b >= c and b >= d:
     max = b #jika b lebih besar dari nilai lain

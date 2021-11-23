@@ -45,9 +45,11 @@ def checker(path):
             # print(expression)
 
             loopIndent = [x for x in loopIndent if x < indent]
-            defIndent = [x for x in defIndent if x <= indent]
-            returnIndent = [x for x in returnIndent if x <= max(defIndent)]
-            
+            defIndent = [x for x in defIndent if x < indent]
+            if len(defIndent) != 0:
+                returnIndent = [x for x in returnIndent if x <= max(defIndent)]
+            else:
+                returnIndent = []
             if expression[0] == "#": #comment
                 continue
             elif "#" in expression:
@@ -94,14 +96,14 @@ def checker(path):
                                                             pass
                                                             #print(expression)
                                                         else:
-                                                            print('\033[93m' + "Error in line", count, "->", expression)
+                                                            print('\033[93m' + "Syntax Error in line", count, ": ", expression)
                                                             break
                                                     else:
                                                         print('\033[93m' + "Error: no loop initiated")
                                                         break
                                                 
                                                 else:
-                                                    print('\033[93m' + "Error in line", count, "->", expression)
+                                                    print('\033[93m' + "Syntax Error in line", count, ": ", expression)
                                                     break
                                             else:
                                                 pass
@@ -124,10 +126,12 @@ def checker(path):
                                     returnIndent.append(indent) 
                                 if len(defIndent) != 0:
                                     if indent <= max(defIndent):
-                                        print("wrong indentation position for return")
+                                        print('\033[93m' + "Error in line", count, ": ", expression)
+                                        print('\033[93m' + "wrong indentation position for return")
                                         break
                                 else:
-                                    print("return not initiated with def")
+                                    print('\033[93m' + "Error in line", count, ": ", expression)
+                                    print('\033[93m' + "return not initiated with def")
                                     break
                     else: #cek def
                         #print("def statement")
@@ -137,7 +141,7 @@ def checker(path):
                     #print("conditionals")
                     if "else" in expression:
                         if indent not in ifIndent:
-                            print('\033[93m' + "Error in line", count, "->", expression)
+                            print('\033[93m' + "Error in line", count, ": ", expression)
                             print('\033[93m' + "Error: else initiated before if")
                             break
                         else:
@@ -149,15 +153,14 @@ def checker(path):
                             else:
                                 if lineArr[i + 1][1] > indent:
                                     #print("else statement")
-                                    print(indent)
                                     ifIndent = [x for x in ifIndent if x < indent]
                                 elif indent not in ifIndent:
-                                    print('\033[93m' + "Error in line", count, "->", expression)
+                                    print('\033[93m' + "Error in line", count, ": ", expression)
                                     print('\033[93m' + "Error: else should be followed with a statement")
                                     break
                     elif "elif" in expression:
                         if indent not in ifIndent:
-                            print('\033[93m' + "Error in line", count, "->", expression)
+                            print('\033[93m' + "Error in line", count, ": ", expression)
                             print('\033[93m' + "Error: elif initiated before if")
                             break
                         else:
@@ -171,7 +174,7 @@ def checker(path):
                                     #print("elif statement")
                                     pass
                                 else:
-                                    print('\033[93m' + "Error in line", count, "->", expression)
+                                    print('\033[93m' + "Error in line", count, ": ", expression)
                                     print('\033[93m' + "Error: elif should be followed with a statement")
                                     break
                     elif "if" in expression:
@@ -189,7 +192,7 @@ def checker(path):
                                 if lineArr[i + 1][1] not in ifIndent:
                                     ifIndent.append(lineArr[i + 1][1])
                             else:
-                                print('\033[93m' + "Error in line", count, "->", expression)
+                                print('\033[93m' + "Error in line", count, ": ", expression)
                                 print('\033[93m' + "Error: if should be followed with a statement")
                                 break    
                 # # evaluasi tiap line
