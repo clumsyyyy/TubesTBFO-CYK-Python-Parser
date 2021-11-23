@@ -72,14 +72,15 @@ class IMPORT_PARSER:
             word[0] = " "
         wlen = len(word)
         for i in range(wlen):
-            if i % 2 == 1 and i != 1:
+            if i == 1:
+                word[i] = "VAR" 
+            elif i % 2 == 1:
                 try:
                     funvarChecker.check(word[i])
                 except Exception as e:
                     word[i] = "INVALID"
                 else:
                     word[i] = "VAR"
-
         res = cykCheck.check(RuleInst.getImportRule(), word)
         if (res):
             return True
