@@ -812,7 +812,7 @@ class FA_function_HELPER:
         str = str.strip()
         leadingbraces = 0
         for i in str:
-            if i == "[":
+            if i == "(":
                 leadingbraces += 1
         strlen = len(str)
         str = str[leadingbraces:strlen-leadingbraces]
