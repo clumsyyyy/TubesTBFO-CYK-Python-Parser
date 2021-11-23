@@ -65,7 +65,7 @@ class IMPORT_PARSER:
                 return
         word[1] = ' '.join(word[1:caught])
         del word[2:caught]
-        print("this", word)
+
         cykCheck = CYKCHECK.CYKCHECKCLASS()
         RuleInst = CNFINST.CNF_IMPORT()
         if (word[0] == ""):

@@ -138,7 +138,7 @@ class FA_function_HELPER:
                 pwlen = len(parsedWord)
                 exprFlag = False
                 delFirst = False
-                print("parsedbef:", parsedWord)
+                ##print("parsedbef:", parsedWord)
                 for i in range(pwlen):
                     if parsedWord[i] == "(":
                         exprFlag = True
@@ -194,7 +194,7 @@ class FA_function_HELPER:
                                 else:
                                     parsedWord[i] = "BOOLOPS"
                             else:
-                                print("wordbracs:", word)
+                                ##print("wordbracs:", word)
                                 andpos = self.findIndexwithoutHandling(word, "and")
                                 orpos = self.findIndexwithoutHandling(word, "or")
                                 notpos = self.findIndexwithoutHandling(word, "not")
@@ -207,10 +207,10 @@ class FA_function_HELPER:
                                 else:
                                     delFirst = True
                                 parsedWord[i] = "BOOLOPS"
-                                print("pw:", parsedWord)
+                                #print("pw:", parsedWord)
                 if (delFirst == True):
                     del parsedWord[0]
-                print("parsedaft:", parsedWord)
+                #print("parsedaft:", parsedWord)
                 parsedWord = list(filter(lambda a: a != "(" and a != ")", parsedWord))
                 strIncheck = " ".join(parsedWord)
                 res = self.checkBool(strIncheck)
@@ -252,7 +252,7 @@ class FA_function_HELPER:
                 if wordBlock != "":
                     word.append(wordBlock.strip())
                     wordBlock = ""
-                print("basecasebef: ", str, word)
+                #print("basecasebef: ", str, word)
                 for i in range(len(word)):
                     if word[i] not in ["and", "or", "not", "not in", "in"]:
                         if (word[i] == "True" or word[i] == "False" or word[i] == "None"):
@@ -290,7 +290,7 @@ class FA_function_HELPER:
                                         word[i] = "VAR"
                             else:
                                 word[i] = "INT"
-                print("basecaseaft: ",  word)
+                #print("basecaseaft: ",  word)
                 res = self.checkCyk(argsRule.getBoolRule(), word)
                 if (res):
                     return True
@@ -499,7 +499,12 @@ class FA_function_HELPER:
                                     try:
                                         self.checkBool(i)
                                     except:
-                                        raise Exception(["Invalid expression"])
+                                        try:
+                                            self.checkListElCall(i)
+                                        except:
+                                            raise Exception(["Invalid expression"])
+                                        else:
+                                            pass
                                     else:
                                         pass
                                 else:
@@ -570,7 +575,7 @@ class FA_function_HELPER:
 
     def checkVar(self, string): #can accept array too
         string = self.remove_leading_brackets_and_strips(string)
-        print("Str:", string)
+        #print("Str:", string)
         inst = FA_VALIDFUNVARNAMEC()
         if ("." in string):
             methodcheck = IMPORT_PARSER()
@@ -639,9 +644,9 @@ class FA_function_HELPER:
                     argBlock += i
             if argBlock != "":
                 argStack.append(argBlock)
-            print(argStack)
+            #print(argStack)
             allArgs = argStack[1:]
-            print(allArgs)
+            #print(allArgs)
             aalen = len(allArgs)
             for i in range(aalen):
                 if (allArgs[i] == ","):
@@ -704,7 +709,7 @@ class FA_function_HELPER:
                                 raise Exception(["Invalid argument"])
                             else:
                                 allArgs[i] = "V"
-            print(allArgs)
+            #print(allArgs)
             res = self.checkCyk(argsInst.getArgsRule(), allArgs)
             if (res):
                 return True
@@ -755,7 +760,7 @@ class FA_function_HELPER:
             raise Exception(["Empty String"])
         argsRule = CNF_LOOP()
         word = str.strip().split()
-        print(word)
+        #print(word)
         if (word[0] != "for"):
             raise Exception(["Invalid for loop"])
         if (word[2] != "in"):
@@ -770,7 +775,7 @@ class FA_function_HELPER:
         if (wlen > 4):
             word[3] = ' '.join(word[3:-1])
             del word[4:-1]
-        print(word)
+        #print(word)
         try:
             self.checkFunction(word[3])
         except Exception as e:
@@ -808,7 +813,7 @@ class FA_function_HELPER:
         str = str.strip()
         argsRule = CNF_LOOP()
         word = str.strip().split()
-        print(word)
+        #print(word)
         if (word[0] != "while"):
             raise Exception(["Invalid while loop"])
         if (word[-1] != ":"):

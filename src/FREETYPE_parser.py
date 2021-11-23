@@ -38,7 +38,7 @@ class freetypeParser:
         word = [arr[0],func]
 
         word.append(arr[-1])
-        print(word)
+
         cyk = CYKCHECKCLASS()
         defClassRule = CNF_Freetype()
         if cyk.check(defClassRule.getDefClass(), word):
@@ -112,11 +112,11 @@ class freetypeParser:
                     else:
                         exception = "EXCEPTION"
                         word = [word[0],exception]
-        print(word)
+
         cyk = CYKCHECKCLASS()
         returnRule = CNF_Freetype()
-        print(returnRule.getPassReturnRaise())
-        if cyk.check(returnRule.getPassReturnRaise(),word):
+
+        if cyk.check(returnRule.getPassReturnRaise(), word):
             return True
         else:
             raise Exception(["Incompatible grammar!"])

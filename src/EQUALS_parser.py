@@ -16,10 +16,14 @@ class equalsParser:
             if strArr[i] not in singletonIdents:
                 token += strArr[i]
             else:
-                equalSign += strArr[i]
-                if strArr[i] == "=":
-                    word.append(equalSign)
-                    break
+                if strArr[i + 1].isdigit() and strArr[i] != "=":
+                    print(strArr[i])
+                    continue
+                else:
+                    equalSign += strArr[i]
+                    if strArr[i] == "=":
+                        word.append(equalSign)
+                        break
 
         word = [token.strip(), equalSign, ''.join(strArr[i + 1:]).strip() ]
 
@@ -31,17 +35,22 @@ class equalsParser:
         
         #cek sisi kiri harusnya variabel
         varCheck = varNameChecker()
+        funcCheck = FA_function_HELPER()
+        boolCheck = FA_function_HELPER()
         try:
             varCheck.check(word[0])
         except Exception as e:
-            raise e
+            try:
+                funcCheck.checkListElCall(word[0])
+            except Exception as e:
+                word[0] = "INVALID"
+            else:
+                word[0] = "LISTEL"
         else:
             word[0] = "VAR"     
  
         #cek sisi kanan
-        funcCheck = FA_function_HELPER()
-        boolCheck = FA_function_HELPER()
-        print(word)
+        
         try:
             funcCheck.checkList(word[2])
         except Exception as e:
@@ -74,7 +83,7 @@ class equalsParser:
 
         CYKChecker = CYKCHECKCLASS()
         CNFEq = CNF_Equals()
-
+        print(word)
         if CYKChecker.check(CNFEq.getEqualsRule(), word):
             return True
         else:

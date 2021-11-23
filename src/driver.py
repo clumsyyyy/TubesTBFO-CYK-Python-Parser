@@ -11,7 +11,11 @@ equal = equalsParser()
 importCheck = IMPORT_PARSER()
 
 try:
-    defcheck.checkPassReturnRaise("return 5 <= 6 and \"a\" in \"makllo\"")
+    #conditionals.checkConditionals("if selisih_a == arr_a[i + 1] - arr_a[i] and selisih_b == arr_b[i + 1] - arr_b[i]:")
+    #loopFuncCheck.checkComparison("a[i] + a[i - 1]==selisih")
+    #loopFuncCheck.checkListElCall("arr[i-1]")
+    #loopFuncCheck.checkBool("selisih_a == arr_a[i + 1] - arr_a[i] and selisih_b == arr_b[i + 1] - arr_b[i]")
+    loopFuncCheck.checkComparison("selisih_a == arr_a[j] - arr_a[i]")
 except Exception as e:
     print(e)
 else:

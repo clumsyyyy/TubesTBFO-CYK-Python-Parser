@@ -21,16 +21,6 @@ def checker(path):
     loopIndent = []
     commentStart = False
 
-
-    # ========== DRIVER ==========
-    # print("\nSelamat datang di Another CYK Parser!")
-    # print("Silahkan masukkan nama file...\n(pastikan file sudah berada di folder samples)")
-    # path = "utilities/samples/" + input(">>> ")
-
-    # while (not os.path.exists(path)):
-    #     print("File '", path, "' tidak ada!\n")
-    #     print("Silahkan masukkan nama file...\n(pastikan file sudah berada di folder samples)")
-    #     path = "utilities/samples/" + input(">>> ")
     path = "samples/" + path
     print("\nMembuka file", path, "...\n")
     if not os.path.exists(path):
@@ -48,7 +38,6 @@ def checker(path):
     file.close()
 
     for i in range(len(lineArr)):
-        print(len(lineArr[i][0]))
         if lineArr[i][0] != '\n' or len(lineArr[i][0]) != 0:
             expression = lineArr[i][0].strip("\n").strip()
             indent = lineArr[i][1]
@@ -60,9 +49,10 @@ def checker(path):
             returnIndent = [x for x in returnIndent if x <= max(defIndent)]
             
             if expression[0] == "#": #comment
-                pass
+                continue
             elif "#" in expression:
                 expression = expression.split("#")[0].strip()
+                print(expression)
             elif expression[:3] == "\'\'\'" and expression[-3:] == "\'\'\'" and len(expression) != 3:
                 continue
             elif expression[:3] == "\'\'\'" or expression[-3:] == "\'\'\'" :
@@ -72,144 +62,149 @@ def checker(path):
                 elif commentStart == True:
                     commentStart = False
                     print("comment end")
-            else:
-                if not commentStart:
+
+            if not commentStart and (expression[:3] != "\'\'\'" and expression[-3:] != "\'\'\'"):
+                try:
+                    conditionals.checkConditionals(expression)
+                except Exception as e:
                     try:
-                        conditionals.checkConditionals(expression)
+                        defcheck.checkDefClass(expression)
                     except Exception as e:
                         try:
-                            defcheck.checkDefClass(expression)
+                            defcheck.checkPassReturnRaise(expression)
                         except Exception as e:
                             try:
-                                defcheck.checkPassReturnRaise(expression)
+                                loopFuncCheck.checkForLoop(expression)
                             except Exception as e:
                                 try:
-                                    loopFuncCheck.checkForLoop(expression)
+                                    loopFuncCheck.checkWhileLoop(expression)
                                 except Exception as e:
                                     try:
-                                        loopFuncCheck.checkWhileLoop(expression)
+                                        equal.checkEqual(expression)
                                     except Exception as e:
                                         try:
-                                            equal.checkEqual(expression)
+                                            importCheck.checkimp(expression)
                                         except Exception as e:
                                             try:
-                                                importCheck.checkimp(expression)
+                                                loopFuncCheck.checkFunction(expression)
                                             except Exception as e:
-                                                try:
-                                                    loopFuncCheck.checkFunction(expression)
-                                                except Exception as e:
-                                                    if expression in contextedKeywords:
-                                                        if len(loopIndent) != 0:
-                                                            if indent > max(loopIndent):
-                                                                print(expression)
-                                                            else:
-                                                                print("Error in line", count, "->", expression)
-                                                                break
+                                                if expression in contextedKeywords:
+                                                    if len(loopIndent) != 0:
+                                                        if indent > max(loopIndent):
+                                                            print(expression)
                                                         else:
-                                                            print("Error: no loop initiated")
+                                                            print("Error in line", count, "->", expression)
                                                             break
-                                                    
                                                     else:
-                                                        print("Error in line", count, "->", expression)
+                                                        print("Error: no loop initiated")
                                                         break
+                                                
                                                 else:
-                                                    pass
-                                                    print("function call")
+                                                    print("Error in line", count, "->", expression)
+                                                    break
                                             else:
                                                 pass
-                                                print("import statement")
+                                                print("function call")
                                         else:
                                             pass
-                                            print("equal statement")
+                                            print("import statement")
                                     else:
-                                        print("while statement")
-                                        loopIndent.append(indent)
-                                else:
-                                    print("loop statement")
-                                    loopIndent.append(indent)
-                            else: #cek return
-                                if "return" in expression:
-                                    if indent not in returnIndent:
-                                        returnIndent.append(indent) 
-                                    if len(defIndent) != 0:
-                                        if indent <= max(defIndent):
-                                            print("wrong indentation position for return")
-                                            break
-                                    else:
-                                        print("return not initiated with def")
-                                        break
-                        else: #cek def
-                            print("def statement")
-                            if indent not in defIndent:
-                                defIndent.append(indent)
-                    else: #cek indentasi if else
-                        if "else" in expression:
-                            if indent not in ifIndent:
-                                print("Error in line", count, "->", expression)
-                                print("Error: else initiated before if")
-                                break
-                            else:
-                                try:
-                                    conditionals.checkConditionals(lineArr[i + 1][0].strip('\n').strip())
-                                except Exception as e:
-                                    print("else statement")
-                                    ifIndent = [x for x in ifIndent if x < indent]
-                                else:
-                                    if lineArr[i + 1][1] > indent:
-                                        print("else statement")
-                                        print(indent)
-                                        ifIndent = [x for x in ifIndent if x < indent]
-                                    elif indent not in ifIndent:
-                                        print("Error in line", count, "->", expression)
-                                        print("Error: else should be followed with a statement")
-                                        break
-                        elif "elif" in expression:
-                            if indent not in ifIndent:
-                                print("Error in line", count, "->", expression)
-                                print("Error: elif initiated before if")
-                                break
-                            else:
-                                try:
-                                    conditionals.checkConditionals(lineArr[i + 1][0].strip('\n').strip())
-                                except:
-                                    pass
-                                    print("elif statement")
-                                else:
-                                    if lineArr[i + 1][1] > indent:
-                                        print("elif statement")
                                         pass
-                                    else:
-                                        print("Error in line", count, "->", expression)
-                                        print("Error: elif should be followed with a statement")
+                                        print("equal statement")
+                                else:
+                                    print("while statement")
+                                    loopIndent.append(indent)
+                            else:
+                                print("loop statement")
+                                loopIndent.append(indent)
+                        else: #cek return
+                            if "return" in expression:
+                                if indent not in returnIndent:
+                                    returnIndent.append(indent) 
+                                if len(defIndent) != 0:
+                                    if indent <= max(defIndent):
+                                        print("wrong indentation position for return")
                                         break
-                        elif "if" in expression:
+                                else:
+                                    print("return not initiated with def")
+                                    break
+                    else: #cek def
+                        print("def statement")
+                        if indent not in defIndent:
+                            defIndent.append(indent)
+                else: #cek indentasi if else
+                    print("conditionals")
+                    if "else" in expression:
+                        print("something")
+                        if indent not in ifIndent:
+                            print("Error in line", count, "->", expression)
+                            print("Error: else initiated before if")
+                            break
+                        else:
+                            try:
+                                conditionals.checkConditionals(lineArr[i + 1][0].strip('\n').strip())
+                            except Exception as e:
+                                print("else statement")
+                                ifIndent = [x for x in ifIndent if x < indent]
+                            else:
+                                if lineArr[i + 1][1] > indent:
+                                    print("else statement")
+                                    print(indent)
+                                    ifIndent = [x for x in ifIndent if x < indent]
+                                elif indent not in ifIndent:
+                                    print("Error in line", count, "->", expression)
+                                    print("Error: else should be followed with a statement")
+                                    break
+                    elif "elif" in expression:
+                        print("something")
+                        if indent not in ifIndent:
+                            print("Error in line", count, "->", expression)
+                            print("Error: elif initiated before if")
+                            break
+                        else:
                             try:
                                 conditionals.checkConditionals(lineArr[i + 1][0].strip('\n').strip())
                             except:
-                                print("if statement")
-                                if indent not in ifIndent:
-                                    ifIndent.append(indent)
+                                pass
+                                print("elif statement")
                             else:
-                                if lineArr[i + 1][1] >= indent:
-                                    #print("if statement")
-                                    if indent not in ifIndent:
-                                        ifIndent.append(indent)
-                                    if lineArr[i + 1][1] not in ifIndent:
-                                        ifIndent.append(lineArr[i + 1][1])
+                                if lineArr[i + 1][1] > indent:
+                                    print("elif statement")
+                                    pass
                                 else:
                                     print("Error in line", count, "->", expression)
-                                    print("Error: if should be followed with a statement")
-                                    break    
-                    # # evaluasi tiap line
+                                    print("Error: elif should be followed with a statement")
+                                    break
+                    elif "if" in expression:
+                        print("something")
+                        try:
+                            conditionals.checkConditionals(lineArr[i + 1][0].strip('\n').strip())
+                        except:
+                            print("if statement")
+                            if indent not in ifIndent:
+                                ifIndent.append(indent)
+                        else:
+                            if lineArr[i + 1][1] >= indent:
+                                #print("if statement")
+                                if indent not in ifIndent:
+                                    ifIndent.append(indent)
+                                if lineArr[i + 1][1] not in ifIndent:
+                                    ifIndent.append(lineArr[i + 1][1])
+                            else:
+                                print("Error in line", count, "->", expression)
+                                print("Error: if should be followed with a statement")
+                                break    
+                # # evaluasi tiap line
                     
         count += 1
 
-
+    print("")
     if commentStart:
         print("Comment started but not ended")
-    elif count - 1 == len(lineArr) and not commentStart:
+    elif count >= len(lineArr) and not commentStart:
         print("Program accepted!\n")
 
 
 
-checker("inputList.py")
+#checker(sys.argv[1])
+checker("input3.py")
