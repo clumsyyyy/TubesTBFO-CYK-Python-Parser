@@ -33,25 +33,24 @@ def checker(path):
     lineArr = []
     contextedKeywords = ["break", "continue", "pass"]
     for line in file:
-        if line != "\n":
+        if line != "\n" or line != "":
             lineArr.append([line, len(line) - len(line.lstrip())])
     file.close()
 
     for i in range(len(lineArr)):
         count += 1
-        if lineArr[i][0] != '\n' or len(lineArr[i][0]) != 0:
+        if lineArr[i][0] != "\n":
             expression = lineArr[i][0].strip("\n").strip()
             indent = lineArr[i][1]
             # print("Line", count, ": ", end = "")
             # print(expression)
-
             loopIndent = [x for x in loopIndent if x < indent]
             defIndent = [x for x in defIndent if x < indent]
             if len(defIndent) != 0:
                 returnIndent = [x for x in returnIndent if x <= max(defIndent)]
             else:
                 returnIndent = []
-            if expression[0] == "#": #comment
+            if expression[0] == "#" and len(expression) > 0: #comment
                 continue
             elif "#" in expression:
                 expression = expression.split("#")[0].strip()

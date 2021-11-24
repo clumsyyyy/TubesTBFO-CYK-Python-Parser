@@ -11,5 +11,3 @@ elif x < 0:
 elif x == 0:
     print("X adalah bilangan nol")
 
-
-    

@@ -3,15 +3,22 @@ from CYKcheck import CYKCHECKCLASS
 from CNF import CNF_CONDITIONAL
 class conditionalParser:
     def checkConditionals(self, string):
-        keyWords = ["if", "elif", "else", "while"]
+        keyWords = ["elif", "if", "else", "while"]
         # cek colon
         if (string[-1] != ":"):
             raise Exception(["Colon sign missing"])
         if string.count(":") > 1:
             raise Exception(["Too many colon signs"])
         #cek apakah bener depannya keyword
-        
+        keyWord = ""
         arr = (' '.join(string.split())).split(' ')
+        arr = [x.strip() for x in arr]
+        for i in range(len(keyWords)):
+            if keyWords[i] in string:
+                keyWord = keyWords[i]
+                arr = (' '.join(string.split(keyWords[i]))).split(' ')
+                break
+        arr =  [keyWord] + [x for x in arr if x != ""]
 
         if ":" in arr[-1] and arr[-1] != ":":
             arr[-1] = arr[-1][:-1]

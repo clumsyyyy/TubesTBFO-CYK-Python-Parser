@@ -17,7 +17,3 @@ def list():
     else:
         print("not nice")
 
-
-return 0
-
-

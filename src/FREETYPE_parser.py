@@ -99,21 +99,24 @@ class freetypeParser:
                 word = [word[0],statement]
 
         elif (word[0] == "raise"):
+            
             checker =  FA_function_HELPER()
-            exception = ' '.join(word[1:])
-            if len(exception) < 9:
+            exception = ' '.join(word[1:]).strip()
+            if len(exception) == 0:
                 raise Exception(["No Exception"])
             else:
-                if exception[:9] != "Exception":
-                    raise Exception(["No Exception"])
-                else:
+                try:
+                    checker.checkFunction(exception)
+                except Exception as e:
                     try:
-                        checker.checkFunction(exception)
-                    except Exception as e:
-                        raise(e)
+                        checker.checkVar(exception)
+                    except:
+                        exception = "INVALID"
                     else:
                         exception = "EXCEPTION"
-                        word = [word[0],exception]
+                else:
+                    exception = "EXCEPTION"
+                    word = [word[0],exception]
 
         cyk = CYKCHECKCLASS()
         returnRule = CNF_Freetype()

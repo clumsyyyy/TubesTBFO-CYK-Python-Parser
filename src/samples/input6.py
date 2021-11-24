@@ -19,6 +19,6 @@ if arr_len == len:
     else:
         print("not a palindrome")
 else:
-    print("Different string length.")
+    print("different string length")
 
 
