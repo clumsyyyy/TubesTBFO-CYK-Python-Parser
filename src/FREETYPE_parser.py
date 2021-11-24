@@ -81,7 +81,7 @@ class freetypeParser:
                                     checker.checkList(statement)
                                 except Exception as e:
                                     try:
-                                        var.check(statement)
+                                        checker.checkVar(statement)
                                     except Exception as e:
                                         statement = "INVALID"
                                     else:
