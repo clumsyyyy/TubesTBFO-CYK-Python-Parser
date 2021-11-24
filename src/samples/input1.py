@@ -19,8 +19,8 @@ def gaming(count):
             count -= 2
             if flag:
                 nice()
-        else:
-            notnice()
+            else:
+                notnice()
     while a == 5:
         count //= 2
     return count

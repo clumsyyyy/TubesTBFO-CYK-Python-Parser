@@ -41,8 +41,9 @@ class equalsParser:
         varCheck = varNameChecker()
         funcCheck = FA_function_HELPER()
         boolCheck = FA_function_HELPER()
+
         try:
-            varCheck.check(word[0])
+            funcCheck.checkVar(word[0])
         except Exception as e:
             try:
                 funcCheck.checkListElCall(word[0])
@@ -52,7 +53,7 @@ class equalsParser:
                 word[0] = "LISTEL"
         else:
             word[0] = "VAR"     
- 
+
         #cek sisi kanan
         try:
             funcCheck.checkString(word[2])
