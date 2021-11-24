@@ -65,7 +65,7 @@ class equalsParser:
                     funcCheck.checkList(word[2])
                 except Exception as e:
                     try:
-                        varCheck.check(word[2])
+                        funcCheck.checkVar(word[2])
                     except Exception as e:
                         try:
                             funcCheck.checkFunction(word[2])
