@@ -159,6 +159,19 @@ class CNF_LOOP:
             ("H4", ["while"]),
             ("H0", [":"]),
         ]
+    def getWithRule(self):
+        return [
+            ("START", ["H1", "H0"]),
+            ("FINST", ["VAR"]),
+            ("FINST", ["FUNCALL"]),
+            ("H0", [":"]),
+            ("H1", ["H3", "H2"]),
+            ("H2", ["VAR"]),
+            ("H3", ["H5", "H4"]),
+            ("H4", ["as"]),
+            ("H5", ["H6", "FINST"]),
+            ("H6", ["with"]),
+        ]
 
 class CNF_Equals:
     def getEqualsRule(self):

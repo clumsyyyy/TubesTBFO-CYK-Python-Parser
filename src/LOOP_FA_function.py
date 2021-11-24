@@ -1,3 +1,4 @@
+from os import waitpid
 from CNF import CNF_LOOP, CNF_Boolean
 from FA_varchecker import varNameChecker as FA_VALIDFUNVARNAMEC
 from CYKcheck import CYKCHECKCLASS
@@ -767,10 +768,49 @@ class FA_function_HELPER:
                 raise Exception(["Invalid List"])
             else:
                 return True
+    
+    def preParse(self, str):
+        wordmentah = str.split(" ")
+        wmlen = len(wordmentah)
+        toChange = []
+        bracketStack = []
+        for i in range(wmlen):
+            slen = len(wordmentah[i])
+            for j in range(slen):
+                if wordmentah[i][j] == "(":
+                    if (len(bracketStack) == 0):
+                        toChange.append((i, j))    
+                    bracketStack.append(wordmentah[i][j])
+                elif wordmentah[i][j] == ")":
+                    bracketStack.pop()
+                    if (len(bracketStack) == 0):
+                        toChange.append((i, j))
+        if (len(toChange) % 2 == 1):
+            raise Exception("Bracket mismatch")
+        changed = 0
+        cukup = False
+        for (i, j) in toChange:
+            if (cukup):
+                if (changed % 2 == 1):
+                    cpstr = wordmentah[i][:j]
+                    wordmentah[i] = cpstr + " " + wordmentah[i][j+1:]
+                break
+            tempocheck = (' '.join(wordmentah)).split()
+            if ("for" in tempocheck and "in" in tempocheck):
+                cukup = True
+            cpstr = wordmentah[i][:j]
+            wordmentah[i] = cpstr + " " + wordmentah[i][j+1:]
+            changed += 1
+        stringready =  ' '.join(wordmentah)
+        return stringready
             
     def checkForLoop(self, str):
         if str == "":
             raise Exception(["Empty String"])
+        try:
+            str = self.preParse(str)
+        except:
+            raise Exception(["Invalid For Loop"])
         argsRule = CNF_LOOP()
         word = str.strip().split()
         #print(word)
@@ -850,6 +890,10 @@ class FA_function_HELPER:
     def checkWhileLoop(self, str):
         if str == "":
             raise Exception(["Empty String"])
+        try:
+            str = self.preParse(str)
+        except:
+            raise Exception(["Invalid While Loop"])
         argsRule = CNF_LOOP()
         str = str.strip()
         argsRule = CNF_LOOP()
@@ -905,3 +949,50 @@ class FA_function_HELPER:
             return True
         else:
             raise Exception(["Invalid While Loop Statement"])
+        
+    def checkWithStatement(self, str):
+        if str == "":
+            raise Exception(["Empty String"])
+        try:
+            str = self.preParse(str)
+        except:
+            raise Exception(["Invalid with statement"])
+        word = str.split()
+        if (word[0] != "with"):
+            raise Exception(["Invalid with statement"])
+        if (len(word[-1]) != 1):
+            toapp = word[-1][-1]
+            word[-1] = word[-1][:-1]
+            word.append(toapp)
+        try:
+            asidx = word.index("as")
+            strnew = ' '.join(word[1:asidx])
+            word[1] = strnew
+            del word[2:asidx]
+        except:
+            raise Exception(["Invalid with statement"])
+        try:
+            if (word[3] == "as"):
+                raise Exception(["Invalid with statement"])
+            self.checkVar(word[3])
+        except:
+            raise Exception(["Invalid with statement"])
+        else:
+            word[3] = "VAR"
+        try:
+            self.checkVar(word[1])
+        except:
+            try:
+                self.checkFunction(word[1])
+            except:
+                raise Exception(["Invalid with statement"])
+            else:
+                word[1] = "FUNCALL"
+        else:
+            word[1] = "VAR"
+        res = self.checkCyk(CNF_LOOP().getWithRule(), word)
+        if (res):
+            return True
+        else:
+            raise Exception(["Invalid with statement"])
+            
