@@ -60,9 +60,7 @@ class freetypeParser:
         if word[-1] == ":":
             raise Exception(["Colon detected at the end of statement"])
         if(word[0] == "return"):
-            if (len(word) == 1):
-                raise Exception(["return nothing"])
-            else:
+            if len(word) != 1:
                 statement = ' '.join(word[1:])
                 bool = FA_function_HELPER()
                 checker =  FA_function_HELPER()
@@ -98,7 +96,7 @@ class freetypeParser:
                         statement = "STATEMENT"
                 else:
                     statement = "STATEMENT"
-            word = [word[0],statement]
+                word = [word[0],statement]
 
         elif (word[0] == "raise"):
             checker =  FA_function_HELPER()
@@ -120,7 +118,7 @@ class freetypeParser:
         cyk = CYKCHECKCLASS()
         returnRule = CNF_Freetype()
 
-        if cyk.check(returnRule.getPassReturnRaise(), word):
+        if cyk.check(returnRule.getPassReturnRaise(), ["return"]):
             return True
         else:
             raise Exception(["Incompatible grammar!"])

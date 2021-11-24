@@ -239,6 +239,7 @@ class CNF_Freetype:
     
     def getPassReturnRaise(self):
         return [
+            ("S", ["return"]),
             ("S",["pass"]),
             ("S",["RETURN","STATEMENT"]),
             ("S",["RAISE","EXCEPTION"]),
