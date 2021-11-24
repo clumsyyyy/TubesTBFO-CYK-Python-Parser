@@ -101,6 +101,7 @@ def checker(path):
                                                             errFlag = True
                                                             break
                                                     else:
+                                                        print('\033[93m' + "Error in line", count, ": ", expression)
                                                         print('\033[93m' + "Error: no loop initiated for context keywords (break/continue/pass)")
                                                         errFlag = True
                                                         break
@@ -212,7 +213,7 @@ def checker(path):
     if commentStart:
         print("Comment started but not ended")
     elif not errFlag and not commentStart:
-        print('\033[92m' + "Program accepted!\n")
+        print('\033[92m' + "Program accepted!")
     print('\033[0m')
 
 
