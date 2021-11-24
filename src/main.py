@@ -32,11 +32,13 @@ def checker(path):
     file = open(path, "r", encoding="utf8")
     lineArr = []
     contextedKeywords = ["break", "continue", "pass"]
+    print("==================================================\n")
     for line in file:
         if line != "\n" or line != "":
             lineArr.append([line, len(line) - len(line.lstrip())])
+            print(line, end = "")
     file.close()
-
+    print("\n==================================================")
     for i in range(len(lineArr)):
         count += 1
         if lineArr[i][0] != "\n":
