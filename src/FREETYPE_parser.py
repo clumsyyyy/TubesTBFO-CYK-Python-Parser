@@ -118,7 +118,7 @@ class freetypeParser:
         cyk = CYKCHECKCLASS()
         returnRule = CNF_Freetype()
 
-        if cyk.check(returnRule.getPassReturnRaise(), ["return"]):
+        if cyk.check(returnRule.getPassReturnRaise(), word):
             return True
         else:
             raise Exception(["Incompatible grammar!"])

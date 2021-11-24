@@ -11,20 +11,24 @@ class equalsParser:
         equalSign = ""
         token = ""
         word = []
-
+        bracketFlag = 0
         for i in range(len(strArr)):
             if strArr[i] not in singletonIdents:
                 token += strArr[i]
+                if strArr[i] == "[":
+                    bracketFlag = True
+                elif strArr[i] == "]":
+                    bracketFlag = False
             else:
-                if strArr[i + 1].isdigit() and strArr[i] != "=":
+                if bracketFlag:
                     #print(strArr[i])
-                    continue
+                    token += strArr[i]
                 else:
                     equalSign += strArr[i]
                     if strArr[i] == "=":
                         word.append(equalSign)
                         break
-
+        
         word = [token.strip(), equalSign, ''.join(strArr[i + 1:]).strip() ]
 
         if equalSign == "":
