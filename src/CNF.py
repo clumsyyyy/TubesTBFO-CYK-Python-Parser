@@ -65,6 +65,12 @@ class CNF_Boolean:
             ("H3", ["S1", "IS"]),
             ("H4", ["Not", "S1"])
         ]
+    def getNewIsRule(self):
+        return [
+            ("S", ["H0", "S"]),
+            ("S", ["NOT", "S1"]),
+
+        ]
 class CNF_IMPORT:
     def getImportRule(self):
         return [

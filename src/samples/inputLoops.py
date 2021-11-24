@@ -1,3 +1,4 @@
+from a import b as c
 def aFunction():
     return "a" and 5 <= 6 * 8
 

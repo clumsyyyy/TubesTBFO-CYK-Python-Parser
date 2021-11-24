@@ -24,21 +24,25 @@ class freetypeParser:
             raise Exception(["Missing def/class keyword"])
 
         func = (' '.join(arr[1:-1]))
-
         varFunChecker = varNameChecker()
         funcCheck = FA_function_HELPER()
 
-        try: 
-            funcCheck.checkFunction(func)
-        except Exception as e:
-            raise(e)
-        else:
-            func = "FUNNAME"
-                        
-        word = [arr[0],func]
-
-        word.append(arr[-1])
-
+        if arr[0] == "def":
+            try: 
+                funcCheck.checkFunction(func)
+            except Exception as e:
+                raise(e)
+            else:
+                func = "FUNNAME"
+        elif arr[0] == "class":
+            try:
+                funcCheck.checkVar(func)
+            except Exception as e:
+                raise(e)
+            else:
+                func = "FUNNAME"             
+        word = [arr[0],func, arr[-1]]
+        
         cyk = CYKCHECKCLASS()
         defClassRule = CNF_Freetype()
         if cyk.check(defClassRule.getDefClass(), word):

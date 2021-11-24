@@ -29,7 +29,7 @@ class FA_function_HELPER:
 
     def checkComparison(self, str):
         str = self.remove_leading_brackets_and_strips(str)
-        comparisonOps = [ "<=", ">=", ">", "<", "==", "!="]
+        comparisonOps = [ "<=", ">=", ">", "<", "==", "!=", "is"]
         opsCount = 0;
         for i in range(len(comparisonOps)):
             if (comparisonOps[i] in str):
