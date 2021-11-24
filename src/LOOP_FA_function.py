@@ -769,7 +769,7 @@ class FA_function_HELPER:
             else:
                 return True
     
-    def preParse(self, str):
+    def preParse(self, str, stopcond):
         wordmentah = str.split(" ")
         wmlen = len(wordmentah)
         toChange = []
@@ -796,11 +796,12 @@ class FA_function_HELPER:
                     wordmentah[i] = cpstr + " " + wordmentah[i][j+1:]
                 break
             tempocheck = (' '.join(wordmentah)).split()
-            if ("for" in tempocheck and "in" in tempocheck):
+            if (set(stopcond) <= set(tempocheck)):
                 cukup = True
-            cpstr = wordmentah[i][:j]
-            wordmentah[i] = cpstr + " " + wordmentah[i][j+1:]
-            changed += 1
+            else:
+                cpstr = wordmentah[i][:j]
+                wordmentah[i] = cpstr + " " + wordmentah[i][j+1:]
+                changed += 1
         stringready =  ' '.join(wordmentah)
         return stringready
             
@@ -808,7 +809,7 @@ class FA_function_HELPER:
         if str == "":
             raise Exception(["Empty String"])
         try:
-            str = self.preParse(str)
+            str = self.preParse(str, ["for", "in"])
         except:
             raise Exception(["Invalid For Loop"])
         argsRule = CNF_LOOP()
@@ -891,7 +892,7 @@ class FA_function_HELPER:
         if str == "":
             raise Exception(["Empty String"])
         try:
-            str = self.preParse(str)
+            str = self.preParse(str, ["while"])
         except:
             raise Exception(["Invalid While Loop"])
         argsRule = CNF_LOOP()
@@ -954,7 +955,7 @@ class FA_function_HELPER:
         if str == "":
             raise Exception(["Empty String"])
         try:
-            str = self.preParse(str)
+            str = self.preParse(str, ["with"])
         except:
             raise Exception(["Invalid with statement"])
         word = str.split()
