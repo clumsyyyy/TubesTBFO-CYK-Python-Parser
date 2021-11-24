@@ -791,6 +791,7 @@ class FA_function_HELPER:
         cukup = False
         for (i, j) in toChange:
             if (cukup):
+                cukup = False
                 if (changed % 2 == 1):
                     cpstr = wordmentah[i][:j]
                     wordmentah[i] = cpstr + " " + wordmentah[i][j+1:]
@@ -802,6 +803,10 @@ class FA_function_HELPER:
                 cpstr = wordmentah[i][:j]
                 wordmentah[i] = cpstr + " " + wordmentah[i][j+1:]
                 changed += 1
+        if (cukup):
+            if (changed % 2 == 1):
+                cpstr = wordmentah[i][:j]
+                wordmentah[i] = cpstr + " " + wordmentah[i][j+1:]
         stringready =  ' '.join(wordmentah)
         return stringready
             
